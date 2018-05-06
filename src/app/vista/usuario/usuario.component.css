@@ -1,0 +1,14 @@
+img{
+    display:block;
+    margin:auto;
+}
+
+.hoverTable{
+    width:100%; 
+    border-collapse:collapse; 
+}
+
+/* Define the hover highlight color for the table row */
+.hoverTable tr:hover {
+        background-color:rgb(197, 194, 194);
+}

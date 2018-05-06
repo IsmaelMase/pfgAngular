@@ -1,0 +1,91 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
+
+<div class="ui-g">
+  <div class="ui-g-12">
+    <p-panel>
+      <p-header>
+        <div class="ui-helper-clearfix">
+          <span class="ui-panel-title">Cursos</span>
+        </div>
+      </p-header>
+      <p-dataView class="ui-table-responsive" #dv [value]="cursos" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <div class="ui-g">
+              <div class="ui-g-4 ui-md-4 filter-container">
+                <div style="position:relative">
+                  <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
+                </div>
+              </div>
+              <div class="ui-g-4 ui-md-4">
+                <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
+              </div>
+              <div class="ui-g-4 ui-md-4">
+                <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" (click)="seleccionarCurso(curso)"></button>
+              </div>
+            </div>
+          </div>
+        </p-header>
+        <ng-template let-curso pTemplate="listItem">
+          <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+            <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
+              <img src="../../../assets/cursos.png" width="30%" height="100%">
+            </div>
+            <div class="ui-g-12 ui-md-8 curso-details">
+              <div class="ui-g">
+                <div class="ui-g-2 ui-sm-6">Nombre: </div>
+                <div class="ui-g-10 ui-sm-6">
+                  <b>{{curso.nombre}}</b>
+                </div>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-md-1 search-icon">
+              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"
+                style="margin-top:0"></button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template let-curso pTemplate="gridItem">
+          <div style="padding:.5em" class="ui-g-12 ui-md-2">
+            <p-panel [header]="curso.nombre" [ngStyle]="{'text-align':'center'}">
+              <img src="../../../assets/cursos.png" width="25%" height="25%">
+              <hr class="ui-widget-content" style="border-top:0">
+              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"
+                style="margin-top:0"></button>
+            </p-panel>
+          </div>
+        </ng-template>
+      </p-dataView>
+    </p-panel>
+  </div>
+</div>
+<div>
+  <p-dialog [(visible)]="modificando" [autoAlign]="true" [modal]="true" (onHide)="cancelar()">
+    <p-header>
+      Formulario Curso
+    </p-header>
+    <form #formCurso="ngForm">
+      <br>
+      <div class="ui-grid-row">
+        <span class="ui-float-label">
+          <input id="float-input" type="text" size="30" pInputText name="nombre" #nombre="ngModel" [(ngModel)]="cursoSeleccionado.nombre"
+            required>
+          <label for="float-input">Nombre</label>
+        </span>
+      </div>
+    </form>
+    <p-footer>
+      <div class="ui-g">
+        <div class="ui-sm-12 ui-md-6">
+          <button pTooltip="Borrar" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton icon="fa-trash" (click)="confirmacionBorrado()"
+            class="ui-button-danger"></button>
+        </div>
+        <div class="ui-sm-12 ui-md-6">
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formCurso.form.valid" pButton
+            icon="fa-check" (click)="saveCurso(); formCurso.reset();" class="ui-button-success"></button>
+        </div>
+      </div>
+    </p-footer>
+  </p-dialog>
+</div>

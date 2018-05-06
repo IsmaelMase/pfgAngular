@@ -1,0 +1,175 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
+
+<div class="ui-g">
+  <div class="ui-g-12">
+    <p-panel>
+      <p-header>
+        <div class="ui-helper-clearfix">
+          <span class="ui-panel-title">Recursos</span>
+        </div>
+      </p-header>
+      <p-dataView class="ui-table-responsive" #dv [value]="recursos" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <div class="ui-g">
+              <div class="ui-g-4 ui-md-4 filter-container">
+                <div style="position:relative">
+                  <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
+                </div>
+              </div>
+              <div class="ui-g-4 ui-md-4">
+                <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
+              </div>
+              <div class="ui-g-4 ui-md-4">
+                <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" (click)="seleccionarRecurso(recurso)"></button>
+              </div>
+            </div>
+          </div>
+        </p-header>
+        <ng-template let-recurso pTemplate="listItem">
+          <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+            <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
+              <img src="../../../assets/recurso.png" width="30%" height="100%">
+            </div>
+            <div class="ui-g-12 ui-md-8 recurso-details">
+              <div class="ui-g">
+                <div class="ui-g-2 ui-sm-6">Nombre: </div>
+                <div class="ui-g-10 ui-sm-6">
+                  <b>{{recurso.nombre}}</b>
+                </div>
+              </div>
+              <div *ngIf="tipo == 'aulas'" class="ui-g">
+                <div class="ui-g-2 ui-sm-6">Capacidad: </div>
+                <div class="ui-g-10 ui-sm-6">
+                  <b>{{recurso.capacidad}}</b>
+                </div>
+              </div>
+              <div class="ui-g">
+                <span *ngIf="recurso.incidencia" pTooltip="{{recurso.incidencia}}" tooltipPosition="bottom">
+                  <i class="fa fa-exclamation-triangle icon"></i>
+                </span>
+                <span *ngIf="recurso.datos" pTooltip="{{recurso.datos}}" tooltipPosition="bottom">
+                  <i class="fa fa-info-circle icon2"></i>
+                </span>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-md-1 search-icon">
+              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
+                style="margin-top:0"></button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template let-recurso pTemplate="gridItem">
+          <div style="padding:.5em" class="ui-g-12 ui-md-2">
+            <p-panel [header]="recurso.nombre" [ngStyle]="{'text-align':'center'}">
+              <img src="../../../assets/recurso.png" width="25%" height="25%">
+              <div class="recurso-detail" [ngStyle]="{'text-align':'center'}">
+                <div *ngIf="tipo == 'aulas'">
+                  <b>Capacidad: </b>{{recurso.capacidad}}
+                </div>
+                <span *ngIf="recurso.incidencia" pTooltip="{{recurso.incidencia}}" tooltipPosition="bottom">
+                  <i class="fa fa-exclamation-triangle icon"></i>
+                </span>
+                <span *ngIf="recurso.datos" pTooltip="{{recurso.datos}}" tooltipPosition="bottom">
+                  <i class="fa fa-info-circle icon2"></i>
+                </span>
+              </div>
+              <hr class="ui-widget-content" style="border-top:0">
+              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReservaDiaria(recurso)"
+                style="margin-top:0"></button>
+            </p-panel>
+          </div>
+        </ng-template>
+      </p-dataView>
+    </p-panel>
+  </div>
+</div>
+<p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
+  [draggable]="false" [appendTo]="body">
+  <p-header>
+    Formulario Recurso
+  </p-header>
+  <div class="ui-g ui-fluid">
+    <div class="ui-sm-12 ui-md-12">
+      <div class="ui-grid-row">
+        <img class="imgFormulario" src="../assets/recurso.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+      </div>
+    </div>
+  </div>
+  <form #formRecurso="ngForm">
+    <div class="ui-g ui-fluid">
+      <div class="ui-sm-12 ui-md-12">
+        <div class="ui-grid-row">
+          <span class="ui-float-label">
+            <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="nombre" #nombre="ngModel" [(ngModel)]="recursoSeleccionado.nombre"
+              required>
+            <label for="float-input">Nombre</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="tipo == 'aulas'" class="ui-g ui-fluid">
+      <div class="ui-sm-12 ui-md-12">
+        <div class="ui-grid-row">
+          <span class="ui-float-label">
+            <input id="float-input" type="number" size="30" [ngStyle]="{'width':'100%'}" pInputText name="capacidad" #capacidad="ngModel"
+              [(ngModel)]="recursoSeleccionado.capacidad" required>
+            <label for="float-input">Capacidad</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-sm-12 ui-md-12">
+        <div class="ui-grid-row">
+          <label for="float-input">Imagen</label>
+          <input id="float-input" type="file" size="30" [ngStyle]="{'width':'100%'}" pInputText>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="ui-g ui-fluid">
+      <div class="ui-sm-12 ui-md-12">
+        <div class="ui-grid-row">
+          <span class="ui-float-label">
+            <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="datos"
+              #datos="ngModel" [(ngModel)]="recursoSeleccionado.datos"></textarea>
+            <label for="float-input">Datos</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="ui-g ui-fluid">
+      <div class="ui-sm-12 ui-md-12">
+        <div class="ui-grid-row">
+          <span class="ui-float-label">
+            <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="incidencia"
+              #incidencia="ngModel" [(ngModel)]="recursoSeleccionado.incidencia"></textarea>
+            <label for="float-input">Incidencia</label>
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <p-footer>
+    <div class="ui-g">
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()" tooltipPosition="left" pButton icon="fa-trash"
+          class="ui-button-danger"></button>
+      </div>
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
+          icon="fa-check" (click)="saveRecurso()" class="ui-button-success"></button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<div *ngIf="opcionReservaSeleccionada">
+  <reserva [dialog]="opcionReservaSeleccionada" [recurso]="recursoReserva" (cerrar)="cerrarDialogReservas($event)"></reserva>
+</div>

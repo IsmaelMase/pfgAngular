@@ -1,0 +1,19 @@
+.imgFormulario{
+    margin-left: 35%;
+}
+
+.icon {
+    color:red;
+    text-shadow: 1px 1px 1px #ccc;
+    font-size: 1.5em;
+}
+
+.icon2 {
+    color: rgb(98, 168, 233);
+    text-shadow: 1px 1px 1px #ccc;
+    font-size: 1.5em;
+}
+
+.dialogReserva{
+    overflow: visible;
+}

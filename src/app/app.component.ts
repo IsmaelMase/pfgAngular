@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  oculto = false;
+
+
+  ocultar(){
+    this.oculto = !this.oculto;
+  }
 }

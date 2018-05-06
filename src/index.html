@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Salerev</title>
@@ -8,7 +9,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
+
 <body>
   <app-root></app-root>
 </body>
+
 </html>
+<script>
+  $(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".account").click(function () {
+      var X = $(this).attr('id');
+      if (X == 1) {
+        $(".submenu").hide();
+        $(this).attr('id', '0');
+      }
+      else {
+        $(".submenu").show();
+        $(this).attr('id', '1');
+      }
+    });
+    $(".submenu").mouseup(function () {
+      return false
+    });
+    $(".account").mouseup(function () {
+      return false
+    });
+    $(document).mouseup(function () {
+      $(".submenu").hide();
+      $(".account").attr('id', '');
+    });
+  });
+</script>
