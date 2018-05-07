@@ -15,6 +15,7 @@
             <div class="ui-g">
               <div class="ui-g-4 ui-md-4 filter-container">
                 <div style="position:relative">
+                  <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
                   <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
                 </div>
               </div>
@@ -30,7 +31,7 @@
         <ng-template let-recurso pTemplate="listItem">
           <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
             <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
-              <img src="../../../assets/recurso.png" width="30%" height="100%">
+              <img src="../../../assets/recurso.png" width="40%" height="100%">
             </div>
             <div class="ui-g-12 ui-md-8 recurso-details">
               <div class="ui-g">
@@ -57,6 +58,10 @@
             <div class="ui-g-12 ui-md-1 search-icon">
               <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
                 style="margin-top:0"></button>
+              <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
+                style="margin-top:0"></button>
             </div>
           </div>
         </ng-template>
@@ -78,7 +83,9 @@
               <hr class="ui-widget-content" style="border-top:0">
               <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
                 style="margin-top:0"></button>
-              <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReservaDiaria(recurso)"
+              <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
                 style="margin-top:0"></button>
             </p-panel>
           </div>
@@ -88,7 +95,7 @@
   </div>
 </div>
 <p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
-  [draggable]="false" [appendTo]="body">
+  [draggable]="false" [appendTo]="body" [responsive]="true">
   <p-header>
     Formulario Recurso
   </p-header>

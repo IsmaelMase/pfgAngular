@@ -1,5 +1,6 @@
 import { Usuario } from './usuario';
 import { Recurso } from './recurso';
+import { Curso } from './curso';
 
 export class Reserva {
     constructor(
@@ -8,6 +9,7 @@ export class Reserva {
         public intervalos_reservas: string[],
         public usuario: Usuario,
         public recurso: Recurso,
+        public curso: Curso,
         public anotacion: string
     ) { }
 }

@@ -19,32 +19,33 @@ export class ReservaService {
         this.url = CONSTANTS.url;
     }
 
-    getReservas() {
-        return this._http.get(this.url + 'reserva/reservas').map(res => res.json());
+    getReservasByRecurso(id: string) {
+        return this._http.get(this.url + 'reserva/reservasByRecurso/' + id).map(res => res.json());
     }
 
-    getFechasNoDisponibles(horas:string[],idRecurso:string) {
+    getFechasNoDisponibles(horas: string[], idRecurso: string) {
         let json = JSON.stringify(horas);
-        let headers = new Headers({'Content-Type':'application/json'});
+        let headers = new Headers({ 'Content-Type': 'application/json' });
         console.log(json);
-        return this._http.post(this.url+'reserva/getFechasDisponibles/'+idRecurso, json, {headers: headers})
-                         .map(res => res.json());    }
-
-    addReserva(reserva: Reserva){
-        let json = JSON.stringify(reserva);
-        let headers = new Headers({'Content-Type':'application/json'});
-
-        return this._http.post(this.url+'reserva/saveReserva', json, {headers: headers})
-                         .map(res => res);
-                       
+        return this._http.post(this.url + 'reserva/getFechasDisponibles/' + idRecurso, json, { headers: headers })
+            .map(res => res.json());
     }
 
-    removeReserva(id: String){
-        let headers = new Headers({'Content-Type':'application/json'});
+    addReserva(reserva: Reserva) {
+        let json = JSON.stringify(reserva);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
 
-        return this._http.delete(this.url+'reserva/removeReserva/'+id, {headers: headers})
-                         .map(res => res);
-                       
+        return this._http.post(this.url + 'reserva/saveReserva', json, { headers: headers })
+            .map(res => res);
+
+    }
+
+    removeReserva(id: String) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+
+        return this._http.delete(this.url + 'reserva/removeReserva/' + id, { headers: headers })
+            .map(res => res);
+
     }
 
     private handleError(error: any): Promise<any> {

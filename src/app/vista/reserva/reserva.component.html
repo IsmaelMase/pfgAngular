@@ -1,15 +1,15 @@
 <p-growl [(value)]="msgs"></p-growl>
 <p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
 
-<p-dialog class="dialogReserva" [(visible)]="reservaDiaria" [modal]="true" [autoAlign]="true" [width]="800" (onHide)="cancelar()"
-  [resizable]="false" [draggable]="false" [appendTo]="body">
+<p-dialog *ngIf="reservaDiaria" class="dialogReserva" [(visible)]="reservaDiaria" [modal]="true" [autoAlign]="true" [width]="800"
+  (onHide)="cancelar()" [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true">
   <p-header>
     Formulario Reserva
   </p-header>
   <div class="ui-g ui-fluid">
     <div class="ui-sm-12 ui-md-12">
       <div class="ui-grid-row">
-        <img class="imgFormulario" src="../assets/calendario.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+        <img class="imgFormulario" src="../assets/calendario.png" alt="Nombre" width="25%" height="25%">
       </div>
     </div>
   </div>
@@ -17,7 +17,7 @@
     <div class="ui-g ui-fluid">
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
-          <p-table [ngStyle]="{'width':'100%'}" (onRowSelect)="getFechasNoDisponibles()" (onRowUnselect)="getFechasNoDisponibles()"
+          <p-table [ngStyle]="{'width':'100%'}" [responsive]="true" (onRowSelect)="getFechasNoDisponibles()" (onRowUnselect)="getFechasNoDisponibles()"
             [value]="horasDisponibles" selectionMode="multiple" [(selection)]="reserva.intervalos_reservas">
             <ng-template pTemplate="header">
               <tr>
@@ -35,14 +35,16 @@
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="dd/mm/yy"
-            selectionMode="multiple" name="fechas" #fechas="ngModel" [(ngModel)]="reserva.fechas_reservas" [inline]="true"></p-calendar>
+            selectionMode="multiple" [disabledDates]="fechasNoDisponibles" [disabledDays]="[0,6]" name="fechas" #fechas="ngModel"
+            [(ngModel)]="reserva.fechas_reservas">
+          </p-calendar>
         </div>
       </div>
 
     </div>
     <br>
-    <p-table #dt2 [columns]="cols" [paginator]="true" [rows]="10" [value]="usuarios" [(selection)]="reserva.usuario" [filterDelay]="50"
-      selectionMode="single">
+    <p-table #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reserva.usuario" [filterDelay]="50"
+      selectionMode="single" [responsive]="true" required>
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -66,7 +68,7 @@
     </p-table>
     <br>
     <div class="ui-g ui-fluid">
-      <div class="ui-sm-12 ui-md-12">
+      <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="anotacion"
@@ -75,14 +77,75 @@
           </span>
         </div>
       </div>
+      <div class="ui-sm-12 ui-md-6">
+        <p-table #dt3 *ngIf="reserva.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}" [responsive]="true"
+          [value]="reserva.usuario.cursos" selectionMode="single" [(selection)]="reserva.curso">
+          <ng-template pTemplate="caption">
+            <div style="text-align: right">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText placeholder="Global Filter" (input)="dt3.filterGlobal($event.target.value, 'contains')" style="width:auto">
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+            <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+              {{rowData.nombre}}
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
   </form>
   <p-footer>
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
-          class="ui-button-success" [disabled]="!fechaSeleccionada && reserva.intervalos_reservas.lenght == 0 && !reserva.usuario"></button>
+          class="ui-button-success"></button>
       </div>
     </div>
   </p-footer>
+</p-dialog>
+<p-dialog *ngIf="reservas" class="dialogReserva" [(visible)]="reservas" [modal]="true" [autoAlign]="true" [width]="800" (onHide)="cancelar()"
+  [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true">
+  <p-header>
+    Listado de Reservas
+  </p-header>
+  <p-table #dt class="hoverTable" [columns]="colsReservas" [value]="reservasList" [paginator]="true" [rows]="10" [filterDelay]="50"
+    [virtualScroll]="true" [responsive]="true">
+    <ng-template pTemplate="header" let-rowData let-columns>
+      <tr>
+        <th *ngFor="let col of columns" [ngStyle]="{'text-align':'center'}">
+          {{col.header}}
+        </th>
+      </tr>
+      <tr>
+        <th *ngFor="let col of columns">
+          <div *ngIf="col.header ==='Fecha'">
+            <input pInputText type="text" (input)="dt.filter($event.target.value, {{rowData.fechas_reservas[0] | date:'fullDate':'':'es' | uppercase}}, 'contains')" [ngStyle]="{'width':'100%'}">
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td *ngFor="let col of columns" (click)="seleccionarUsuario(rowData)" [ngStyle]="{'text-align':'center'}">
+          <div *ngIf="col.header ==='Usuario'">
+            {{rowData.usuario.nombre}} {{rowData.usuario.apellido}}
+          </div>
+          <div *ngIf="col.header ==='Fecha'">
+            {{rowData.fechas_reservas[0] | date:'fullDate':'':'es' | uppercase}}
+          </div>
+          <div *ngIf="col.header ==='Hora'">
+            {{rowData.intervalos_reservas[0]}}
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </p-dialog>

@@ -91,8 +91,9 @@ export class RecursoComponent implements OnInit {
     } this.modificando = true;
   }
 
-  abrirDialogReservaDiaria(recurso: Recurso) {
-    this.opcionReservaSeleccionada = "diaria";
+  abrirDialogReserva(recurso: Recurso,tipoDialog:string) {
+    this.opcionReservaSeleccionada = tipoDialog;
+    console.log(recurso);
     this.recursoReserva = recurso;
   }
 
@@ -104,6 +105,11 @@ export class RecursoComponent implements OnInit {
       this.opcionReservaSeleccionada = "";
       this.recursoReserva = null;
       this.mostrarMensajeCorrecto();
+    }
+    else if (e === "fail") {
+      this.opcionReservaSeleccionada = "";
+      this.recursoReserva = null;
+      this.mostrarMensajeIncorrecto();
     }
   }
 

@@ -16,7 +16,7 @@
             (click)="abrirDialog()"></button>
         </div>
       </div>
-      <p-table #dt class="hoverTable" [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [filterDelay]="50" [virtualScroll]="true">
+      <p-table #dt class="hoverTable" [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [filterDelay]="50" [virtualScroll]="true" [responsive]="true">
         <ng-template pTemplate="caption">
           <div style="text-align: right">
             <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -47,7 +47,7 @@
   </div>
 </div>
 <p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
-  [draggable]="false" [appendTo]="body">
+  [draggable]="false" [appendTo]="body" [responsive]="true">
   <p-header>
     Formulario Usuario
   </p-header>

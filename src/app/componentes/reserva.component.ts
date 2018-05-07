@@ -11,6 +11,10 @@ import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Reserva } from '../modelo/reserva';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import localeFrExtra from '@angular/common/locales/extra/es';
+registerLocaleData(localeEs, 'es', localeFrExtra);
 
 @Component({
   selector: 'reserva',
@@ -33,7 +37,11 @@ export class ReservaComponent implements OnInit {
   public reserva: Reserva;
   public fechaSeleccionada: Date;
   public reservaDiaria: boolean = false;
-  public fechaNoDisponibles: string[];
+  public reservas: boolean = false;
+  public fechasNoDisponibles: Array<Date>;
+  public colsCursos: any[];
+  public colsReservas: any[];
+  public reservasList: Reserva[];
 
 
   constructor(
@@ -47,13 +55,14 @@ export class ReservaComponent implements OnInit {
 
   ngOnInit() {
     if (this.dialog === "diaria") {
-      this.reserva = new Reserva("", [], [], null, null, "");
+      this.reserva = new Reserva("", [], [], null, null, null, "");
+      this.reserva.recurso = this.recurso;
       this.getHorasDisponibles();
-      this.getUsuarios();
       this.reservaDiaria = true;
-      console.log("llego");
+    } else if (this.dialog === "reservas") {
+      this.reservas = true;
+      this.getReservas();
     }
-    this.reserva.recurso = this.recurso;
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
     this.es = {
       firstDayOfWeek: 1,
@@ -66,9 +75,17 @@ export class ReservaComponent implements OnInit {
       clear: 'Borrar'
     }
     this.cols = [
-      { field: 'dni', header: 'DNI' },
       { field: 'nombre', header: 'Nombre' },
       { field: 'apellido', header: 'Apellido' }
+    ];
+    this.colsCursos = [
+      { field: 'nombre', header: 'Nombre' }
+    ];
+    this.colsReservas = [
+      { header: 'Usuario' },
+      { header: 'Fecha' },
+      { header: 'Hora' },
+
     ];
   }
 
@@ -76,6 +93,7 @@ export class ReservaComponent implements OnInit {
     this._horarioService.getHoras().subscribe(
       response => {
         this.horasDisponibles = response;
+        this.getUsuarios();
         console.log(this.horasDisponibles);
       },
       error => {
@@ -84,17 +102,35 @@ export class ReservaComponent implements OnInit {
     );
   }
 
-  getFechasNoDisponibles(){
-    this._reservaService.getFechasNoDisponibles(this.reserva.intervalos_reservas,this.recurso.id).subscribe(
+  getReservas() {
+    this._reservaService.getReservasByRecurso(this.recurso.id).subscribe(
       response => {
-        console.log(response)
+        console.log(response);
+        this.reservasList = response;
       },
       error => {
-        console.log(error)
+        console.log(<any>error);
+      }
+    );
+  }
+
+  getFechasNoDisponibles() {
+    this.fechasNoDisponibles = [];
+    this._reservaService.getFechasNoDisponibles(this.reserva.intervalos_reservas, this.recurso.id).subscribe(
+      response => {
+        console.log(response);
+        for (let fecha in response) {
+          console.log(response[fecha]);
+          this.fechasNoDisponibles.push(new Date(response[fecha]));
+        }
+        this.fechasNoDisponibles = [...this.fechasNoDisponibles];
+      },
+      error => {
         this.mostrarMensajeIncorrecto();
       }
     );
   }
+
 
   getUsuarios() {
     this._usuarioService.getUsuarios().subscribe(
@@ -140,6 +176,7 @@ export class ReservaComponent implements OnInit {
         if (response.status === 201) {
           this.cerrar.emit("ok");
         } else {
+          this.cerrar.emit("fail");
           this.mostrarMensajeIncorrecto();
         }
       },
