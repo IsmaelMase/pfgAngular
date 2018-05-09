@@ -6,15 +6,16 @@ import { HorarioService } from '../servicios/horarios.service';
 import { Recurso } from '../modelo/recurso';
 import { Curso } from '../modelo/curso';
 import { Usuario } from '../modelo/usuario';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Reserva } from '../modelo/reserva';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
-import localeFrExtra from '@angular/common/locales/extra/es';
-registerLocaleData(localeEs, 'es', localeFrExtra);
+import localeEsExtra from '@angular/common/locales/extra/es';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'reserva',
@@ -40,8 +41,11 @@ export class ReservaComponent implements OnInit {
   public reservas: boolean = false;
   public fechasNoDisponibles: Array<Date>;
   public colsCursos: any[];
-  public colsReservas: any[];
   public reservasList: Reserva[];
+  public eventos: any[];
+  public header: any;
+  public usuarioSeleccionado: Usuario;
+
 
 
   constructor(
@@ -54,14 +58,22 @@ export class ReservaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    registerLocaleData(localeEs, 'es', localeEsExtra);
+    moment.lang("es");
     if (this.dialog === "diaria") {
       this.reserva = new Reserva("", [], [], null, null, null, "");
       this.reserva.recurso = this.recurso;
       this.getHorasDisponibles();
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
-      this.reservas = true;
+      this.header = {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      };
+      this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", []);
       this.getReservas();
+
     }
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
     this.es = {
@@ -81,12 +93,6 @@ export class ReservaComponent implements OnInit {
     this.colsCursos = [
       { field: 'nombre', header: 'Nombre' }
     ];
-    this.colsReservas = [
-      { header: 'Usuario' },
-      { header: 'Fecha' },
-      { header: 'Hora' },
-
-    ];
   }
 
   getHorasDisponibles() {
@@ -94,7 +100,6 @@ export class ReservaComponent implements OnInit {
       response => {
         this.horasDisponibles = response;
         this.getUsuarios();
-        console.log(this.horasDisponibles);
       },
       error => {
         console.log(<any>error);
@@ -106,21 +111,22 @@ export class ReservaComponent implements OnInit {
     this._reservaService.getReservasByRecurso(this.recurso.id).subscribe(
       response => {
         console.log(response);
-        this.reservasList = response;
+        this.trasnformarReservasEventos(response);
       },
       error => {
         console.log(<any>error);
       }
     );
   }
+  clickeado(event){
+    console.log(event);
+  }
 
   getFechasNoDisponibles() {
     this.fechasNoDisponibles = [];
     this._reservaService.getFechasNoDisponibles(this.reserva.intervalos_reservas, this.recurso.id).subscribe(
       response => {
-        console.log(response);
         for (let fecha in response) {
-          console.log(response[fecha]);
           this.fechasNoDisponibles.push(new Date(response[fecha]));
         }
         this.fechasNoDisponibles = [...this.fechasNoDisponibles];
@@ -149,6 +155,30 @@ export class ReservaComponent implements OnInit {
     this.getHorasDisponibles();
     this.getUsuarios();
     console.log(this.horasDisponibles);
+  }
+
+  trasnformarReservasEventos(reservas: Reserva[]) {
+    this.eventos = [];
+    let evento = {};
+
+    let observableReservas = Observable.from(reservas);
+
+    observableReservas.map((reserva: Reserva) => {
+      let horas = reserva.intervalos_reservas[0].split("-");
+      let fechaSeparada = reserva.fechas_reservas[0].split("/")
+
+      evento = {
+        "title": reserva.recurso.nombre,
+        "start": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[0],
+        "end": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[1],
+        "reserva": reserva
+      }
+      this.eventos.push(evento);
+    }).finally(() => {
+      this.getUsuarios();
+      this.reservas = true;
+      console.log(this.eventos)
+    }).subscribe();
   }
 
 

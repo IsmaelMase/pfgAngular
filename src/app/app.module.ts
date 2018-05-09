@@ -19,6 +19,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
+import { ScheduleModule } from 'primeng/schedule';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 import { CursoService } from './servicios/curso.service'
@@ -68,7 +70,9 @@ import { ReservaComponent } from './componentes/reserva.component';
     routing,
     ConfirmDialogModule,
     InputTextareaModule,
-    CalendarModule
+    CalendarModule,
+    ScheduleModule,
+    ProgressSpinnerModule
   ],
   providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService],
   bootstrap: [AppComponent]
