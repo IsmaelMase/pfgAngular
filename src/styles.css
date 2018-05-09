@@ -3,3 +3,10 @@
 body{
     overflow-y: scroll
 }
+
+.ui-paginator .ui-paginator-page.ui-state-active {
+    background: rgb(74, 161, 201) !important;
+    color: #ffffff;
+    background: rgb(74, 161, 201) !important;
+    
+}

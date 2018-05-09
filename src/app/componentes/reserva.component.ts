@@ -45,6 +45,7 @@ export class ReservaComponent implements OnInit {
   public eventos: any[];
   public header: any;
   public usuarioSeleccionado: Usuario;
+  public mesMostrado: number = 0;
 
 
 
@@ -66,13 +67,14 @@ export class ReservaComponent implements OnInit {
       this.getHorasDisponibles();
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
+      this.mesMostrado = 0;
       this.header = {
         left: 'prev,next today',
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       };
+      this.getReservas(0);
       this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", []);
-      this.getReservas();
 
     }
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
@@ -107,8 +109,8 @@ export class ReservaComponent implements OnInit {
     );
   }
 
-  getReservas() {
-    this._reservaService.getReservasByRecurso(this.recurso.id).subscribe(
+  getReservas(mes) {
+    this._reservaService.getReservasByRecursoAndMes(this.recurso.id, mes).subscribe(
       response => {
         console.log(response);
         this.trasnformarReservasEventos(response);
@@ -118,8 +120,20 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-  clickeado(event){
-    console.log(event);
+  clickeado(event) {
+    console.log(event)
+    if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
+      console.log(event.getDate()._d.getMonth())
+      this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
+
+      if (Number(event.getDate()._d.getUTCMonth() + 1) < 10) {
+        this.getReservas("0" + this.mesMostrado);
+
+      } else {
+        this.getReservas(this.mesMostrado);
+
+      }
+    }
   }
 
   getFechasNoDisponibles() {
@@ -168,7 +182,7 @@ export class ReservaComponent implements OnInit {
       let fechaSeparada = reserva.fechas_reservas[0].split("/")
 
       evento = {
-        "title": reserva.recurso.nombre,
+        "title": reserva.usuario.nombre,
         "start": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[0],
         "end": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[1],
         "reserva": reserva

@@ -3,62 +3,55 @@
 
 <div class="ui-g">
   <div class="ui-g-12">
-    <p-panel>
+    <p-dataView class="ui-table-responsive" #dv [value]="cursos" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
       <p-header>
         <div class="ui-helper-clearfix">
-          <span class="ui-panel-title">Cursos</span>
+          <div class="ui-g">
+            <div class="ui-g-4 ui-md-4 filter-container">
+              <div style="position:relative">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
+              </div>
+            </div>
+            <div class="ui-g-4 ui-md-4">
+              <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
+            </div>
+            <div class="ui-g-4 ui-md-4">
+              <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" (click)="seleccionarCurso(curso)"></button>
+            </div>
+          </div>
         </div>
       </p-header>
-      <p-dataView class="ui-table-responsive" #dv [value]="cursos" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
-        <p-header>
-          <div class="ui-helper-clearfix">
+      <ng-template let-curso pTemplate="listItem">
+        <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+          <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
+            <img src="../../../assets/cursos.png" width="30%" height="100%">
+          </div>
+          <div class="ui-g-12 ui-md-8 curso-details">
             <div class="ui-g">
-              <div class="ui-g-4 ui-md-4 filter-container">
-                <div style="position:relative">
-                  <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                  <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
-                </div>
-              </div>
-              <div class="ui-g-4 ui-md-4">
-                <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
-              </div>
-              <div class="ui-g-4 ui-md-4">
-                <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" (click)="seleccionarCurso(curso)"></button>
+              <div class="ui-g-2 ui-sm-6">Nombre: </div>
+              <div class="ui-g-10 ui-sm-6">
+                <b>{{curso.nombre}}</b>
               </div>
             </div>
           </div>
-        </p-header>
-        <ng-template let-curso pTemplate="listItem">
-          <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
-            <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
-              <img src="../../../assets/cursos.png" width="30%" height="100%">
-            </div>
-            <div class="ui-g-12 ui-md-8 curso-details">
-              <div class="ui-g">
-                <div class="ui-g-2 ui-sm-6">Nombre: </div>
-                <div class="ui-g-10 ui-sm-6">
-                  <b>{{curso.nombre}}</b>
-                </div>
-              </div>
-            </div>
-            <div class="ui-g-12 ui-md-1 search-icon">
-              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"
-                style="margin-top:0"></button>
-            </div>
+          <div class="ui-g-12 ui-md-1 search-icon">
+            <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"
+              style="margin-top:0"></button>
           </div>
-        </ng-template>
-        <ng-template let-curso pTemplate="gridItem">
-          <div style="padding:.5em" class="ui-g-12 ui-md-2">
-            <p-panel [header]="curso.nombre" [ngStyle]="{'text-align':'center'}">
-              <img src="../../../assets/cursos.png" width="25%" height="25%">
-              <hr class="ui-widget-content" style="border-top:0">
-              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"
-                style="margin-top:0"></button>
-            </p-panel>
-          </div>
-        </ng-template>
-      </p-dataView>
-    </p-panel>
+        </div>
+      </ng-template>
+      <ng-template let-curso pTemplate="gridItem">
+        <div style="padding:.5em" class="ui-g-12 ui-md-2">
+          <p-panel [header]="curso.nombre" [ngStyle]="{'text-align':'center'}">
+            <img src="../../../assets/cursos.png" width="25%" height="25%">
+            <hr class="ui-widget-content" style="border-top:0">
+            <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"
+              style="margin-top:0"></button>
+          </p-panel>
+        </div>
+      </ng-template>
+    </p-dataView>
   </div>
 </div>
 <div>

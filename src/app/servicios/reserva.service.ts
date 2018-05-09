@@ -19,8 +19,8 @@ export class ReservaService {
         this.url = CONSTANTS.url;
     }
 
-    getReservasByRecurso(id: string) {
-        return this._http.get(this.url + 'reserva/reservasByRecurso/' + id).map(res => res.json());
+    getReservasByRecursoAndMes(id: string,mes) {
+        return this._http.get(this.url + 'reserva/reservasByRecursoAndMes/' + id+"/"+mes).map(res => res.json());
     }
 
     getFechasNoDisponibles(horas: string[], idRecurso: string) {

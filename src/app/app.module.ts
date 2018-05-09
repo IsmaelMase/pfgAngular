@@ -38,6 +38,8 @@ import { CursoComponent } from './componentes/curso.component';
 import { UsuarioComponent } from './componentes/usuario.component';
 import { RecursoComponent } from './componentes/recurso.component';
 import { ReservaComponent } from './componentes/reserva.component';
+import { PantallaAppComponent } from './componentes/pantalla-app.component';
+import { LoginComponent } from './componentes/login.component';
 
 
 
@@ -47,7 +49,9 @@ import { ReservaComponent } from './componentes/reserva.component';
     CursoComponent,
     UsuarioComponent,
     RecursoComponent,
-    ReservaComponent
+    ReservaComponent,
+    PantallaAppComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

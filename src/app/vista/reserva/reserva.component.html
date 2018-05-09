@@ -116,7 +116,6 @@
   <p-header>
     Listado de Reservas
   </p-header>
-  <button type="button" pButton (click)="back(fc)"></button>
-  <p-schedule (click)="clickeado($event)" [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+  <p-schedule #fc (onViewRender)="clickeado(fc)" [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
 
 </p-dialog>
