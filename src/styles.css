@@ -10,3 +10,13 @@ body{
     background: rgb(74, 161, 201) !important;
     
 }
+
+.calendario .ui-state-highlight {
+    border-color: #78b7df !important; 
+    background: #78b7df !important;
+    color: #0000;
+}
+
+.calendario .fc-content{
+ color: white;
+}

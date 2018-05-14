@@ -20,12 +20,15 @@ export class UsuarioService {
     }
 
     getUsuarios() {
-        return this._http.get(this.url + 'usuario/usuarios').map(res => res.json());
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+
+        return this._http.get(this.url + 'usuario/usuarios',{headers:headers}).map(res => res.json());
     }
 
     addUsuario(usuario: Usuario){
         let json = JSON.stringify(usuario);
         let headers = new Headers({'Content-Type':'application/json'});
+        headers.append('Authorization', localStorage.getItem("token"));
 
         return this._http.post(this.url+'usuario/saveUsuario', json, {headers: headers})
                          .map(res => res);
@@ -34,6 +37,7 @@ export class UsuarioService {
 
     removeUsuario(id: String){
         let headers = new Headers({'Content-Type':'application/json'});
+        headers.append('Authorization', localStorage.getItem("token"));
 
         return this._http.delete(this.url+'usuario/removeUsuario/'+id, {headers: headers})
                          .map(res => res);

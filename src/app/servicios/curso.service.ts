@@ -20,24 +20,27 @@ export class CursoService {
     }
 
     getCursos() {
-        return this._http.get(this.url + 'curso/cursos').map(res => res.json());
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+        return this._http.get(this.url + 'curso/cursos', { headers: headers }).map(res => res);
     }
 
-    addCurso(curso: Curso){
+    addCurso(curso: Curso) {
         let json = JSON.stringify(curso);
-        let headers = new Headers({'Content-Type':'application/json'});
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
 
-        return this._http.post(this.url+'curso/saveCurso', json, {headers: headers})
-                         .map(res => res);
-                       
+        return this._http.post(this.url + 'curso/saveCurso', json, { headers: headers })
+            .map(res => res);
+
     }
 
-    removeCurso(id: String){
-        let headers = new Headers({'Content-Type':'application/json'});
+    removeCurso(id: String) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
 
-        return this._http.delete(this.url+'curso/removeCurso/'+id, {headers: headers})
-                         .map(res => res);
-                       
+        return this._http.delete(this.url + 'curso/removeCurso/' + id, { headers: headers })
+            .map(res => res);
+
     }
 
     private handleError(error: any): Promise<any> {

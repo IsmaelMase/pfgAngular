@@ -8,7 +8,7 @@ import { CONSTANTS } from './serviceConstants';
 { }
 
 @Injectable()
-export class HorarioService {
+export class LoginService {
 
     public url: string;
 
@@ -18,11 +18,16 @@ export class HorarioService {
         this.url = CONSTANTS.url;
     }
 
-    getHoras() {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
+    login(usuarioLogin:any) {
+        let json = JSON.stringify(usuarioLogin);
+        console.log(json);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
 
-        return this._http.get(this.url + 'intervalo/intervalos', { headers: headers }).map(res => res);
+        return this._http.post(this.url + 'login', json, { headers: headers })
+            .map((res:Response) => res);
+
     }
+
 
     private handleError(error: any): Promise<any> {
         console.error('Some error occured', error);

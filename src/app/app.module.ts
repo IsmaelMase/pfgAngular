@@ -28,6 +28,7 @@ import { UsuarioService } from './servicios/usuario.service'
 import { RecursoService } from './servicios/recurso.service'
 import { HorarioService } from './servicios/horarios.service'
 import { ReservaService } from './servicios/reserva.service'
+import { LoginService } from './servicios/login.service'
 
 import { routing, appRoutingProviders } from './app.routing';
 import { ConfirmationService } from 'primeng/api';
@@ -40,6 +41,7 @@ import { RecursoComponent } from './componentes/recurso.component';
 import { ReservaComponent } from './componentes/reserva.component';
 import { PantallaAppComponent } from './componentes/pantalla-app.component';
 import { LoginComponent } from './componentes/login.component';
+import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
 
 
 
@@ -51,7 +53,8 @@ import { LoginComponent } from './componentes/login.component';
     RecursoComponent,
     ReservaComponent,
     PantallaAppComponent,
-    LoginComponent
+    LoginComponent,
+    ReservaProfesorComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +81,7 @@ import { LoginComponent } from './componentes/login.component';
     ScheduleModule,
     ProgressSpinnerModule
   ],
-  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService],
+  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

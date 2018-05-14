@@ -17,7 +17,7 @@
               <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
             </div>
             <div class="ui-g-4 ui-md-4">
-              <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" (click)="seleccionarCurso(curso)"></button>
+              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success" icon="fa-plus" (click)="abrirDialog()"></button>
             </div>
           </div>
         </div>
@@ -72,8 +72,8 @@
     <p-footer>
       <div class="ui-g">
         <div class="ui-sm-12 ui-md-6">
-          <button pTooltip="Borrar" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton icon="fa-trash" (click)="confirmacionBorrado()"
-            class="ui-button-danger"></button>
+          <button *ngIf="cursoSeleccionado.id" pTooltip="Borrar" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton icon="fa-trash"
+            (click)="confirmacionBorrado()" class="ui-button-danger"></button>
         </div>
         <div class="ui-sm-12 ui-md-6">
           <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formCurso.form.valid" pButton

@@ -96,7 +96,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="telefono" #telefono="ngModel"
-              [(ngModel)]="usuarioSeleccionado.telefono" required>
+              [(ngModel)]="usuarioSeleccionado.telefono">
             <label for="float-input">Teléfono</label>
           </span>
         </div>
@@ -115,12 +115,12 @@
       <div class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <label for="float-input">Imagen</label>
-          <input id="float-input" type="file" size="30" [ngStyle]="{'width':'100%'}" pInputText required>
+          <input id="float-input" type="file" size="30" [ngStyle]="{'width':'100%'}" pInputText>
         </div>
       </div>
     </div>
     <br>
-    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="cursos" [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos">
+    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="cursos" [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos" required>
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -152,7 +152,7 @@
   <p-footer>
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()" tooltipPosition="left" pButton icon="fa-trash"
+        <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()" tooltipPosition="left" pButton icon="fa-trash"
           class="ui-button-danger"></button>
       </div>
       <div class="ui-sm-12 ui-md-6">

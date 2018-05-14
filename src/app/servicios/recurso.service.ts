@@ -19,20 +19,27 @@ export class RecursoService {
     }
 
     getOtros() {
-        return this._http.get(this.url + 'recurso/otros').map(res => res.json());
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+
+        return this._http.get(this.url + 'recurso/otros', { headers: headers }).map(res => res.json());
     }
 
     getAulas() {
-        return this._http.get(this.url + 'recurso/aulas').map(res => res.json());
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+
+        return this._http.get(this.url + 'recurso/aulas', { headers: headers }).map(res => res.json());
     }
 
     getRecursos() {
-        return this._http.get(this.url + 'recurso/allRecursos').map(res => res.json());
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+
+        return this._http.get(this.url + 'recurso/allRecursos', { headers: headers }).map(res => res.json());
     }
 
     addRecurso(recurso: Recurso) {
         let json = JSON.stringify(recurso);
         let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
 
         return this._http.post(this.url + 'recurso/saveRecurso', json, { headers: headers })
             .map(res => res);
@@ -41,6 +48,8 @@ export class RecursoService {
 
     removeRecurso(id: String) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
+
         return this._http.delete(this.url + 'recurso/removeRecurso/' + id, { headers: headers })
             .map(res => res);
 

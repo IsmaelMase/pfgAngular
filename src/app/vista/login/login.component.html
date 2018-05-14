@@ -1,4 +1,6 @@
 <html>
+<p-growl [(value)]="msgs"></p-growl>
+
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
@@ -6,14 +8,14 @@
 
     <!-- Icon -->
     <div class="fadeIn first">
-      <img src="../../../assets/logo.png" id="icon" alt="User Icon" />
+      <img src="../../../assets/logo.png" width="30%" height="30%" id="icon" alt="User Icon" />
     </div>
 
     <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Email">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="Contraseña">
-      <input [routerLink]="['/pantallaApp/profesores']" type="submit" class="fadeIn fourth" value="Log In">
+    <form (keydown)="login($event)">
+      <input type="text" class="fadeIn second" name="email" pInputText [(ngModel)]="usuario.email" placeholder="Email">
+      <input type="password" class="fadeIn third" name="password" pInputText [(ngModel)]="password" placeholder="Contraseña">
+      <input (click)="login($event)" type="button" class="fadeIn fourth" value="Entrar">
     </form>
   </div>
 </div>

@@ -9,6 +9,7 @@ export class Usuario {
         public telefono: string,
         public email: string,
         public password: string,
-        public cursos: Curso[]
+        public cursos: Curso[],
+        public rol: string
     ) { }
 }

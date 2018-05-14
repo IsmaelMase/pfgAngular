@@ -6,6 +6,7 @@ import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Reserva } from '../modelo/reserva';
+import { Usuario } from '../modelo/usuario';
 
 @Component({
   selector: 'recurso',
@@ -22,6 +23,7 @@ export class RecursoComponent implements OnInit {
   public pos: number = -1;
   public recursoReserva: Recurso;
   public opcionReservaSeleccionada: string;
+  public usuario: Usuario;
 
   constructor(
     private _recursoService: RecursoService,
@@ -33,7 +35,7 @@ export class RecursoComponent implements OnInit {
   ngOnInit() {
     this._route.params.forEach((params: Params) => {
       this.tipo = params['tipo'];
-
+      this.usuario = JSON.parse(localStorage.getItem("usuario"))
       if (this.tipo === 'aulas') {
         this.cambiarAulas();
       } else {

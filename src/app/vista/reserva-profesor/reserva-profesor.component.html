@@ -1,0 +1,21 @@
+<div class="ui-g">
+  <div class="ui-g-12">
+    <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
+      [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+  </div>
+</div>
+
+<p-dialog [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
+  [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
+  <p-card title="Advanced Card" subtitle="Subtitle" [style]="{width: '360px'}" styleClass="ui-card-shadow">
+    <p-header>
+      <img src="Card" src="assets/showcase/images/usercard.png">
+    </p-header>
+    <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+      quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</div>
+    <p-footer>
+      <button pButton type="button" label="Save" icon="fa-check"></button>
+      <button pButton type="button" label="Cancel" icon="fa-close" class="ui-button-secondary"></button>
+    </p-footer>
+  </p-card>
+</p-dialog>

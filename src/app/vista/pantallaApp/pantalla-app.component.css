@@ -4,6 +4,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
+    overflow-y: auto;
 }
 
 p {
@@ -123,7 +124,7 @@ i, span {
 
 #sidebar ul li a {
     padding: 10px;
-    font-size: 1.1em;
+    font-size: 17px;
     display: block;
 }
 #sidebar ul li a:hover {

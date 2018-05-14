@@ -9,37 +9,31 @@
         <img src="../assets/avatar.png" alt="Nombre" width="100%" height="100%">
       </div>
       <div>
-        <h3>Ismael Masegosa Fdez-Bermejo sdfsdf sdsdf sdfsdsssss</h3>
+        <h3>{{usuario.nombre}} {{usuario.apellido}}</h3>
       </div>
     </div>
     <ul class="list-unstyled components">
-      <li [routerLink]="['/pantallaApp/profesores']">
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/profesores']">
         <a>
           <i class="fa fa-graduation-cap"></i>
           Profesores
         </a>
       </li>
-      <li>
-        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
+      <li [routerLink]="['/pantallaApp/recursos','aulas']">
+        <a>
           <i class="glyphicon glyphicon-blackboard"></i>
-          Recursos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <i class="fa fa-caret-down" aria-hidden="true"></i>
+
+          Aulas
         </a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li [routerLink]="['/pantallaApp/recursos','aulas']">
-            <a>
-              Aulas
-            </a>
-          </li>
-          <li [routerLink]="['/pantallaApp/recursos','otros']">
-            <a>
-              Otros
-            </a>
-          </li>
-        </ul>
       </li>
-      <li>
-        <a href="#">
+      <li [routerLink]="['/pantallaApp/recursos','otros']">
+        <a>
+          <i class="far fa-keyboard"></i>
+          Recursos
+        </a>
+      </li>
+      <li *ngIf="usuario.rol!=='ROL_ADMIN'" [routerLink]="['/pantallaApp/reservas']">
+        <a>
           <i class="fa fa-calendar"></i>
           Reservas
         </a>
@@ -50,7 +44,7 @@
           Mensajes
         </a>
       </li>
-      <li [routerLink]="['/pantallaApp/cursos']">
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/cursos']">
         <a>
           <i class="fa fa-columns"></i>
           Cursos
@@ -82,13 +76,14 @@
             </button>
           </form>
           <div class="nav navbar-nav navbar-right">
-            <button [routerLink]="['/login']" type="button" pTooltip="Cerrar Sesión" class="btn-logout btn btn-danger">
+            <button (click)="logout()" type="button" pTooltip="Cerrar Sesión" class="btn-logout btn btn-danger">
               <i class="fa fa-sign-out" aria-hidden="true"></i>
             </button>
           </div>
         </div>
       </div>
     </nav>
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="changeOfRoutes()">
+    </router-outlet>
   </div>
 </div>

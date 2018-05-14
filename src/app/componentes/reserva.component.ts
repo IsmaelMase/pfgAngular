@@ -44,9 +44,10 @@ export class ReservaComponent implements OnInit {
   public reservasList: Reserva[];
   public eventos: any[];
   public header: any;
-  public usuarioSeleccionado: Usuario;
   public mesMostrado: number = 0;
-
+  public yearMostrado: number = 0;
+  public usuario: Usuario;
+  public maxFechas: number;
 
 
   constructor(
@@ -62,9 +63,14 @@ export class ReservaComponent implements OnInit {
     registerLocaleData(localeEs, 'es', localeEsExtra);
     moment.lang("es");
     if (this.dialog === "diaria") {
-      this.reserva = new Reserva("", [], [], null, null, null, "");
-      this.reserva.recurso = this.recurso;
       this.getHorasDisponibles();
+      this.reserva = new Reserva("", [], [], null, null, null, "");
+      this.usuario = JSON.parse(localStorage.getItem("usuario"))
+      if (this.usuario.rol === "ROL_PROFESOR") {
+        this.reserva.usuario = this.usuario;
+        this.maxFechas = 30;
+      }
+      this.reserva.recurso = this.recurso;
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
       this.mesMostrado = 0;
@@ -73,8 +79,7 @@ export class ReservaComponent implements OnInit {
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       };
-      this.getReservas(0);
-      this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", []);
+      this.getReservas("05");
 
     }
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
@@ -100,8 +105,13 @@ export class ReservaComponent implements OnInit {
   getHorasDisponibles() {
     this._horarioService.getHoras().subscribe(
       response => {
-        this.horasDisponibles = response;
-        this.getUsuarios();
+        if (response.status !== 403) {
+          this.horasDisponibles = response.json();
+          this.getUsuarios();
+        } else {
+          this._router.navigate(["login"]);
+        }
+
       },
       error => {
         console.log(<any>error);
@@ -109,11 +119,14 @@ export class ReservaComponent implements OnInit {
     );
   }
 
-  getReservas(mes) {
-    this._reservaService.getReservasByRecursoAndMes(this.recurso.id, mes).subscribe(
+  getReservas(fecha) {
+    this._reservaService.getReservasByRecursoAndFecha(this.recurso.id, fecha).subscribe(
       response => {
-        console.log(response);
-        this.trasnformarReservasEventos(response);
+        if (response.status !== 403) {
+          this.trasnformarReservasEventos(response.json());
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -125,25 +138,33 @@ export class ReservaComponent implements OnInit {
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
       console.log(event.getDate()._d.getMonth())
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
+      this.yearMostrado = Number(event.getDate()._d.getFullYear())
 
       if (Number(event.getDate()._d.getUTCMonth() + 1) < 10) {
-        this.getReservas("0" + this.mesMostrado);
+        this.getReservas("0" + this.mesMostrado + "/" + this.yearMostrado);
 
       } else {
-        this.getReservas(this.mesMostrado);
+        this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
 
       }
     }
   }
 
   getFechasNoDisponibles() {
+    console.log(this.reserva.intervalos_reservas.length === 0);
     this.fechasNoDisponibles = [];
     this._reservaService.getFechasNoDisponibles(this.reserva.intervalos_reservas, this.recurso.id).subscribe(
       response => {
-        for (let fecha in response) {
-          this.fechasNoDisponibles.push(new Date(response[fecha]));
+        if (response.status !== 403) {
+          for (let fecha in response.json()) {
+            let fechaSeparada = response.json()[fecha].split("/")
+            this.fechasNoDisponibles.push(new Date(fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + "00:00"));
+          }
+          console.log(this.fechasNoDisponibles);
+          this.fechasNoDisponibles = [...this.fechasNoDisponibles];
+        } else {
+          this._router.navigate(["login"]);
         }
-        this.fechasNoDisponibles = [...this.fechasNoDisponibles];
       },
       error => {
         this.mostrarMensajeIncorrecto();
@@ -155,8 +176,12 @@ export class ReservaComponent implements OnInit {
   getUsuarios() {
     this._usuarioService.getUsuarios().subscribe(
       response => {
-        this.usuarios = response;
-        console.log(this.usuarios);
+        if (response.status !== 403) {
+          this.usuarios = response;
+          console.log(this.usuarios);
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -180,11 +205,12 @@ export class ReservaComponent implements OnInit {
     observableReservas.map((reserva: Reserva) => {
       let horas = reserva.intervalos_reservas[0].split("-");
       let fechaSeparada = reserva.fechas_reservas[0].split("/")
-
+      console.log(reserva);
       evento = {
         "title": reserva.usuario.nombre,
         "start": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[0],
         "end": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[1],
+        "color": "#0767a3",
         "reserva": reserva
       }
       this.eventos.push(evento);
@@ -219,6 +245,8 @@ export class ReservaComponent implements OnInit {
         console.log(response)
         if (response.status === 201) {
           this.cerrar.emit("ok");
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
         } else {
           this.cerrar.emit("fail");
           this.mostrarMensajeIncorrecto();

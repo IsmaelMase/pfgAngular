@@ -13,7 +13,7 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class CursoComponent implements OnInit {
 
-  public cursos: Curso[];
+  public cursos: Curso[] = [];
   public cursoSeleccionado: Curso;
   public modificando: boolean = false;
   public msgs: Message[] = [];
@@ -37,8 +37,11 @@ export class CursoComponent implements OnInit {
   getCursos() {
     this._cursoService.getCursos().subscribe(
       response => {
-        this.cursos = response;
-        console.log(this.cursos);
+        if (response.status !== 403) {
+          this.cursos = response.json();
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -47,7 +50,7 @@ export class CursoComponent implements OnInit {
   }
 
   seleccionarCurso(curso: Curso) {
-    this.pos=this.cursos.indexOf(curso);
+    this.pos = this.cursos.indexOf(curso);
     for (let prop in curso) {
       this.cursoSeleccionado[prop] = curso[prop];
     }
@@ -59,6 +62,11 @@ export class CursoComponent implements OnInit {
     this.modificando = false;
   }
 
+  abrirDialog() {
+    this.cursoSeleccionado = new Curso("", "");
+    this.modificando = true;
+  }
+
   saveCurso() {
     console.log(this.cursoSeleccionado)
     this._cursoService.addCurso(this.cursoSeleccionado).subscribe(
@@ -68,6 +76,8 @@ export class CursoComponent implements OnInit {
           this.mostrarMensajeCorrecto();
           this.remplazarObjeto(response);
           this.cancelar();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
           this.cancelar();
@@ -87,6 +97,8 @@ export class CursoComponent implements OnInit {
           this.mostrarMensajeCorrecto();
           this.eliminarElementoArray(curso);
           this.cancelar();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
           this.cancelar();

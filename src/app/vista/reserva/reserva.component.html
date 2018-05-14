@@ -36,14 +36,14 @@
         <div class="ui-grid-row">
           <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="dd/mm/yy"
             selectionMode="multiple" [disabledDates]="fechasNoDisponibles" [disabledDays]="[0,6]" name="fechas" #fechas="ngModel"
-            [(ngModel)]="reserva.fechas_reservas" dataType="string">
+            [(ngModel)]="reserva.fechas_reservas" dataType="string" [maxDateCount]="maxFechas">
           </p-calendar>
         </div>
       </div>
 
     </div>
     <br>
-    <p-table #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reserva.usuario" [filterDelay]="50"
+    <p-table *ngIf="usuario.rol==='ROL_ADMIN'" #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reserva.usuario" [filterDelay]="50"
       selectionMode="single" [responsive]="true" required>
       <ng-template pTemplate="caption">
         <div style="text-align: right">
@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <p-table #dt3 *ngIf="reserva.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}" [responsive]="true"
+        <p-table  #dt3 *ngIf="reserva.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}" [responsive]="true"
           [value]="reserva.usuario.cursos" selectionMode="single" [(selection)]="reserva.curso">
           <ng-template pTemplate="caption">
             <div style="text-align: right">
@@ -116,6 +116,6 @@
   <p-header>
     Listado de Reservas
   </p-header>
-  <p-schedule #fc (onViewRender)="clickeado(fc)" [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+  <p-schedule class="calendario" #fc (onViewRender)="clickeado(fc)" [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
 
 </p-dialog>

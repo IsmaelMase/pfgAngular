@@ -44,17 +44,24 @@ export class UsuarioComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(JSON.parse(localStorage.getItem("usuario")).rol!=="ROL_ADMIN"){
+      this._router.navigate(["cursos"]);
+    }
     this.getUsuarios();
     this.getCursos();
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", []);
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
   }
 
 
   getUsuarios() {
     this._usuarioService.getUsuarios().subscribe(
       response => {
-        this.usuarios = response;
-        console.log(this.usuarios);
+        if (response.status !== 403) {
+          this.usuarios = response;
+          console.log(this.usuarios);
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -65,8 +72,11 @@ export class UsuarioComponent implements OnInit {
   getCursos() {
     this._cursoService.getCursos().subscribe(
       response => {
-        this.cursos = response;
-        console.log(this.cursos);
+        if (response.status !== 403) {
+          this.cursos = response.json();
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -83,17 +93,18 @@ export class UsuarioComponent implements OnInit {
   }
 
   cancelar() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", []);
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
     this.modificando = false;
   }
 
   abrirDialog() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", []);
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
     this.modificando = true;
   }
 
   saveUsuario(formulario) {
     console.log(this.usuarioSeleccionado)
+    this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
         console.log(response);
@@ -102,7 +113,10 @@ export class UsuarioComponent implements OnInit {
           this.remplazarObjeto(response);
           this.cancelar();
           formulario.reset();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
         } else {
+          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeIncorrecto();
         }
       },
@@ -118,8 +132,10 @@ export class UsuarioComponent implements OnInit {
         console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
-          this.eliminarElementoArray(usuario);
+          this.eliminarElementoArray();
           this.cancelar();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
         }
@@ -154,9 +170,8 @@ export class UsuarioComponent implements OnInit {
     console.log(this.usuarios)
   }
 
-  eliminarElementoArray(usuario: Usuario) {
-    let pos = this.usuarios.indexOf(usuario);
-    this.usuarios.splice(pos, 1);
+  eliminarElementoArray() {
+    this.usuarios.splice(this.pos, 1);
   }
 
   mostrarMensajeCorrecto() {
