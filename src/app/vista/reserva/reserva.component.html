@@ -43,8 +43,8 @@
 
     </div>
     <br>
-    <p-table *ngIf="usuario.rol==='ROL_ADMIN'" #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reserva.usuario" [filterDelay]="50"
-      selectionMode="single" [responsive]="true" required>
+    <p-table *ngIf="usuario.rol==='ROL_ADMIN'" #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reserva.usuario"
+      [filterDelay]="50" selectionMode="single" [responsive]="true" required>
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <p-table  #dt3 *ngIf="reserva.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}" [responsive]="true"
+        <p-table #dt3 *ngIf="reserva.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}" [responsive]="true"
           [value]="reserva.usuario.cursos" selectionMode="single" [(selection)]="reserva.curso">
           <ng-template pTemplate="caption">
             <div style="text-align: right">
@@ -116,6 +116,43 @@
   <p-header>
     Listado de Reservas
   </p-header>
-  <p-schedule class="calendario" #fc (onViewRender)="clickeado(fc)" [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+  <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
+    [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+</p-dialog>
 
+<p-dialog *ngIf="reservaSeleccionada.id" header="Reserva" [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true"
+  (onHide)="cancelarUpdate()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
+  <div>
+    <b>Profesor:</b>
+    <span>{{reservaSeleccionada.usuario.nombre}}</span>
+  </div>
+  <div>
+    <b>Fecha:</b>
+    <span>{{reservaSeleccionada.fechas_reservas[0]}}</span>
+  </div>
+  <div>
+    <b>Hora:</b>
+    <span>{{reservaSeleccionada.intervalos_reservas[0]}}</span>
+  </div>
+  <div>
+    <b>Curso:</b>
+    <span>{{reservaSeleccionada.curso.nombre}}</span>
+  </div>
+  <div>
+    <b>Anotación:</b>
+    <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="anotacion"
+      #anotacion="ngModel" [(ngModel)]="reservaSeleccionada.anotacion"></textarea>
+  </div>
+  <p-footer>
+    <div class="ui-g">
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'left'}" pTooltip="Cancelar reserva" (click)="confirmacionBorrado()" tooltipPosition="left" pButton
+          icon="fa-trash" class="ui-button-danger"></button>
+      </div>
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="updateReserva()"
+          class="ui-button-success"></button>
+      </div>
+    </div>
+  </p-footer>
 </p-dialog>

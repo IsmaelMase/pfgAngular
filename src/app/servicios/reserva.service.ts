@@ -22,7 +22,7 @@ export class ReservaService {
     getReservasByRecursoAndFecha(id: string, fecha) {
         let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
 
-        return this._http.get(this.url + 'reserva/reservasByRecursoAndfecha/' + id + "/" + fecha, { headers: headers }).map(res => res);
+        return this._http.get(this.url + 'reserva/reservasByRecursoAndFecha/' + id + "/" + fecha, { headers: headers }).map(res => res);
     }
 
     getReservasByUsuarioAndFecha(id: string, fecha) {

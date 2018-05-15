@@ -1,3 +1,5 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
 <div class="ui-g">
   <div class="ui-g-12">
     <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
@@ -5,17 +7,39 @@
   </div>
 </div>
 
-<p-dialog [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
-  [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
-  <p-card title="Advanced Card" subtitle="Subtitle" [style]="{width: '360px'}" styleClass="ui-card-shadow">
-    <p-header>
-      <img src="Card" src="assets/showcase/images/usercard.png">
-    </p-header>
-    <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-      quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</div>
-    <p-footer>
-      <button pButton type="button" label="Save" icon="fa-check"></button>
-      <button pButton type="button" label="Cancel" icon="fa-close" class="ui-button-secondary"></button>
-    </p-footer>
-  </p-card>
+<p-dialog *ngIf="reservaSeleccionada.id" header="Reserva" [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true"
+  (onHide)="cancelar()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
+  <div>
+    <b>Recurso:</b>
+    <span>{{reservaSeleccionada.recurso.nombre}}</span>
+  </div>
+  <div>
+    <b>Fecha:</b>
+    <span>{{reservaSeleccionada.fechas_reservas[0]}}</span>
+  </div>
+  <div>
+    <b>Hora:</b>
+    <span>{{reservaSeleccionada.intervalos_reservas[0]}}</span>
+  </div>
+  <div>
+    <b>Curso:</b>
+    <span>{{reservaSeleccionada.curso.nombre}}</span>
+  </div>
+  <div>
+    <b>Anotación:</b>
+    <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="anotacion"
+      #anotacion="ngModel" [(ngModel)]="reservaSeleccionada.anotacion"></textarea>
+  </div>
+  <p-footer>
+    <div class="ui-g">
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'left'}" pTooltip="Cancelar reserva" (click)="confirmacionBorrado()" tooltipPosition="left" pButton
+          icon="fa-trash" class="ui-button-danger"></button>
+      </div>
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
+          class="ui-button-success"></button>
+      </div>
+    </div>
+  </p-footer>
 </p-dialog>

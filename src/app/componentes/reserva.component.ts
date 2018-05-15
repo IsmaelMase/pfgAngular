@@ -48,6 +48,8 @@ export class ReservaComponent implements OnInit {
   public yearMostrado: number = 0;
   public usuario: Usuario;
   public maxFechas: number;
+  public reservaSeleccionada:Reserva;
+  public pos: number = 0;
 
 
   constructor(
@@ -73,13 +75,14 @@ export class ReservaComponent implements OnInit {
       this.reserva.recurso = this.recurso;
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
+      this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
       this.mesMostrado = 0;
       this.header = {
         left: 'prev,next today',
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       };
-      this.getReservas("05");
+      this.getReservas("05/2018");
 
     }
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
@@ -133,6 +136,7 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
+  
   clickeado(event) {
     console.log(event)
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
@@ -256,6 +260,76 @@ export class ReservaComponent implements OnInit {
         this.mostrarMensajeIncorrecto();
       }
     );
+  }
+
+  seleccionarReserva(reserva: Reserva) {
+    this.pos = this.eventos.indexOf(reserva);
+    for (let prop in reserva) {
+      this.reservaSeleccionada[prop] = reserva[prop];
+    }
+  }
+
+  updateReserva() {
+    console.log(this.reservaSeleccionada);
+    this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
+      response => {
+        console.log(response)
+        if (response.status === 201) {
+          this.cancelarUpdate();
+          this.mostrarMensajeCorrecto();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
+        } else {
+          this.cancelarUpdate()
+          this.mostrarMensajeIncorrecto();
+        }
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+  }
+
+  removeReserva(reserva: Reserva) {
+    this._reservaService.removeReserva(reserva.id).subscribe(
+      response => {
+        console.log(response);
+        if (response.status === 200) {
+          this.eliminarElementoArray();
+          this.cancelarUpdate();
+          this.mostrarMensajeCorrecto();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
+        } else {
+          this.cancelarUpdate()
+          this.mostrarMensajeIncorrecto();
+        }
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+  }
+
+  confirmacionBorrado() {
+    this.confirmationService.confirm({
+      message: '¿Desea cancelar la reserva?',
+      header: 'Confirmacion eliminado',
+      icon: 'fa fa-trash',
+      accept: () => {
+        this.removeReserva(this.reservaSeleccionada);
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  cancelarUpdate() {
+    this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+  }
+  eliminarElementoArray() {
+    this.eventos.splice(this.pos, 1);
+    this.cancelar()
   }
 
 }

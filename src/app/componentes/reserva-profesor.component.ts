@@ -127,17 +127,38 @@ export class ReservaProfesorComponent implements OnInit {
     }
   }
 
+  saveReserva() {
+    this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
+      response => {
+        console.log(response)
+        if (response.status === 201) {
+          this.cancelar();
+          this.mostrarMensajeCorrecto();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
+        } else {
+          this.cancelar()
+          this.mostrarMensajeIncorrecto();
+        }
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+  }
+
   removeReserva(reserva: Reserva) {
     this._reservaService.removeReserva(reserva.id).subscribe(
       response => {
         console.log(response);
         if (response.status === 200) {
-          this.mostrarMensajeCorrecto();
           this.eliminarElementoArray();
-          this.reservaSeleccionada = null
+          this.cancelar();
+          this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
           this._router.navigate(["login"]);
         } else {
+          this.cancelar()
           this.mostrarMensajeIncorrecto();
         }
       },
@@ -149,7 +170,7 @@ export class ReservaProfesorComponent implements OnInit {
 
   confirmacionBorrado() {
     this.confirmationService.confirm({
-      message: '¿Desea elminiar el usuario?',
+      message: '¿Desea cancelar la reserva?',
       header: 'Confirmacion eliminado',
       icon: 'fa fa-trash',
       accept: () => {
@@ -160,8 +181,12 @@ export class ReservaProfesorComponent implements OnInit {
     });
   }
 
+  cancelar() {
+    this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+  }
   eliminarElementoArray() {
     this.eventos.splice(this.pos, 1);
+    this.cancelar()
   }
 
   mostrarMensajeCorrecto() {

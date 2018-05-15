@@ -148,7 +148,7 @@ export class UsuarioComponent implements OnInit {
 
   confirmacionBorrado() {
     this.confirmationService.confirm({
-      message: '¿Desea elminiar el usuario?',
+      message: '¿Desea eliminar el usuario?',
       header: 'Confirmacion eliminado',
       icon: 'fa fa-trash',
       accept: () => {
