@@ -24,7 +24,7 @@ export class ReservaProfesorComponent implements OnInit {
   public es: any;
   public eventos: any[];
   public header: any;
-  public mesMostrado: number = 0;
+  public mesMostrado: any = 0;
   public usuario: Usuario;
   public maxFechas: number;
   public yearMostrado: number = 0;
@@ -81,18 +81,16 @@ export class ReservaProfesorComponent implements OnInit {
   }
 
   clickeado(event) {
-    console.log(event)
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
-      console.log(event.getDate()._d.getMonth())
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
 
       if (Number(event.getDate()._d.getUTCMonth() + 1) < 10) {
-        this.getReservas("0" + this.mesMostrado + "/" + this.yearMostrado);
+        this.mesMostrado="0" + this.mesMostrado;
+        this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
 
       } else {
         this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
-
       }
     }
   }
@@ -106,7 +104,6 @@ export class ReservaProfesorComponent implements OnInit {
     observableReservas.map((reserva: Reserva) => {
       let horas = reserva.intervalos_reservas[0].split("-");
       let fechaSeparada = reserva.fechas_reservas[0].split("/")
-      console.log(reserva);
       evento = {
         "title": reserva.recurso.nombre,
         "start": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[0],
@@ -115,22 +112,22 @@ export class ReservaProfesorComponent implements OnInit {
         "reserva": reserva
       }
       this.eventos.push(evento);
-    }).finally(() => {
-      console.log(this.eventos)
     }).subscribe();
   }
 
   seleccionarReserva(reserva: Reserva) {
+    console.log(reserva);
     this.pos = this.eventos.indexOf(reserva);
     for (let prop in reserva) {
       this.reservaSeleccionada[prop] = reserva[prop];
     }
+    console.log(this.pos);
   }
 
   saveReserva() {
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
-        console.log(response)
+        console.log(response.json())
         if (response.status === 201) {
           this.cancelar();
           this.mostrarMensajeCorrecto();
@@ -150,9 +147,7 @@ export class ReservaProfesorComponent implements OnInit {
   removeReserva(reserva: Reserva) {
     this._reservaService.removeReserva(reserva.id).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
-          this.eliminarElementoArray();
           this.cancelar();
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
@@ -166,6 +161,16 @@ export class ReservaProfesorComponent implements OnInit {
         this.mostrarMensajeIncorrecto();
       }
     );
+  }
+
+  remplazarObjeto(response) {
+    if (this.pos !== -1) {
+      this.eventos[this.pos] = response.json();
+      console.log(this.eventos);
+    } else {
+      this.eventos.push(response.json());
+    }
+    this.pos = -1;
   }
 
   confirmacionBorrado() {
@@ -183,9 +188,12 @@ export class ReservaProfesorComponent implements OnInit {
 
   cancelar() {
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+    this.getReservas(this.mesMostrado+"/"+this.yearMostrado);
   }
   eliminarElementoArray() {
+    console.log(this.pos);
     this.eventos.splice(this.pos, 1);
+    this.pos = -1
     this.cancelar()
   }
 

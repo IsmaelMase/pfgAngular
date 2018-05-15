@@ -22,7 +22,7 @@ export class UsuarioService {
     getUsuarios() {
         let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
 
-        return this._http.get(this.url + 'usuario/usuarios',{headers:headers}).map(res => res.json());
+        return this._http.get(this.url + 'usuario/usuarios',{headers:headers}).map(res => res);
     }
 
     addUsuario(usuario: Usuario){

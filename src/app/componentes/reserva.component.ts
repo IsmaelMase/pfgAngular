@@ -44,11 +44,11 @@ export class ReservaComponent implements OnInit {
   public reservasList: Reserva[];
   public eventos: any[];
   public header: any;
-  public mesMostrado: number = 0;
+  public mesMostrado: any = 0;
   public yearMostrado: number = 0;
   public usuario: Usuario;
   public maxFechas: number;
-  public reservaSeleccionada:Reserva;
+  public reservaSeleccionada: Reserva;
   public pos: number = 0;
 
 
@@ -64,6 +64,7 @@ export class ReservaComponent implements OnInit {
   ngOnInit() {
     registerLocaleData(localeEs, 'es', localeEsExtra);
     moment.lang("es");
+    this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
     if (this.dialog === "diaria") {
       this.getHorasDisponibles();
       this.reserva = new Reserva("", [], [], null, null, null, "");
@@ -75,7 +76,6 @@ export class ReservaComponent implements OnInit {
       this.reserva.recurso = this.recurso;
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
-      this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
       this.mesMostrado = 0;
       this.header = {
         left: 'prev,next today',
@@ -83,7 +83,6 @@ export class ReservaComponent implements OnInit {
         right: 'month,agendaWeek,agendaDay'
       };
       this.getReservas("05/2018");
-
     }
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
     this.es = {
@@ -136,7 +135,7 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-  
+
   clickeado(event) {
     console.log(event)
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
@@ -145,11 +144,11 @@ export class ReservaComponent implements OnInit {
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
 
       if (Number(event.getDate()._d.getUTCMonth() + 1) < 10) {
-        this.getReservas("0" + this.mesMostrado + "/" + this.yearMostrado);
+        this.mesMostrado="0" + this.mesMostrado;
+        this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
 
       } else {
         this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
-
       }
     }
   }
@@ -181,7 +180,7 @@ export class ReservaComponent implements OnInit {
     this._usuarioService.getUsuarios().subscribe(
       response => {
         if (response.status !== 403) {
-          this.usuarios = response;
+          this.usuarios = response.json();
           console.log(this.usuarios);
         } else {
           this._router.navigate(["login"]);
@@ -295,7 +294,6 @@ export class ReservaComponent implements OnInit {
       response => {
         console.log(response);
         if (response.status === 200) {
-          this.eliminarElementoArray();
           this.cancelarUpdate();
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
@@ -325,6 +323,7 @@ export class ReservaComponent implements OnInit {
   }
 
   cancelarUpdate() {
+    this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
   eliminarElementoArray() {

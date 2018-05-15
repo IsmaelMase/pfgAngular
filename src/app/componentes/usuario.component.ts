@@ -57,7 +57,7 @@ export class UsuarioComponent implements OnInit {
     this._usuarioService.getUsuarios().subscribe(
       response => {
         if (response.status !== 403) {
-          this.usuarios = response;
+          this.usuarios = response.json();
           console.log(this.usuarios);
         } else {
           this._router.navigate(["login"]);
