@@ -45,6 +45,7 @@ import { PantallaAppComponent } from './componentes/pantalla-app.component';
 import { LoginComponent } from './componentes/login.component';
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
 import { MensajeComponent } from './componentes/mensaje.component';
+import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuario.component';
 
 
 
@@ -58,7 +59,8 @@ import { MensajeComponent } from './componentes/mensaje.component';
     PantallaAppComponent,
     LoginComponent,
     ReservaProfesorComponent,
-    MensajeComponent
+    MensajeComponent,
+    ConfiguracionUsuarioComponent
   ],
   imports: [
     BrowserModule,

@@ -113,6 +113,11 @@ i, span {
     background-color:#00b0ff;
 }
 
+#sidebar .sidebar-header:hover {
+    padding: 20px;
+    background-color:#0091ea;
+}
+
 #sidebar .sidebar-header strong {
     display: none;
     font-size: 1.8em;
