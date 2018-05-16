@@ -8,6 +8,7 @@ import { UsuarioComponent } from './componentes/usuario.component'
 import { PantallaAppComponent } from './componentes/pantalla-app.component'
 import { LoginComponent } from './componentes/login.component'
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
+import { MensajeComponent } from './componentes/mensaje.component';
 
 const appRoutes: Routes = [
 	{
@@ -16,6 +17,7 @@ const appRoutes: Routes = [
 			{ path: 'profesores', component: UsuarioComponent },
 			{ path: 'reservas', component: ReservaProfesorComponent },
 			{ path: 'cursos', component: CursoComponent },
+			{ path: 'mensajes', component: MensajeComponent },
 			{ path: 'recursos/:tipo', component: RecursoComponent },
 			{ path: '**', component: UsuarioComponent }
 		]

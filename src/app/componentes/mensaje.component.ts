@@ -1,57 +1,53 @@
 import { Component, OnInit } from '@angular/core';
+import { MensajeService } from '../servicios/mensaje.service';
 import { UsuarioService } from '../servicios/usuario.service';
-import { CursoService } from '../servicios/curso.service';
+import { Mensaje } from '../modelo/mensaje';
 import { Usuario } from '../modelo/usuario';
-import { Curso } from '../modelo/curso';
 import { Observable } from 'rxjs/Observable';
 import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-
-
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import localeEsExtra from '@angular/common/locales/extra/es';
+import * as moment from 'moment';
 @Component({
-  selector: 'usuario',
-  templateUrl: '../vista/usuario/usuario.component.html',
-  styleUrls: ['../vista/usuario/usuario.component.css']
+  selector: 'app-mensaje',
+  templateUrl: '../vista/mensaje/mensaje.component.html',
+  styleUrls: ['../vista/mensaje/mensaje.component.css']
 })
-export class UsuarioComponent implements OnInit {
+export class MensajeComponent implements OnInit {
 
   public usuarios: Usuario[];
-  public cursos: Curso[];
-  public usuarioSeleccionado: Usuario;
+  public mensajes: Mensaje[];
+  public mensajeSeleccionado: Mensaje;
   public modificando: boolean = false;
   public msgs: Message[] = [];
   public cols: any[];
-  public colsCursos: any[];
   public pos: number = -1;
+  public usuario: Usuario;
 
   constructor(
     private _usuarioService: UsuarioService,
-    private _cursoService: CursoService,
+    private _mensajeService: MensajeService,
     private _route: ActivatedRoute,
     private _router: Router,
     private confirmationService: ConfirmationService
   ) {
     this.cols = [
-      { field: 'dni', header: 'DNI' },
-      { field: 'nombre', header: 'Nombre' },
-      { field: 'apellido', header: 'Apellido' },
-      { field: 'email', header: 'Email' }
-    ];
-    this.colsCursos = [
-      { field: 'nombre', header: 'Nombre' }
+      { field: 'emisor', header: 'Enviado por...' },
+      { field: 'cuerpo', header: 'Cuerpo' },
+      { field: 'fecha', header: 'Fecha' },
     ];
   }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem("usuario")).rol!=="ROL_ADMIN"){
-      this._router.navigate(["cursos"]);
-    }
-    this.getUsuarios();
-    this.getCursos();
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
+    registerLocaleData(localeEs, 'es', localeEsExtra);
+    moment.lang("es");
+    this.usuario = JSON.parse(localStorage.getItem("usuario"))
+    this.getMensajes();
+    this.mensajeSeleccionado = new Mensaje("", this.usuario, null, "", false, "");
   }
-
 
   getUsuarios() {
     this._usuarioService.getUsuarios().subscribe(
@@ -69,11 +65,13 @@ export class UsuarioComponent implements OnInit {
     );
   }
 
-  getCursos() {
-    this._cursoService.getCursos().subscribe(
+  getMensajes() {
+    this._mensajeService.getMensajes(this.usuario.id).subscribe(
       response => {
         if (response.status !== 403) {
-          this.cursos = response.json();
+          this.mensajes = response.json();
+          this.getUsuarios();
+          console.log(this.mensajes);
         } else {
           this._router.navigate(["login"]);
         }
@@ -84,29 +82,41 @@ export class UsuarioComponent implements OnInit {
     );
   }
 
-  seleccionarUsuario(usuario: Usuario) {
-    this.pos = this.usuarios.indexOf(usuario);
-    for (let prop in usuario) {
-      this.usuarioSeleccionado[prop] = usuario[prop];
+  filtrarUsuario(event) {
+    //in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
+    let filtered: any[] = [];
+    for (let i = 0; i < this.usuarios.length; i++) {
+      let usuario = this.usuarios[i];
+      if (usuario.nombre.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+        filtered.push(usuario);
+      }
     }
-    this.usuarioSeleccionado.password="";
+    this.usuarios=[...filtered];
+  }
+
+
+  seleccionarMensaje(mensaje: Mensaje) {
+    this.pos = this.mensajes.indexOf(mensaje);
+    for (let prop in mensaje) {
+      this.mensajeSeleccionado[prop] = mensaje[prop];
+    }
     this.modificando = true;
   }
 
   cancelar() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
+    this.mensajeSeleccionado = new Mensaje("", this.usuario, null, "", false, "");
     this.modificando = false;
   }
 
   abrirDialog() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
+    this.mensajeSeleccionado = new Mensaje("", this.usuario, null, "", false, "");
     this.modificando = true;
   }
 
-  saveUsuario(formulario) {
-    console.log(this.usuarioSeleccionado)
-    this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
-    this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
+  saveMensaje(formulario) {
+    this.mensajeSeleccionado.fecha=moment().format("L");
+    console.log(this.mensajeSeleccionado)
+    this._mensajeService.addMensaje(this.mensajeSeleccionado).subscribe(
       response => {
         console.log(response);
         if (response.status === 201) {
@@ -117,7 +127,6 @@ export class UsuarioComponent implements OnInit {
         } else if (response.status === 403) {
           this._router.navigate(["login"]);
         } else {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeIncorrecto();
         }
       },
@@ -127,8 +136,8 @@ export class UsuarioComponent implements OnInit {
     );
   }
 
-  removeUsuario(usuario: Usuario) {
-    this._usuarioService.removeUsuario(usuario.id).subscribe(
+  removeMensaje(mensaje: Mensaje) {
+    this._mensajeService.removeMensaje(mensaje.id).subscribe(
       response => {
         console.log(response);
         if (response.status === 200) {
@@ -149,11 +158,11 @@ export class UsuarioComponent implements OnInit {
 
   confirmacionBorrado() {
     this.confirmationService.confirm({
-      message: '¿Desea eliminar el usuario?',
+      message: '¿Desea eliminar el mensaje?',
       header: 'Confirmacion eliminado',
       icon: 'fa fa-trash',
       accept: () => {
-        this.removeUsuario(this.usuarioSeleccionado);
+        this.removeMensaje(this.mensajeSeleccionado);
       },
       reject: () => {
       }
@@ -161,18 +170,18 @@ export class UsuarioComponent implements OnInit {
   }
 
   remplazarObjeto(response) {
-    console.log(this.usuarios)
+    console.log(this.mensajes)
     if (this.pos !== -1) {
-      this.usuarios[this.pos] = response.json();
+      this.mensajes[this.pos] = response.json();
     } else {
-      this.usuarios.push(response.json());
+      this.mensajes.push(response.json());
     }
     this.pos = -1;
-    console.log(this.usuarios)
+    console.log(this.mensajes)
   }
 
   eliminarElementoArray() {
-    this.usuarios.splice(this.pos, 1);
+    this.mensajes.splice(this.pos, 1);
   }
 
   mostrarMensajeCorrecto() {

@@ -40,3 +40,11 @@ div.scrollable {
 ::-webkit-scrollbar-thumb:hover {
     background: #12b603; 
 }
+
+.leido{
+    background-color: #FFFF; 
+}
+
+.noLeido{
+    background-color: #d3c854; 
+}

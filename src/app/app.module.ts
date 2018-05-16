@@ -21,6 +21,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { ScheduleModule } from 'primeng/schedule';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 
 import { CursoService } from './servicios/curso.service'
@@ -29,6 +30,7 @@ import { RecursoService } from './servicios/recurso.service'
 import { HorarioService } from './servicios/horarios.service'
 import { ReservaService } from './servicios/reserva.service'
 import { LoginService } from './servicios/login.service'
+import { MensajeService } from './servicios/mensaje.service'
 
 import { routing, appRoutingProviders } from './app.routing';
 import { ConfirmationService } from 'primeng/api';
@@ -42,6 +44,7 @@ import { ReservaComponent } from './componentes/reserva.component';
 import { PantallaAppComponent } from './componentes/pantalla-app.component';
 import { LoginComponent } from './componentes/login.component';
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
+import { MensajeComponent } from './componentes/mensaje.component';
 
 
 
@@ -54,7 +57,8 @@ import { ReservaProfesorComponent } from './componentes/reserva-profesor.compone
     ReservaComponent,
     PantallaAppComponent,
     LoginComponent,
-    ReservaProfesorComponent
+    ReservaProfesorComponent,
+    MensajeComponent
   ],
   imports: [
     BrowserModule,
@@ -79,9 +83,10 @@ import { ReservaProfesorComponent } from './componentes/reserva-profesor.compone
     InputTextareaModule,
     CalendarModule,
     ScheduleModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    AutoCompleteModule
   ],
-  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService],
+  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
