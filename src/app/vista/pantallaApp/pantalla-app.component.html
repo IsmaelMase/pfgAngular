@@ -52,6 +52,12 @@
           Cursos
         </a>
       </li>
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/horarios']">
+        <a>
+          <i class="fa fa-columns"></i>
+          Horarios
+        </a>
+      </li>
     </ul>
 
   </nav>

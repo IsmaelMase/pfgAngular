@@ -7,6 +7,18 @@
     margin-bottom: -1%;
 }
 
+.tabla {
+    width: 60% !important;
+}
+
+.cabeceraIntervalo {
+    width: 70% !important;
+}
+
+.textoHorario{
+   margin-top: 50%;
+}
+
 div.scrollable {
     width: 100%;
     height: 5%;

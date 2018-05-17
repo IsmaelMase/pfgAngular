@@ -26,7 +26,7 @@ export class MensajeComponent implements OnInit {
   public cols: any[];
   public pos: number = -1;
   public usuario: Usuario;
-
+  public visualizar: boolean = false;
   constructor(
     private _usuarioService: UsuarioService,
     private _mensajeService: MensajeService,
@@ -91,7 +91,7 @@ export class MensajeComponent implements OnInit {
         filtered.push(usuario);
       }
     }
-    this.usuarios=[...filtered];
+    this.usuarios = [...filtered];
   }
 
 
@@ -100,12 +100,21 @@ export class MensajeComponent implements OnInit {
     for (let prop in mensaje) {
       this.mensajeSeleccionado[prop] = mensaje[prop];
     }
-    this.modificando = true;
+    if (this.pos === -1) {
+      this.modificando = true;
+    } else {
+      if (!this.mensajeSeleccionado.leido) {
+        this.mensajeSeleccionado.leido = true;
+        this.saveMensaje();
+      }
+      this.visualizar = true;
+    }
   }
 
   cancelar() {
     this.mensajeSeleccionado = new Mensaje("", this.usuario, null, "", false, "");
     this.modificando = false;
+    this.visualizar = false;
   }
 
   abrirDialog() {
@@ -113,8 +122,10 @@ export class MensajeComponent implements OnInit {
     this.modificando = true;
   }
 
-  saveMensaje(formulario) {
-    this.mensajeSeleccionado.fecha=moment().format("L");
+  saveMensaje() {
+    if (!this.mensajeSeleccionado.id) {
+      this.mensajeSeleccionado.fecha = moment().format("L");
+    }
     console.log(this.mensajeSeleccionado)
     this._mensajeService.addMensaje(this.mensajeSeleccionado).subscribe(
       response => {
@@ -123,7 +134,6 @@ export class MensajeComponent implements OnInit {
           this.mostrarMensajeCorrecto();
           this.remplazarObjeto(response);
           this.cancelar();
-          formulario.reset();
         } else if (response.status === 403) {
           this._router.navigate(["login"]);
         } else {
@@ -170,10 +180,11 @@ export class MensajeComponent implements OnInit {
   }
 
   remplazarObjeto(response) {
-    console.log(this.mensajes)
-    if (this.pos !== -1) {
+    console.log(this.mensajes);
+    console.log(response.json().receptor.indexOf(this.usuario));
+    if (this.pos !== -1 && response.json().receptor.indexOf(this.usuario) !== -1) {
       this.mensajes[this.pos] = response.json();
-    } else {
+    } else if (this.pos === -1 && response.json().receptor.indexOf(this.usuario) !== -1) {
       this.mensajes.push(response.json());
     }
     this.pos = -1;

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CursoService } from '../servicios/curso.service';
 import { UsuarioService } from '../servicios/usuario.service';
 import { ReservaService } from '../servicios/reserva.service';
-import { HorarioService } from '../servicios/horarios.service';
+import { HorarioService } from '../servicios/horario.service';
 import { Recurso } from '../modelo/recurso';
 import { Curso } from '../modelo/curso';
 import { Usuario } from '../modelo/usuario';

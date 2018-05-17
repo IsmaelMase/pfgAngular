@@ -1,0 +1,128 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
+
+<div class="ui-g">
+  <div class="ui-g-12">
+    <p-dataView class="ui-table-responsive" #dv [value]="horarios" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+      <p-header>
+        <div class="ui-helper-clearfix">
+          <div class="ui-g">
+            <div class="ui-g-4 ui-md-4 filter-container">
+              <div style="position:relative">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
+              </div>
+            </div>
+            <div class="ui-g-4 ui-md-4">
+              <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
+            </div>
+            <div class="ui-g-4 ui-md-4">
+              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success" icon="fa-plus" (click)="abrirDialog()"></button>
+            </div>
+          </div>
+        </div>
+      </p-header>
+      <ng-template let-horario pTemplate="listItem">
+        <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+          <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
+            <img src="../../../assets/horarios.png" width="30%" height="100%">
+          </div>
+          <div class="ui-g-12 ui-md-8 horario-details">
+            <div class="ui-g">
+              <div class="ui-g-2 ui-sm-6">Nombre: </div>
+              <div class="ui-g-10 ui-sm-6">
+                <b>{{horario.nombre}}</b>
+              </div>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-md-1 search-icon">
+            <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarHorario(horario)"
+              style="margin-top:0"></button>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template let-horario pTemplate="gridItem">
+        <div style="padding:.5em" class="ui-g-12 ui-md-2">
+          <p-panel [ngStyle]="{'text-align':'center'}">
+            <p-header>
+              <div class="scrollable">
+                {{horario.nombre}}
+              </div>
+            </p-header>
+            <img src="../../../assets/horarios.png" width="25%" height="25%">
+            <hr class="ui-widget-content" style="border-top:0">
+            <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarHorario(horario)"
+              style="margin-top:0"></button>
+          </p-panel>
+        </div>
+      </ng-template>
+    </p-dataView>
+  </div>
+</div>
+<div>
+  <p-dialog [(visible)]="modificando" [autoAlign]="true" [modal]="true" (onHide)="cancelar()">
+    <p-header>
+      Formulario Horario
+    </p-header>
+    <form #formHorario="ngForm">
+      <br>
+      <div class="ui-grid-row">
+        <span class="ui-float-label">
+          <input id="float-input" type="text" size="30" pInputText name="nombre" #nombre="ngModel" [(ngModel)]="horarioSeleccionado.nombre"
+            required>
+          <label for="float-input">Nombre</label>
+        </span>
+      </div>
+      <br>
+      <div class="ui-g">
+        <div class="ui-sm-12 ui-md-10">
+          <b>Nuevo Intervalo</b>
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-sm-12 ui-md-1">
+          <div class="textoHorario">De</div>
+        </div>
+        <div class="ui-sm-12 ui-md-4">
+          <input [ngStyle]="{'width':'100%'}" pInputText type="time" name="inicio" #inicio="ngModel" (ngModelChange)="comprobar()"
+            [(ngModel)]="intervalo.inicio">
+        </div>
+        <div class="ui-sm-12 ui-md-1">
+          <div class="textoHorario">A</div>
+        </div>
+        <div class="ui-sm-12 ui-md-4">
+          <input [ngStyle]="{'width':'100%'}" pInputText type="time" name="fin" #fin="ngModel" [(ngModel)]="intervalo.fin" (ngModelChange)="comprobar()"
+            >
+        </div>
+        <div class="ui-sm-12 ui-md-2">
+          <button [ngStyle]="{'float':'right'}" pTooltip="Añadir Intervalo" tooltipPosition="left" pButton icon="fa-plus" (click)="addIntervalo()"
+            class="ui-button-success" [disabled]="intervalo.valido"></button>
+        </div>
+      </div>
+
+      <div class="ui-g">
+        <div class="ui-sm-12 ui-md-10">
+          <b>Listado</b>
+        </div>
+      </div>
+      <div *ngFor="let intervalo of intervalos; let i = index" [ngStyle]="{'width':'100%'}">
+        <b>De </b>{{intervalo.inicio}}
+        <b> a </b>{{intervalo.fin}}
+        <button pTooltip="Borrar intervalo" tooltipPosition="bottom" pButton icon="fa-trash"
+        (click)="removeIntervalo(intervalo)" class="ui-button-danger"></button>
+      </div>
+    </form>
+    <p-footer>
+      <div class="ui-g">
+        <div class="ui-sm-12 ui-md-6">
+          <button *ngIf="horarioSeleccionado.id" pTooltip="Borrar horario" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton icon="fa-trash"
+            (click)="confirmacionBorrado()" class="ui-button-danger"></button>
+        </div>
+        <div class="ui-sm-12 ui-md-6">
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid" pButton
+            icon="fa-check" (click)="saveHorario(); formHorario.reset();" class="ui-button-success"></button>
+        </div>
+      </div>
+    </p-footer>
+  </p-dialog>
+</div>

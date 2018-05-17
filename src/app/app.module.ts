@@ -22,12 +22,13 @@ import { CalendarModule } from 'primeng/calendar';
 import { ScheduleModule } from 'primeng/schedule';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { MessageModule } from 'primeng/message';
 
 
 import { CursoService } from './servicios/curso.service'
 import { UsuarioService } from './servicios/usuario.service'
 import { RecursoService } from './servicios/recurso.service'
-import { HorarioService } from './servicios/horarios.service'
+import { HorarioService } from './servicios/horario.service'
 import { ReservaService } from './servicios/reserva.service'
 import { LoginService } from './servicios/login.service'
 import { MensajeService } from './servicios/mensaje.service'
@@ -46,6 +47,7 @@ import { LoginComponent } from './componentes/login.component';
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
 import { MensajeComponent } from './componentes/mensaje.component';
 import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuario.component';
+import { HorarioComponent } from './componentes/horario.component';
 
 
 
@@ -60,7 +62,8 @@ import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuar
     LoginComponent,
     ReservaProfesorComponent,
     MensajeComponent,
-    ConfiguracionUsuarioComponent
+    ConfiguracionUsuarioComponent,
+    HorarioComponent
   ],
   imports: [
     BrowserModule,
@@ -86,9 +89,10 @@ import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuar
     CalendarModule,
     ScheduleModule,
     ProgressSpinnerModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    MessageModule
   ],
-  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService],
+  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -43,7 +43,12 @@
       </ng-template>
       <ng-template let-curso pTemplate="gridItem">
         <div style="padding:.5em" class="ui-g-12 ui-md-2">
-          <p-panel [header]="curso.nombre" [ngStyle]="{'text-align':'center'}">
+          <p-panel [ngStyle]="{'text-align':'center'}">
+            <p-header>
+              <div class="scrollable">
+                {{curso.nombre}}
+              </div>
+            </p-header>
             <img src="../../../assets/cursos.png" width="25%" height="25%">
             <hr class="ui-widget-content" style="border-top:0">
             <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarCurso(curso)"

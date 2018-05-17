@@ -9,6 +9,7 @@ import { PantallaAppComponent } from './componentes/pantalla-app.component'
 import { LoginComponent } from './componentes/login.component'
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
 import { MensajeComponent } from './componentes/mensaje.component';
+import { HorarioComponent } from './componentes/horario.component';
 
 const appRoutes: Routes = [
 	{
@@ -18,6 +19,7 @@ const appRoutes: Routes = [
 			{ path: 'reservas', component: ReservaProfesorComponent },
 			{ path: 'cursos', component: CursoComponent },
 			{ path: 'mensajes', component: MensajeComponent },
+			{ path: 'horarios', component: HorarioComponent },
 			{ path: 'recursos/:tipo', component: RecursoComponent },
 			{ path: '**', component: UsuarioComponent }
 		]

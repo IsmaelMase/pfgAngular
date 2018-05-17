@@ -38,9 +38,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.abierto=true;
+    this.abierto = true;
     this.getCursos();
     this.usuarioSeleccionado = JSON.parse(localStorage.getItem("usuario"))
+    this.usuarioSeleccionado.password = "";
   }
 
   getCursos() {
@@ -91,4 +92,3 @@ export class ConfiguracionUsuarioComponent implements OnInit {
 
 }
 
-}

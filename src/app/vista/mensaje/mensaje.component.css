@@ -10,7 +10,7 @@ img{
 
 /* Define the hover highlight color for the table row */
 .hoverTable tr:hover {
-        background-color:rgb(197, 194, 194);
+    background-color:rgb(195, 197, 194);
 }
 div.scrollable {
     width: 100%;
@@ -46,5 +46,5 @@ div.scrollable {
 }
 
 .noLeido{
-    background-color: #d3c854; 
+    background-color: #f7f1af; 
 }
