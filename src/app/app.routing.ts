@@ -10,6 +10,7 @@ import { LoginComponent } from './componentes/login.component'
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
 import { MensajeComponent } from './componentes/mensaje.component';
 import { HorarioComponent } from './componentes/horario.component';
+import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
 
 const appRoutes: Routes = [
 	{
@@ -18,8 +19,8 @@ const appRoutes: Routes = [
 			{ path: 'profesores', component: UsuarioComponent },
 			{ path: 'reservas', component: ReservaProfesorComponent },
 			{ path: 'cursos', component: CursoComponent },
-			{ path: 'mensajes', component: MensajeComponent },
 			{ path: 'horarios', component: HorarioComponent },
+			{ path: 'generador-calendario', component: GeneradorCalendarioComponent },
 			{ path: 'recursos/:tipo', component: RecursoComponent },
 			{ path: '**', component: UsuarioComponent }
 		]

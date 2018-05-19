@@ -17,7 +17,7 @@
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <p-table [ngStyle]="{'width':'100%'}" [responsive]="true" (onRowSelect)="getFechasNoDisponibles()" (onRowUnselect)="getFechasNoDisponibles()"
-            [value]="horasDisponibles" selectionMode="multiple" [(selection)]="reserva.intervalos_reservas">
+            [value]="recurso.intervalo.intervalos" selectionMode="multiple" [(selection)]="reserva.intervalos_reservas">
             <ng-template pTemplate="header">
               <tr>
                 <th>Horas</th>
@@ -116,14 +116,14 @@
     Listado de Reservas
   </p-header>
   <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
-    [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+    [events]="eventos" [eventLimit]="4" locale="es" [header]="header" ></p-schedule>
 </p-dialog>
 
 <p-dialog *ngIf="reservaSeleccionada.id" header="Reserva" [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true"
-  (onHide)="cancelarUpdate()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
+  (onHide)="cancelarBorrado()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
   <div>
-    <b>Profesor:</b>
-    <span>{{reservaSeleccionada.usuario.nombre}}</span>
+    <b>Recurso:</b>
+    <span>{{reservaSeleccionada.recurso.nombre}}</span>
   </div>
   <div>
     <b>Fecha:</b>
@@ -149,9 +149,17 @@
           icon="fa-trash" class="ui-button-danger"></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="updateReserva()"
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
           class="ui-button-success"></button>
       </div>
     </div>
   </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="loading" [modal]="true" [autoAlign]="true" [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true" [width]="1000">
+  <p-header>
+    Cargando
+  </p-header>
+  <p-progressSpinner [style]="{width: '10%', height: '10%'}" strokeWidth="3" fill="#FFFFFF" animationDuration=".9s"></p-progressSpinner>
+  <span>Espere por favor se esta realizando la operación</span>
 </p-dialog>

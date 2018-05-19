@@ -3,3 +3,33 @@
     background: #78b7df !important;
     color: #FFFFFF;
 }
+
+@media print {
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+    
+    
+    .primeraFila{
+        background-color: #00B0FF !important;
+    }
+    
+    .primeraColumna{
+        background-color: #C0CA33 !important;
+    }
+    .visible-print {
+        display: inherit !important;
+    }
+
+    .hidden-print {
+        display: none !important;
+    }
+}

@@ -90,6 +90,7 @@ export class HorarioComponent implements OnInit {
 
   cancelar() {
     this.horarioSeleccionado = new Horario("", "", []);
+    this.intervalos=[];
     this.modificando = false;
   }
 

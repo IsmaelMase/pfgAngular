@@ -34,6 +34,7 @@ export class ReservaComponent implements OnInit {
   public minDate = new Date();
   public maxDate = new Date();
   public es: any;
+  public fechasSeleccionadas: string[];
   public horasDisponibles: string[];
   public reserva: Reserva;
   public fechaSeleccionada: Date;
@@ -50,7 +51,8 @@ export class ReservaComponent implements OnInit {
   public maxFechas: number;
   public reservaSeleccionada: Reserva;
   public pos: number = 0;
-
+  public reservasAMostrar: any[] = [];
+  public loading:boolean=false;
 
   constructor(
     private _reservaService: ReservaService,
@@ -122,6 +124,7 @@ export class ReservaComponent implements OnInit {
   }
 
   getReservas(fecha) {
+
     this._reservaService.getReservasByRecursoAndFecha(this.recurso.id, fecha).subscribe(
       response => {
         if (response.status !== 403) {
@@ -144,7 +147,7 @@ export class ReservaComponent implements OnInit {
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
 
       if (Number(event.getDate()._d.getUTCMonth() + 1) < 10) {
-        this.mesMostrado="0" + this.mesMostrado;
+        this.mesMostrado = "0" + this.mesMostrado;
         this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
 
       } else {
@@ -210,7 +213,7 @@ export class ReservaComponent implements OnInit {
       let fechaSeparada = reserva.fechas_reservas[0].split("/")
       console.log(reserva);
       evento = {
-        "title": reserva.usuario.nombre,
+        "title": reserva.usuario.nombre + " " + reserva.curso.nombre,
         "start": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[0],
         "end": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[1],
         "color": "#0767a3",
@@ -223,7 +226,6 @@ export class ReservaComponent implements OnInit {
       console.log(this.eventos)
     }).subscribe();
   }
-
 
   mostrarMensajeCorrecto() {
     this.msgs = [];
@@ -242,8 +244,8 @@ export class ReservaComponent implements OnInit {
   }
 
   saveReserva() {
-    console.log(this.reserva)
-    this._reservaService.addReserva(this.reserva).subscribe(
+    console.log(this.reservaSeleccionada)
+    this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
         console.log(response)
         if (response.status === 201) {
@@ -262,10 +264,16 @@ export class ReservaComponent implements OnInit {
   }
 
   seleccionarReserva(reserva: Reserva) {
+    console.log(reserva);
     this.pos = this.eventos.indexOf(reserva);
     for (let prop in reserva) {
       this.reservaSeleccionada[prop] = reserva[prop];
     }
+    console.log(this.pos);
+  }
+
+  cancelarBorrado() {
+    this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
 
   updateReserva() {
@@ -329,6 +337,31 @@ export class ReservaComponent implements OnInit {
   eliminarElementoArray() {
     this.eventos.splice(this.pos, 1);
     this.cancelar()
+  }
+
+  generar() {
+    this.fechasSeleccionadas.sort();
+    this._reservaService.getReservasByRecursoAndFechas(this.recurso.id, this.fechasSeleccionadas).subscribe(
+      response => {
+        if (response.status === 200) {
+          this.reservasList = response.json();
+          this.formarTabla();
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
+        } else {
+          this.mostrarMensajeIncorrecto();
+        }
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+    console.log(this.fechasSeleccionadas);
+  }
+
+  formarTabla() {
+    this.reservasAMostrar.push(this.fechasSeleccionadas);
+    console.log(this.reservasAMostrar);
   }
 
 }

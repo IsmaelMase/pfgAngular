@@ -118,8 +118,8 @@
       </div>
     </div>
     <br>
-    <div *ngIf="tipo == 'aulas' && usuario.rol==='ROL_ADMIN'" class="ui-g ui-fluid">
-      <div class="ui-sm-12 ui-md-12">
+    <div *ngIf="usuario.rol==='ROL_ADMIN'" class="ui-g ui-fluid">
+      <div *ngIf="tipo == 'aulas'" class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="number" size="30" [ngStyle]="{'width':'100%'}" pInputText name="capacidad" #capacidad="ngModel"
@@ -127,6 +127,11 @@
             <label for="float-input">Capacidad</label>
           </span>
         </div>
+      </div>
+      <div class="ui-sm-12 ui-md-12">
+        <span>Horario</span>
+        <p-dropdown [options]="intervalos" placeholder="Seleccione horario" [(ngModel)]="recursoSeleccionado.intervalo" name="intervalo" #intervalo="ngModel" [style]="{'width':'100%'}" optionLabel="nombre"
+          [showClear]="true" required filter="true"></p-dropdown>
       </div>
     </div>
     <div *ngIf="usuario.rol==='ROL_ADMIN'" class="ui-g ui-fluid">

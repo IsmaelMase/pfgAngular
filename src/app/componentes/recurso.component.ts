@@ -7,7 +7,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Reserva } from '../modelo/reserva';
 import { Usuario } from '../modelo/usuario';
-
+import { HorarioService } from "../servicios/horario.service";
+import { Horario } from '../modelo/horario';
 @Component({
   selector: 'recurso',
   templateUrl: '../vista/recurso/recurso.component.html',
@@ -24,10 +25,12 @@ export class RecursoComponent implements OnInit {
   public recursoReserva: Recurso;
   public opcionReservaSeleccionada: string;
   public usuario: Usuario;
+  public intervalos:Horario;
 
   constructor(
     private _recursoService: RecursoService,
     private _route: ActivatedRoute,
+    private _horarioService: HorarioService,
     private _router: Router,
     private confirmationService: ConfirmationService
   ) { }
@@ -41,7 +44,25 @@ export class RecursoComponent implements OnInit {
       } else {
         this.cambiarOtros();
       }
+      this.getHorasDisponibles();
     });
+  }
+
+  getHorasDisponibles() {
+    this._horarioService.getHoras().subscribe(
+      response => {
+        if (response.status !== 403) {
+          console.log(response.json());
+          this.intervalos = response.json();
+        } else {
+          this._router.navigate(["login"]);
+        }
+
+      },
+      error => {
+        console.log(<any>error);
+      }
+    );
   }
 
   getAulas() {
@@ -54,6 +75,11 @@ export class RecursoComponent implements OnInit {
         console.log(<any>error);
       }
     );
+  }
+
+  imprimir(event){
+    console.log(event.value);
+    console.log(this.recursoSeleccionado);
   }
 
   getOtros() {
@@ -78,18 +104,18 @@ export class RecursoComponent implements OnInit {
 
   cancelar() {
     if (this.tipo === 'aulas') {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a");
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a",null);
     } else {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r");
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r",null);
     }
     this.modificando = false;
   }
 
   abrirDialog() {
     if (this.tipo === 'aulas') {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a");
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a",null);
     } else {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r");
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r",null);
     } this.modificando = true;
   }
 
@@ -194,11 +220,11 @@ export class RecursoComponent implements OnInit {
 
   cambiarAulas() {
     this.getAulas();
-    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a");
+    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a",null);
   }
 
   cambiarOtros() {
     this.getOtros();
-    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r");
+    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r",null);
   }
 }

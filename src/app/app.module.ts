@@ -48,6 +48,7 @@ import { ReservaProfesorComponent } from './componentes/reserva-profesor.compone
 import { MensajeComponent } from './componentes/mensaje.component';
 import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuario.component';
 import { HorarioComponent } from './componentes/horario.component';
+import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
 
 
 
@@ -63,7 +64,8 @@ import { HorarioComponent } from './componentes/horario.component';
     ReservaProfesorComponent,
     MensajeComponent,
     ConfiguracionUsuarioComponent,
-    HorarioComponent
+    HorarioComponent,
+    GeneradorCalendarioComponent
   ],
   imports: [
     BrowserModule,

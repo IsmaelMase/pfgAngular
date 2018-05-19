@@ -2,7 +2,7 @@
 
 <div class="wrapper">
   <!-- Sidebar Holder -->
-  <nav id="sidebar">
+  <nav id="sidebar" class="hidden-print">
     <div class="sidebar-header" (click)="abrirDialogConfiguracion()">
       <div *ngIf="!oculto">
         <img src="../assets/avatar.png" alt="Nombre" width="30%" height="30%" align="left">
@@ -40,12 +40,6 @@
           Reservas
         </a>
       </li>
-      <li [routerLink]="['/pantallaApp/mensajes']">
-        <a>
-          <i class="fa fa-envelope"></i>
-          Mensajes
-        </a>
-      </li>
       <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/cursos']">
         <a>
           <i class="fa fa-columns"></i>
@@ -54,8 +48,14 @@
       </li>
       <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/horarios']">
         <a>
-          <i class="fa fa-columns"></i>
+          <i class="fa fa-clock"></i>
           Horarios
+        </a>
+      </li>
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/generador-calendario']">
+        <a>
+          <i class="fa fa-print"></i>
+          Imprimir Calendario
         </a>
       </li>
     </ul>
@@ -91,7 +91,7 @@
         </div>
       </div>
     </nav>
-    <router-outlet (activate)="changeOfRoutes()">
+    <router-outlet (activate)="changeOfRoutes()" class="visible-print">
     </router-outlet>
   </div>
 </div>

@@ -1,3 +1,5 @@
+import { Horario } from "./horario";
+
 export class Recurso {
     constructor(
         public id: string,
@@ -5,6 +7,7 @@ export class Recurso {
         public datos: string,
         public incidencia: string,
         public capacidad: number,
-        public tipo: String
+        public tipo: String,
+        public intervalo:Horario
     ) { }
 }

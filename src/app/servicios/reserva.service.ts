@@ -31,6 +31,14 @@ export class ReservaService {
         return this._http.get(this.url + 'reserva/reservasByUsuarioAndFecha/' + id + "/" + fecha, { headers: headers }).map(res => res);
     }
 
+    getReservasByRecursoAndFechas(id: string, fechas:string[]) {
+        let json = JSON.stringify(fechas);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
+
+        return this._http.post(this.url + 'reserva/reservasByRecursoAndFechas/' + id,json, { headers: headers }).map(res => res);
+    }
+
     getFechasNoDisponibles(horas: string[], idRecurso: string) {
         let json = JSON.stringify(horas);
         let headers = new Headers({ 'Content-Type': 'application/json' });

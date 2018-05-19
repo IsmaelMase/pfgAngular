@@ -33,7 +33,7 @@ export class RecursoService {
     getRecursos() {
         let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
 
-        return this._http.get(this.url + 'recurso/allRecursos', { headers: headers }).map(res => res.json());
+        return this._http.get(this.url + 'recurso/allRecursos', { headers: headers }).map(res => res);
     }
 
     addRecurso(recurso: Recurso) {
