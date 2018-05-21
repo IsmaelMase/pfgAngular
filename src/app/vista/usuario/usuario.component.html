@@ -6,12 +6,16 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
-          <button [ngStyle]="{'float':'left'}" pTooltip="Refrescar" tooltipPosition="bottom" pButton icon="fa-retweet" class="ui-button-info"
+          <button [ngStyle]="{'float':'left'}" pTooltip="Refrescar" tooltipPosition="bottom" pButton icon="fa-retweet" class="ui-button-info hidden-xs"
+            (click)="getUsuarios()"></button>
+            <button [ngStyle]="{'float':'left'}" pTooltip="Refrescar" tooltipPosition="bottom" pButton icon="fa-retweet" class="ui-button-info hidden-md hidden-lg btn-block"
             (click)="getUsuarios()"></button>
         </div>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Añadir" tooltipPosition="left" pButton icon="fa-plus" class="ui-button-success"
+        <button [ngStyle]="{'float':'right'}" pTooltip="Añadir" tooltipPosition="left" pButton icon="fa-plus" class="ui-button-success hidden-xs"
+          (click)="abrirDialog()"></button>
+          <button [ngStyle]="{'float':'right'}" pTooltip="Añadir" tooltipPosition="left" pButton icon="fa-plus" class="ui-button-success hidden-md hidden-lg btn-block "
           (click)="abrirDialog()"></button>
       </div>
     </div>
@@ -155,11 +159,15 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()" tooltipPosition="left" pButton icon="fa-trash"
-          class="ui-button-danger"></button>
+          class="ui-button-danger hidden-xs"></button>
+          <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()" tooltipPosition="left" pButton icon="fa-trash"
+          class="ui-button-danger hidden-md hidden-lg btn-block "></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid" pButton
           icon="fa-check" (click)="saveUsuario(formUsuario)" class="ui-button-success"></button>
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid" pButton
+          icon="fa-check" (click)="saveUsuario(formUsuario)" class="ui-button-success hidden-md hidden-lg btn-block hidden-xs"></button>
       </div>
     </div>
   </p-footer>

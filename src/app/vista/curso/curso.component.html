@@ -7,17 +7,20 @@
       <p-header>
         <div class="ui-helper-clearfix">
           <div class="ui-g">
-            <div class="ui-g-4 ui-md-4 filter-container">
+            <div class="ui-g-4 ui-md-4 ui-sm-12 filter-container">
               <div style="position:relative">
-                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input type="search" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
+                <i class="fa fa-search hidden-xs" style="margin:4px 4px 0 0"></i>
+                <input type="search" pInputText placeholder="Buscar por nombre" class="hidden-xs" (keyup)="dv.filter($event.target.value)">
+                <input type="search" [ngStyle]="{'width':'100%'}" class="hidden-md hidden-lg" pInputText placeholder="Buscar por nombre"
+                  (keyup)="dv.filter($event.target.value)">
               </div>
             </div>
-            <div class="ui-g-4 ui-md-4">
+            <div class="ui-g-4 ui-md-4 hidden-xs">
               <p-dataViewLayoutOptions [ngStyle]="{'float':'right'}"></p-dataViewLayoutOptions>
             </div>
-            <div class="ui-g-4 ui-md-4">
-              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success" icon="fa-plus" (click)="abrirDialog()"></button>
+            <div class="ui-g-4 ui-md-4 ui-sm-12">
+                <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success hidden-xs" icon="fa-plus" (click)="abrirDialog()"></button>
+              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success hidden-lg hidden-md btn-block" icon="fa-plus" (click)="abrirDialog()"></button>
             </div>
           </div>
         </div>

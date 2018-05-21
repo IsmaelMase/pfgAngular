@@ -156,10 +156,10 @@
   </p-footer>
 </p-dialog>
 
-<p-dialog [(visible)]="loading" [modal]="true" [autoAlign]="true" [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true" [width]="1000">
+<p-dialog [(visible)]="loading" [modal]="true" [autoAlign]="true" [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true" >
   <p-header>
     Cargando
   </p-header>
-  <p-progressSpinner [style]="{width: '10%', height: '10%'}" strokeWidth="3" fill="#FFFFFF" animationDuration=".9s"></p-progressSpinner>
+  <p-progressSpinner [style]="{width: '50%', height: '50%'}" strokeWidth="3" fill="#FFFFFF" animationDuration=".9s"></p-progressSpinner>
   <span>Espere por favor se esta realizando la operación</span>
 </p-dialog>

@@ -25,7 +25,7 @@ export class RecursoComponent implements OnInit {
   public recursoReserva: Recurso;
   public opcionReservaSeleccionada: string;
   public usuario: Usuario;
-  public intervalos:Horario;
+  public intervalos: Horario;
 
   constructor(
     private _recursoService: RecursoService,
@@ -68,8 +68,12 @@ export class RecursoComponent implements OnInit {
   getAulas() {
     this._recursoService.getAulas().subscribe(
       response => {
-        this.recursos = response;
-        console.log(this.recursos);
+        if (response.status !== 403) {
+          this.recursos = response;
+          console.log(this.recursos);
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -77,7 +81,7 @@ export class RecursoComponent implements OnInit {
     );
   }
 
-  imprimir(event){
+  imprimir(event) {
     console.log(event.value);
     console.log(this.recursoSeleccionado);
   }
@@ -85,8 +89,12 @@ export class RecursoComponent implements OnInit {
   getOtros() {
     this._recursoService.getOtros().subscribe(
       response => {
-        this.recursos = response;
-        console.log(this.recursos);
+        if (response.status !== 403) {
+          this.recursos = response;
+          console.log(this.recursos);
+        } else {
+          this._router.navigate(["login"]);
+        }
       },
       error => {
         console.log(<any>error);
@@ -104,22 +112,22 @@ export class RecursoComponent implements OnInit {
 
   cancelar() {
     if (this.tipo === 'aulas') {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a",null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null);
     } else {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r",null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null);
     }
     this.modificando = false;
   }
 
   abrirDialog() {
     if (this.tipo === 'aulas') {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a",null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null);
     } else {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r",null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null);
     } this.modificando = true;
   }
 
-  abrirDialogReserva(recurso: Recurso,tipoDialog:string) {
+  abrirDialogReserva(recurso: Recurso, tipoDialog: string) {
     this.opcionReservaSeleccionada = tipoDialog;
     console.log(recurso);
     this.recursoReserva = recurso;
@@ -220,11 +228,11 @@ export class RecursoComponent implements OnInit {
 
   cambiarAulas() {
     this.getAulas();
-    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a",null);
+    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null);
   }
 
   cambiarOtros() {
     this.getOtros();
-    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r",null);
+    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null);
   }
 }
