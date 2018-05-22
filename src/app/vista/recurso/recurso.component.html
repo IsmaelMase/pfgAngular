@@ -12,7 +12,8 @@
               <div style="position:relative">
                 <i class="fa fa-search hidden-xs" style="margin:4px 4px 0 0"></i>
                 <input type="search" pInputText placeholder="Buscar por nombre" class="hidden-xs" (keyup)="dv.filter($event.target.value)">
-                <input type="search" [ngStyle]="{'width':'100%'}" class="hidden-md hidden-lg" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
+                <input type="search" [ngStyle]="{'width':'100%'}" class="hidden-md hidden-lg" pInputText placeholder="Buscar por nombre"
+                  (keyup)="dv.filter($event.target.value)">
               </div>
             </div>
             <div class="ui-g-4 ui-md-4 hidden-xs">
@@ -20,7 +21,8 @@
             </div>
             <div class="ui-g-4 ui-md-4 ui-sm-12">
               <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success hidden-xs" (click)="seleccionarRecurso(recurso)"></button>
-              <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success hidden-md hidden-lg btn-block" (click)="seleccionarRecurso(recurso)"></button>
+              <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success hidden-md hidden-lg btn-block"
+                (click)="seleccionarRecurso(recurso)"></button>
             </div>
           </div>
         </div>
@@ -57,8 +59,8 @@
               style="margin-top:0"></button>
             <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
               style="margin-top:0"></button>
-            <button *ngIf="usuario.rol==='ROL_ADMIN'" pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar"
-              (click)="abrirDialogReserva(recurso,'reservas')" style="margin-top:0"></button>
+            <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
+              style="margin-top:0"></button>
           </div>
         </div>
       </ng-template>
@@ -87,7 +89,7 @@
               style="margin-top:0"></button>
             <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
               style="margin-top:0"></button>
-            <button *ngIf="usuario.rol==='ROL_ADMIN'" pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar"
+            <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar"
               (click)="abrirDialogReserva(recurso,'reservas')" style="margin-top:0"></button>
           </p-panel>
         </div>
@@ -132,8 +134,8 @@
       </div>
       <div class="ui-sm-12 ui-md-12">
         <span>Horario</span>
-        <p-dropdown [options]="intervalos" placeholder="Seleccione horario" [(ngModel)]="recursoSeleccionado.intervalo" name="intervalo" #intervalo="ngModel" [style]="{'width':'100%'}" optionLabel="nombre"
-          [showClear]="true" required filter="true"></p-dropdown>
+        <p-dropdown [options]="intervalos" placeholder="Seleccione horario" [(ngModel)]="recursoSeleccionado.intervalo" name="intervalo"
+          #intervalo="ngModel" [style]="{'width':'100%'}" optionLabel="nombre" [showClear]="true" required filter="true"></p-dropdown>
       </div>
     </div>
     <div *ngIf="usuario.rol==='ROL_ADMIN'" class="ui-g ui-fluid">
@@ -174,13 +176,13 @@
       <div class="ui-sm-12 ui-md-6">
         <button *ngIf="recursoSeleccionado.id && usuario.rol==='ROL_ADMIN'" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()"
           tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger hidden-xs"></button>
-          <button *ngIf="recursoSeleccionado.id && usuario.rol==='ROL_ADMIN'" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()"
+        <button *ngIf="recursoSeleccionado.id && usuario.rol==='ROL_ADMIN'" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()"
           tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger hidden-md hidden-lg btn-block"></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
           icon="fa-check" (click)="saveRecurso()" class="ui-button-success hidden-xs"></button>
-          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
           icon="fa-check" (click)="saveRecurso()" class="ui-button-success hidden-md hidden-lg btn-block"></button>
       </div>
     </div>

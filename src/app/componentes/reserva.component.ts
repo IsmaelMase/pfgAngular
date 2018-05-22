@@ -52,7 +52,7 @@ export class ReservaComponent implements OnInit {
   public reservaSeleccionada: Reserva;
   public pos: number = 0;
   public reservasAMostrar: any[] = [];
-  public loading:boolean=false;
+  public loading: boolean = false;
 
   constructor(
     private _reservaService: ReservaService,
@@ -67,15 +67,14 @@ export class ReservaComponent implements OnInit {
     registerLocaleData(localeEs, 'es', localeEsExtra);
     moment.lang("es");
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+    this.usuario = JSON.parse(localStorage.getItem("usuario"))
     if (this.dialog === "diaria") {
       this.getHorasDisponibles();
-      this.reserva = new Reserva("", [], [], null, null, null, "");
-      this.usuario = JSON.parse(localStorage.getItem("usuario"))
       if (this.usuario.rol === "ROL_PROFESOR") {
-        this.reserva.usuario = this.usuario;
+        this.reservaSeleccionada.usuario = this.usuario;
         this.maxFechas = 30;
       }
-      this.reserva.recurso = this.recurso;
+      this.reservaSeleccionada.recurso = this.recurso;
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
       this.mesMostrado = 0;
@@ -157,9 +156,9 @@ export class ReservaComponent implements OnInit {
   }
 
   getFechasNoDisponibles() {
-    console.log(this.reserva.intervalos_reservas.length === 0);
+    console.log(this.reservaSeleccionada.intervalos_reservas.length === 0);
     this.fechasNoDisponibles = [];
-    this._reservaService.getFechasNoDisponibles(this.reserva.intervalos_reservas, this.recurso.id).subscribe(
+    this._reservaService.getFechasNoDisponibles(this.reservaSeleccionada.intervalos_reservas, this.recurso.id).subscribe(
       response => {
         if (response.status !== 403) {
           for (let fecha in response.json()) {
@@ -196,7 +195,7 @@ export class ReservaComponent implements OnInit {
   }
 
   abrirDialogReservaDiaria(recurso: Recurso) {
-    this.reserva.recurso = recurso;
+    this.reservaSeleccionada.recurso = recurso;
     this.getHorasDisponibles();
     this.getUsuarios();
     console.log(this.horasDisponibles);
@@ -244,6 +243,9 @@ export class ReservaComponent implements OnInit {
   }
 
   saveReserva() {
+    if(this.dialog === "diaria"){
+      
+    }
     console.log(this.reservaSeleccionada)
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
