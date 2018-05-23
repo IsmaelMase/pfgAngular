@@ -20,23 +20,27 @@ export class ReservaService {
     }
 
     getReservasByRecursoAndFecha(id: string, fecha) {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
+        let json = JSON.stringify(fecha);
 
-        return this._http.get(this.url + 'reserva/reservasByRecursoAndFecha/' + id + "/" + fecha, { headers: headers }).map(res => res);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
+        return this._http.post(this.url + 'reserva/reservasByRecursoAndFecha/' + id, json, { headers: headers }).map(res => res);
     }
 
     getReservasByUsuarioAndFecha(id: string, fecha) {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
+        let json = JSON.stringify(fecha);
 
-        return this._http.get(this.url + 'reserva/reservasByUsuarioAndFecha/' + id + "/" + fecha, { headers: headers }).map(res => res);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
+        return this._http.post(this.url + 'reserva/reservasByUsuarioAndFecha/' + id, json, { headers: headers }).map(res => res);
     }
 
-    getReservasByRecursoAndFechas(id: string, fechas:string[]) {
+    getReservasByRecursoAndFechas(id: string, fechas: string[]) {
         let json = JSON.stringify(fechas);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         headers.append('Authorization', localStorage.getItem("token"));
 
-        return this._http.post(this.url + 'reserva/reservasByRecursoAndFechas/' + id,json, { headers: headers }).map(res => res);
+        return this._http.post(this.url + 'reserva/generarTabla/' + id, json, { headers: headers }).map(res => res);
     }
 
     getFechasNoDisponibles(horas: string[], idRecurso: string) {

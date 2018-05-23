@@ -3,7 +3,7 @@
   <div class="ui-sm-12 ui-md-6">
     <div class="ui-grid-row">
       <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="dd/mm/yy"
-        selectionMode="multiple" [disabledDays]="[0,6]" name="fechas" #fechas="ngModel" [(ngModel)]="fechasSeleccionadas" dataType="string"></p-calendar>
+        selectionMode="multiple" [disabledDays]="[0,6]" name="fechas" [maxDateCount]="5" #fechas="ngModel" [(ngModel)]="fechasSeleccionadas" dataType="string"></p-calendar>
     </div>
   </div>
   <div class="ui-sm-12 ui-md-6">

@@ -119,7 +119,7 @@
             (click)="confirmacionBorrado()" class="ui-button-danger"></button>
         </div>
         <div class="ui-sm-12 ui-md-6">
-          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid" pButton
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0]" pButton
             icon="fa-check" (click)="saveHorario(); formHorario.reset();" class="ui-button-success"></button>
         </div>
       </div>

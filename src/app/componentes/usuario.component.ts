@@ -41,15 +41,15 @@ export class UsuarioComponent implements OnInit {
     this.colsCursos = [
       { field: 'nombre', header: 'Nombre' }
     ];
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
   }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem("usuario")).rol!=="ROL_ADMIN"){
+    if (JSON.parse(localStorage.getItem("usuario")).rol !== "ROL_ADMIN") {
       this._router.navigate(["cursos"]);
     }
     this.getUsuarios();
     this.getCursos();
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
   }
 
 
@@ -89,7 +89,7 @@ export class UsuarioComponent implements OnInit {
     for (let prop in usuario) {
       this.usuarioSeleccionado[prop] = usuario[prop];
     }
-    this.usuarioSeleccionado.password="";
+    this.usuarioSeleccionado.password = "";
     this.modificando = true;
   }
 

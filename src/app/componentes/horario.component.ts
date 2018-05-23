@@ -100,6 +100,7 @@ export class HorarioComponent implements OnInit {
   }
 
   saveHorario() {
+    this.intervalos.sort();
     this.horarioSeleccionado.intervalos=[];
     for(let intervalo of this.intervalos){
       console.log(intervalo);
