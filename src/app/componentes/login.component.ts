@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
   ) {
-    this.usuario = new Usuario("", "", "", "", "", "", "", [],"");
+    this.usuario = new Usuario("", "", "", "", "", "", "", [],"","");
   }
 
   ngOnInit() {

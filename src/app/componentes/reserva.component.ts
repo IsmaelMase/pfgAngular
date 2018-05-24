@@ -243,9 +243,6 @@ export class ReservaComponent implements OnInit {
   }
 
   saveReserva() {
-    if(this.dialog === "diaria"){
-      
-    }
     console.log(this.reservaSeleccionada)
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {

@@ -49,6 +49,8 @@ import { MensajeComponent } from './componentes/mensaje.component';
 import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuario.component';
 import { HorarioComponent } from './componentes/horario.component';
 import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
+import { UploadService } from './servicios/upload.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -72,6 +74,7 @@ import { GeneradorCalendarioComponent } from './componentes/generador-calendario
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     ButtonModule,
     InputTextModule,
     TooltipModule,
@@ -94,7 +97,7 @@ import { GeneradorCalendarioComponent } from './componentes/generador-calendario
     AutoCompleteModule,
     MessageModule
   ],
-  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService],
+  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService,UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

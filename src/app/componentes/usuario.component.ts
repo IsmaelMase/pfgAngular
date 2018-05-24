@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
+import { UploadService } from '../servicios/upload.service';
 
 
 @Component({
@@ -24,13 +25,16 @@ export class UsuarioComponent implements OnInit {
   public cols: any[];
   public colsCursos: any[];
   public pos: number = -1;
+  public selectedFiles: FileList;
+  public currentFileUpload: File;
 
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
     private _route: ActivatedRoute,
     private _router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private uploadService: UploadService
   ) {
     this.cols = [
       { field: 'dni', header: 'DNI' },
@@ -41,7 +45,7 @@ export class UsuarioComponent implements OnInit {
     this.colsCursos = [
       { field: 'nombre', header: 'Nombre' }
     ];
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "");
   }
 
   ngOnInit() {
@@ -94,16 +98,19 @@ export class UsuarioComponent implements OnInit {
   }
 
   cancelar() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "");
     this.modificando = false;
   }
 
   abrirDialog() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR");
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "");
     this.modificando = true;
   }
 
-  saveUsuario(formulario) {
+  saveUsuario(formulario, imagen) {
+    if (imagen) {
+      this.usuarioSeleccionado.imagen = imagen.name;
+    }
     console.log(this.usuarioSeleccionado)
     this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
@@ -126,6 +133,41 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
+  selectFile(event) {
+    let file = event.target.files.item(0);
+
+    if (file.type.match('image.*')) {
+      this.selectedFiles = event.target.files;
+    } else {
+      alert('invalid format!');
+    }
+  }
+
+  upload(formulario) {
+
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.uploadService.saveImage(this.currentFileUpload).subscribe(
+      (response: any) => {
+        console.log(response);
+        if (response.status === 200) {
+          this.saveUsuario(formulario, this.currentFileUpload);
+        } else if (response.status === 403) {
+          this._router.navigate(["login"]);
+        } else if (response.status === 302) {
+          this.saveUsuario(formulario, this.currentFileUpload);
+        } else if(response.status) {
+          this.msgs = [];
+          this.mostrarMensajeIncorrectoImagen();
+        }
+        this.currentFileUpload = null;
+        this.selectedFiles=undefined;
+      },
+      error => {
+        console.log(error)
+      }
+    );
+  }
+
 
   removeUsuario(usuario: Usuario) {
     this._usuarioService.removeUsuario(usuario.id).subscribe(
@@ -162,7 +204,9 @@ export class UsuarioComponent implements OnInit {
 
   remplazarObjeto(response) {
     console.log(this.usuarios)
-    if (this.pos !== -1) {
+    console.log(this.pos);
+    let usuario = this.usuarios.filter((u: Usuario) => u.id === response.json().id);
+    if (usuario) {
       this.usuarios[this.pos] = response.json();
     } else {
       this.usuarios.push(response.json());
@@ -183,6 +227,12 @@ export class UsuarioComponent implements OnInit {
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
+  }
+
+  mostrarMensajeIncorrectoImagen() {
+    this.msgs = [];
+    console.log("sdasdasda")
+    this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
 
 }
