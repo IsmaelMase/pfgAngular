@@ -5,8 +5,10 @@
   </p-header>
 
   <div class="ui-grid-row">
-    <img src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
-  </div>
+    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
+      height="30%">
+    <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
+      [ngStyle]="{'text-align':'center'}" width="30%" height="30%"> </div>
   <form #formUsuario="ngForm">
     <div class="ui-g ui-fluid">
       <div class="ui-sm-12 ui-md-6">
@@ -74,7 +76,7 @@
       <div class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <label for="float-input">Imagen</label>
-          <input id="float-input" type="file" size="30" [ngStyle]="{'width':'100%'}" pInputText>
+          <input id="float-input" type="file" size="30" (change)="selectFile($event)" [ngStyle]="{'width':'100%'}" pInputText>
         </div>
       </div>
     </div>
@@ -83,7 +85,9 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-12">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid" pButton
-          icon="fa-check" (click)="saveUsuario(formUsuario)" class="ui-button-success"></button>
+          icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-block d-sm-none btn-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid" pButton
+          icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-none d-sm-block "></button>
       </div>
     </div>
   </p-footer>

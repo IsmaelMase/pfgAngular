@@ -121,6 +121,8 @@ export class UsuarioComponent implements OnInit {
           this.remplazarObjeto(response);
           this.cancelar();
           formulario.reset();
+          this.currentFileUpload = null;
+          this.selectedFiles = undefined;
         } else if (response.status === 403) {
           this._router.navigate(["login"]);
         } else {
@@ -155,12 +157,11 @@ export class UsuarioComponent implements OnInit {
           this._router.navigate(["login"]);
         } else if (response.status === 302) {
           this.saveUsuario(formulario, this.currentFileUpload);
-        } else if(response.status) {
+        } else if (response.status) {
           this.msgs = [];
           this.mostrarMensajeIncorrectoImagen();
         }
-        this.currentFileUpload = null;
-        this.selectedFiles=undefined;
+
       },
       error => {
         console.log(error)

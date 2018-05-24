@@ -5,10 +5,13 @@
   <nav id="sidebar" class="hidden-print">
     <div class="sidebar-header" (click)="abrirDialogConfiguracion()">
       <div *ngIf="!oculto">
-        <img src="../assets/avatar.png" alt="Nombre" width="30%" height="30%" align="left">
+        <img *ngIf="!usuario.imagen" src="../assets/avatar.png" alt="Nombre" width="30%" height="30%" align="left">
+        <img *ngIf="usuario.imagen" src="http://localhost:8080/api/upload/files/{{usuario.imagen}}" alt="Nombre" align="left" width="30%" height="30%">
       </div>
       <div *ngIf="oculto">
-        <img src="../assets/avatar.png" alt="Nombre" width="100%" height="100%">
+        <img *ngIf="!usuario.imagen" src="../assets/avatar.png" alt="Nombre" width="100%" height="100%">
+        <img *ngIf="usuario.imagen" src="http://localhost:8080/api/upload/files/{{usuario.imagen}}" alt="Nombre" width="100%" height="100%">
+
       </div>
       <div>
         <h3>{{usuario.nombre}} {{usuario.apellido}}</h3>
@@ -23,7 +26,7 @@
       </li>
       <li [routerLink]="['/pantallaApp/recursos','aulas']">
         <a>
-          <i class="glyphicon glyphicon-blackboard"></i>
+          <i class="fas fa-chalkboard"></i>
 
           Aulas
         </a>
@@ -84,7 +87,7 @@
             </button>
           </form>
           <div class="nav navbar-nav navbar-right">
-            <button (click)="logout()" type="button" pTooltip="Cerrar Sesión" class="btn-logout btn btn-danger">
+            <button (click)="logout()" type="button" pTooltip="Cerrar Sesión" class="btn-logout navbar-btn btn btn-danger">
               <i class="fa fa-sign-out" aria-hidden="true"></i>
             </button>
           </div>

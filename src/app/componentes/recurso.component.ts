@@ -39,11 +39,7 @@ export class RecursoComponent implements OnInit {
     this._route.params.forEach((params: Params) => {
       this.tipo = params['tipo'];
       this.usuario = JSON.parse(localStorage.getItem("usuario"))
-      if (this.tipo === 'aulas') {
-        this.cambiarAulas();
-      } else {
-        this.cambiarOtros();
-      }
+      this.getRecursos();
       this.getHorasDisponibles();
     });
   }
@@ -100,6 +96,14 @@ export class RecursoComponent implements OnInit {
         console.log(<any>error);
       }
     );
+  }
+
+  getRecursos(){
+    if (this.tipo === 'aulas') {
+      this.cambiarAulas();
+    } else {
+      this.cambiarOtros();
+    }
   }
 
   seleccionarRecurso(recurso: Recurso) {
