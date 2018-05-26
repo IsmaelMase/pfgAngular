@@ -9,6 +9,15 @@ html {
   position: absolute;
 }
 
+.parrafo{
+  color: #4f95d3;
+}
+
+.parrafo:hover{
+  color: #1a4f7e;
+  cursor: pointer;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;

@@ -1,3 +1,5 @@
+<p-growl [(value)]="msgs"></p-growl>
+
 <p-dialog [(visible)]="abierto" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
   [draggable]="false" [appendTo]="body" [responsive]="true">
   <p-header>
@@ -8,7 +10,9 @@
     <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
       height="30%">
     <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
-      [ngStyle]="{'text-align':'center'}" width="30%" height="30%"> </div>
+      [ngStyle]="{'text-align':'center'}" width="30%" height="30%"> 
+    </div>
+    <br>
   <form #formUsuario="ngForm">
     <div class="ui-g ui-fluid">
       <div class="ui-sm-12 ui-md-6">
@@ -16,7 +20,7 @@
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="dni" #dni="ngModel" [(ngModel)]="usuarioSeleccionado.dni"
               required>
-            <label for="float-input">DNI</label>
+            <label for="float-input">NIF</label>
           </span>
         </div>
       </div>

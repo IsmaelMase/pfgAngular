@@ -45,7 +45,7 @@
     </p-table>
   </div>
 </div>
-<p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
+<p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar();formUsuario.reset()" [resizable]="false"
   [draggable]="false" [appendTo]="body" [responsive]="true">
   <p-header>
     Formulario Usuario
@@ -65,7 +65,7 @@
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="dni" #dni="ngModel" [(ngModel)]="usuarioSeleccionado.dni"
               required>
-            <label for="float-input">DNI</label>
+            <label for="float-input">NIF</label>
           </span>
         </div>
       </div>

@@ -82,12 +82,28 @@ export class ConfiguracionUsuarioComponent implements OnInit {
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
+        } else if (response.status === 409) {
+          this.usuarioSeleccionado.password = "";
+          this.mostrarMensajeDuplicado("NIF");
+        } else if (response.status === 406) {
+          this.usuarioSeleccionado.password = "";
+          this.mostrarMensajeDuplicado("Email");
         } else {
-          this.cerrar.emit("fail");
+          this.usuarioSeleccionado.password = "";
+          this.mostrarMensajeIncorrecto();
         }
       },
       error => {
-        this.mostrarMensajeIncorrecto();
+        if (error.status === 409) {
+          this.usuarioSeleccionado.password = "";
+          this.mostrarMensajeDuplicado("NIF");
+        } else if (error.status === 406) {
+          this.usuarioSeleccionado.password = "";
+          this.mostrarMensajeDuplicado("Email");
+        } else {
+          this.usuarioSeleccionado.password = "";
+          this.mostrarMensajeIncorrecto();
+        }
       }
     );
   }
@@ -122,18 +138,19 @@ export class ConfiguracionUsuarioComponent implements OnInit {
           } else if (response.status === 302) {
             this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
             this.saveUsuario(formulario);
-          } else if (response.status) {
+          } else if (response.status || response.status === 0) {
+            this.usuarioSeleccionado.password = "";
             this.msgs = [];
             this.mostrarMensajeIncorrectoImagen();
           }
 
         },
         error => {
+          this.usuarioSeleccionado.password = "";
           console.log(error)
         }
       );
     } else {
-      this.usuarioSeleccionado.imagen = "";
       this.saveUsuario(formulario);
     }
   }
@@ -149,5 +166,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
 
+  mostrarMensajeDuplicado(campo: string) {
+    this.msgs = [];
+    console.log("sdasdasda")
+    this.msgs.push({ severity: 'error', summary: 'El campo ' + campo + ' ya esta registrado' });
+  }
 }
 

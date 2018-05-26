@@ -272,7 +272,6 @@ export class RecursoComponent implements OnInit {
         }
       );
     } else {
-      this.recursoSeleccionado.imagen = "";
       this.saveRecurso(formulario);
     }
   }
