@@ -52,8 +52,10 @@
   </p-header>
 
   <div class="ui-grid-row">
-    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
-    <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
+      height="30%">
+    <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
+      [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
   </div>
   <br>
   <form #formUsuario="ngForm">
@@ -123,7 +125,12 @@
       <div class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <label for="float-input">Imagen</label>
-          <input id="float-input" type="file" size="30" (change)="selectFile($event)" [ngStyle]="{'width':'100%'}" pInputText>
+          <div class="ui-inputgroup">
+            <input id="float-input" type="file" size="30" name="imagen" #imagen="ngModel" [(ngModel)]="usuarioSeleccionado.imagen" (change)="selectFile($event)"
+              [ngStyle]="{'width':'100%'}" pInputText>
+            <button pButton type="button" pButton icon="fa-retweet" class="ui-button-info" pTooltip="Imagen por defecto" tooltipPosition="bottom"
+              (click)="resetImage()"></button>
+          </div>
         </div>
       </div>
     </div>

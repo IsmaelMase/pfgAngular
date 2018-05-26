@@ -59,6 +59,7 @@ export class GeneradorCalendarioComponent implements OnInit {
           console.log(response.json());
           this.recursos = response.json();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -76,6 +77,7 @@ export class GeneradorCalendarioComponent implements OnInit {
           this.calendario=response.json();
           this.getKeys(this.calendario);
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },

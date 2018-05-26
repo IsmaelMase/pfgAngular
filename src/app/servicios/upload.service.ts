@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { CONSTANTS } from './serviceConstants';
 
@@ -8,20 +8,15 @@ export class UploadService {
     public url: string;
 
     constructor(
-        private http: HttpClient) {
+        private _http: Http) {
         this.url = CONSTANTS.url;
     }
-    saveImage(file: File): Observable<HttpEvent<{}>> {
-        const formdata: FormData = new FormData();
+    saveImage(file: File) {
+        let formdata: FormData = new FormData();
 
         formdata.append('file', file);
 
-        const req = new HttpRequest('POST', this.url+'upload/saveFile', formdata, {
-            reportProgress: true,
-            responseType: 'text'
-        });
-
-        return this.http.request(req);
+        return this._http.post(this.url + 'upload/saveFile', formdata)
     }
 
     private handleError(error: any): Promise<any> {

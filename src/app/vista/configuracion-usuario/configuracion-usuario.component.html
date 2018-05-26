@@ -76,7 +76,12 @@
       <div class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <label for="float-input">Imagen</label>
-          <input id="float-input" type="file" size="30" (change)="selectFile($event)" [ngStyle]="{'width':'100%'}" pInputText>
+          <div class="ui-inputgroup">
+            <input id="float-input" type="file" name="imagen" #imagen="ngModel" [(ngModel)]="usuarioSeleccionado.imagen" size="30" (change)="selectFile($event)"
+              [ngStyle]="{'width':'100%'}" pInputText>
+            <button pButton type="button" pButton icon="fa-retweet" class="ui-button-info" pTooltip="Imagen por defecto" tooltipPosition="bottom"
+              (click)="resetImage()"></button>
+          </div>
         </div>
       </div>
     </div>

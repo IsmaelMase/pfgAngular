@@ -9,6 +9,7 @@ import { Reserva } from '../modelo/reserva';
 import { Usuario } from '../modelo/usuario';
 import { HorarioService } from "../servicios/horario.service";
 import { Horario } from '../modelo/horario';
+import { UploadService } from '../servicios/upload.service';
 @Component({
   selector: 'recurso',
   templateUrl: '../vista/recurso/recurso.component.html',
@@ -26,13 +27,17 @@ export class RecursoComponent implements OnInit {
   public opcionReservaSeleccionada: string;
   public usuario: Usuario;
   public intervalos: Horario;
+  public selectedFiles: FileList;
+  public currentFileUpload: File;
 
   constructor(
     private _recursoService: RecursoService,
     private _route: ActivatedRoute,
     private _horarioService: HorarioService,
     private _router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private uploadService: UploadService
+
   ) { }
 
   ngOnInit() {
@@ -51,6 +56,7 @@ export class RecursoComponent implements OnInit {
           console.log(response.json());
           this.intervalos = response.json();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
 
@@ -68,6 +74,7 @@ export class RecursoComponent implements OnInit {
           this.recursos = response;
           console.log(this.recursos);
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -89,6 +96,7 @@ export class RecursoComponent implements OnInit {
           this.recursos = response;
           console.log(this.recursos);
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -98,7 +106,7 @@ export class RecursoComponent implements OnInit {
     );
   }
 
-  getRecursos(){
+  getRecursos() {
     if (this.tipo === 'aulas') {
       this.cambiarAulas();
     } else {
@@ -116,18 +124,18 @@ export class RecursoComponent implements OnInit {
 
   cancelar() {
     if (this.tipo === 'aulas') {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
     } else {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null, "");
     }
     this.modificando = false;
   }
 
   abrirDialog() {
     if (this.tipo === 'aulas') {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
     } else {
-      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null);
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null, "");
     } this.modificando = true;
   }
 
@@ -153,7 +161,7 @@ export class RecursoComponent implements OnInit {
     }
   }
 
-  saveRecurso() {
+  saveRecurso(formulario) {
     console.log(this.recursoSeleccionado)
     this._recursoService.addRecurso(this.recursoSeleccionado).subscribe(
       response => {
@@ -162,6 +170,9 @@ export class RecursoComponent implements OnInit {
           this.mostrarMensajeCorrecto();
           this.remplazarObjeto(response);
           this.cancelar();
+          formulario.reset();
+          this.currentFileUpload = null;
+          this.selectedFiles = undefined;
         } else {
           this.mostrarMensajeIncorrecto();
         }
@@ -205,19 +216,69 @@ export class RecursoComponent implements OnInit {
   }
 
   remplazarObjeto(response) {
-    console.log(this.recursos)
-    if (this.pos !== -1) {
+    let recurso = this.recursos.filter((r: Recurso) => r.id === response.json().id);
+    if (recurso.length > 0) {
       this.recursos[this.pos] = response.json();
     } else {
       this.recursos.push(response.json());
     }
     this.pos = -1;
-    console.log(this.recursos)
+  }
+
+  resetImage() {
+    this.recursoSeleccionado.imagen = "";
+    this.currentFileUpload = null;
+    this.selectedFiles = undefined;
+  }
+
+  selectFile(event) {
+    console.log(event);
+    let file = event.target.files.item(0);
+
+    if (file.type.match('image.*')) {
+      this.selectedFiles = event.target.files;
+    }
+  }
+
+  upload(formulario) {
+    console.log(this.selectedFiles)
+    if (this.selectedFiles !== undefined) {
+      this.currentFileUpload = this.selectedFiles.item(0);
+      this.uploadService.saveImage(this.currentFileUpload).subscribe(
+        (response: any) => {
+          console.log(response);
+          if (response.status === 200) {
+            this.recursoSeleccionado.imagen = this.currentFileUpload.name;
+            this.saveRecurso(formulario);
+          } else if (response.status === 403) {
+            console.log("2")
+            localStorage.clear();
+            this._router.navigate(["login"]);
+          } else if (response.status === 302) {
+            console.log("3")
+            this.recursoSeleccionado.imagen = this.currentFileUpload.name;
+            this.saveRecurso(formulario);
+          } else if (response.status) {
+            console.log("4")
+            this.msgs = [];
+
+            this.mostrarMensajeIncorrectoImagen();
+            this.recursoSeleccionado.imagen = "";
+          }
+
+        },
+        error => {
+          console.log(error)
+        }
+      );
+    } else {
+      this.recursoSeleccionado.imagen = "";
+      this.saveRecurso(formulario);
+    }
   }
 
   eliminarElementoArray(recurso: Recurso) {
-    let pos = this.recursos.indexOf(recurso);
-    this.recursos.splice(pos, 1);
+    this.recursos.splice(this.pos, 1);
   }
 
   mostrarMensajeCorrecto() {
@@ -232,11 +293,17 @@ export class RecursoComponent implements OnInit {
 
   cambiarAulas() {
     this.getAulas();
-    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null);
+    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
   }
 
   cambiarOtros() {
     this.getOtros();
-    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null);
+    this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null, "");
+  }
+
+  mostrarMensajeIncorrectoImagen() {
+    this.msgs = [];
+    console.log("sdasdasda")
+    this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
 }

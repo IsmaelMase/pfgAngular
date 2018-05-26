@@ -8,7 +8,7 @@
         <img *ngIf="!usuario.imagen" src="../assets/avatar.png" alt="Nombre" width="30%" height="30%" align="left">
         <img *ngIf="usuario.imagen" src="http://localhost:8080/api/upload/files/{{usuario.imagen}}" alt="Nombre" align="left" width="30%" height="30%">
       </div>
-      <div *ngIf="oculto">
+      <div *ngIf="oculto">0
         <img *ngIf="!usuario.imagen" src="../assets/avatar.png" alt="Nombre" width="100%" height="100%">
         <img *ngIf="usuario.imagen" src="http://localhost:8080/api/upload/files/{{usuario.imagen}}" alt="Nombre" width="100%" height="100%">
 

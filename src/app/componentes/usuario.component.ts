@@ -64,6 +64,7 @@ export class UsuarioComponent implements OnInit {
           this.usuarios = response.json();
           console.log(this.usuarios);
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -79,6 +80,7 @@ export class UsuarioComponent implements OnInit {
         if (response.status !== 403) {
           this.cursos = response.json();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -107,11 +109,7 @@ export class UsuarioComponent implements OnInit {
     this.modificando = true;
   }
 
-  saveUsuario(formulario, imagen) {
-    if (imagen) {
-      this.usuarioSeleccionado.imagen = imagen.name;
-    }
-    console.log(this.usuarioSeleccionado)
+  saveUsuario(formulario) {
     this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
@@ -124,6 +122,7 @@ export class UsuarioComponent implements OnInit {
           this.currentFileUpload = null;
           this.selectedFiles = undefined;
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.usuarioSeleccionado.password = "";
@@ -135,38 +134,51 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
+
+  resetImage() {
+    this.usuarioSeleccionado.imagen = "";
+    this.currentFileUpload = null;
+    this.selectedFiles = undefined;
+  }
+
   selectFile(event) {
+    console.log(event);
     let file = event.target.files.item(0);
 
     if (file.type.match('image.*')) {
       this.selectedFiles = event.target.files;
-    } else {
-      alert('invalid format!');
     }
   }
 
   upload(formulario) {
+    if (this.selectedFiles !== undefined) {
+      this.currentFileUpload = this.selectedFiles.item(0);
+      this.uploadService.saveImage(this.currentFileUpload).subscribe(
+        (response: any) => {
+          console.log(response);
+          if (response.status === 200) {
+            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+            this.saveUsuario(formulario);
+          } else if (response.status === 403) {
+            localStorage.clear();
+            this._router.navigate(["login"]);
+          } else if (response.status === 302) {
+            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+            this.saveUsuario(formulario);
+          } else if (response.status) {
+            this.msgs = [];
+            this.mostrarMensajeIncorrectoImagen();
+          }
 
-    this.currentFileUpload = this.selectedFiles.item(0);
-    this.uploadService.saveImage(this.currentFileUpload).subscribe(
-      (response: any) => {
-        console.log(response);
-        if (response.status === 200) {
-          this.saveUsuario(formulario, this.currentFileUpload);
-        } else if (response.status === 403) {
-          this._router.navigate(["login"]);
-        } else if (response.status === 302) {
-          this.saveUsuario(formulario, this.currentFileUpload);
-        } else if (response.status) {
-          this.msgs = [];
-          this.mostrarMensajeIncorrectoImagen();
+        },
+        error => {
+          console.log(error)
         }
-
-      },
-      error => {
-        console.log(error)
-      }
-    );
+      );
+    } else {
+      this.usuarioSeleccionado.imagen = "";
+      this.saveUsuario(formulario);
+    }
   }
 
 
@@ -204,10 +216,8 @@ export class UsuarioComponent implements OnInit {
   }
 
   remplazarObjeto(response) {
-    console.log(this.usuarios)
-    console.log(this.pos);
     let usuario = this.usuarios.filter((u: Usuario) => u.id === response.json().id);
-    if (usuario) {
+    if (usuario.length > 0) {
       this.usuarios[this.pos] = response.json();
     } else {
       this.usuarios.push(response.json());

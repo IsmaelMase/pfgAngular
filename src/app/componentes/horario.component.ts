@@ -65,6 +65,7 @@ export class HorarioComponent implements OnInit {
         if (response.status !== 403) {
           this.horarios = response.json();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -116,6 +117,7 @@ export class HorarioComponent implements OnInit {
           this.remplazarObjeto(response);
           this.cancelar();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
@@ -137,6 +139,7 @@ export class HorarioComponent implements OnInit {
           this.eliminarElementoArray(horario);
           this.cancelar();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
@@ -174,8 +177,7 @@ export class HorarioComponent implements OnInit {
   }
 
   eliminarElementoArray(horario: Horario) {
-    let pos = this.horarios.indexOf(horario);
-    this.horarios.splice(pos, 1);
+    this.horarios.splice(this.pos, 1);
   }
 
 

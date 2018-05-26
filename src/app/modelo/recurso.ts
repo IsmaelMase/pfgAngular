@@ -7,7 +7,8 @@ export class Recurso {
         public datos: string,
         public incidencia: string,
         public capacidad: number,
-        public tipo: String,
-        public intervalo:Horario
+        public tipo: string,
+        public intervalo:Horario,
+        public imagen:string
     ) { }
 }

@@ -16,8 +16,7 @@
             <div class="ui-g-4 ui-md-4 ui-sm-12 filter-container">
               <div style="position:relative">
                 <input type="search" [ngStyle]="{'width':'100%'}" pInputText placeholder="Buscar por nombre" class="d-none d-sm-block" (keyup)="dv.filter($event.target.value)">
-                <input type="search" [ngStyle]="{'width':'100%'}" class="d-block d-sm-none" pInputText placeholder="Buscar por nombre"
-                  (keyup)="dv.filter($event.target.value)">
+                <input type="search" [ngStyle]="{'width':'100%'}" class="d-block d-sm-none" pInputText placeholder="Buscar por nombre" (keyup)="dv.filter($event.target.value)">
               </div>
             </div>
             <div class="ui-g-4 ui-md-4 d-none d-sm-block">
@@ -34,7 +33,8 @@
       <ng-template let-recurso pTemplate="listItem">
         <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
           <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
-            <img src="../../../assets/recurso.png" width="50%" height="100%">
+            <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="50%" height="100%">
+            <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="50%" height="100%">
           </div>
           <div class="ui-g-12 ui-md-8 recurso-details">
             <div class="ui-g">
@@ -76,7 +76,8 @@
                 {{recurso.nombre}}
               </div>
             </p-header>
-            <img src="../../../assets/recurso.png" width="25%" height="25%">
+            <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="25%" height="25%">
+            <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="25%" height="25%">
             <div class="recurso-detail" [ngStyle]="{'text-align':'center'}">
               <div *ngIf="tipo == 'aulas'">
                 <b>Capacidad: </b>{{recurso.capacidad}}
@@ -109,7 +110,10 @@
   <div class="ui-g ui-fluid">
     <div class="ui-sm-12 ui-md-12">
       <div class="ui-grid-row">
-        <img class="imgFormulario" src="../assets/recurso.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+        <img *ngIf="!recursoSeleccionado.imagen" class="imgFormulario" src="../assets/recurso.png" alt="Nombre" [ngStyle]="{'text-align':'center'}"
+          width="30%" height="30%">
+        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="http://localhost:8080/api/upload/files/{{recursoSeleccionado.imagen}}"
+          alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
       </div>
     </div>
   </div>
@@ -146,7 +150,10 @@
       <div class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <label for="float-input">Imagen</label>
-          <input id="float-input" type="file" size="30" [ngStyle]="{'width':'100%'}" pInputText>
+          <div class="ui-inputgroup">
+            <input id="float-input" type="file" name="imagen" #imagen="ngModel" [(ngModel)]="recursoSeleccionado.imagen" size="30" (change)="selectFile($event)" [ngStyle]="{'width':'100%'}" pInputText>
+            <button pButton type="button" pButton icon="fa-retweet" class="ui-button-info" pTooltip="Imagen por defecto" tooltipPosition="bottom" (click)="resetImage()"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -185,9 +192,9 @@
       </div>
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
-          icon="fa-check" (click)="saveRecurso()" class="ui-button-success d-none d-sm-block"></button>
+          icon="fa-check" (click)="upload(formRecurso)" class="ui-button-success d-none d-sm-block"></button>
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
-          icon="fa-check" (click)="saveRecurso()" class="ui-button-success d-block d-sm-none btn-block"></button>
+          icon="fa-check" (click)="upload(formRecurso)" class="ui-button-success d-block d-sm-none btn-block"></button>
       </div>
     </div>
   </p-footer>

@@ -2,6 +2,10 @@
     margin-left: 35%;
 }
 
+img{
+    border-radius: 50%;
+}
+
 .icon {
     color:red;
     text-shadow: 1px 1px 1px #ccc;

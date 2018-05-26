@@ -71,6 +71,7 @@ export class ReservaProfesorComponent implements OnInit {
         if (response.status !== 403) {
           this.trasnformarReservasEventos(response.json());
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -132,6 +133,7 @@ export class ReservaProfesorComponent implements OnInit {
           this.cancelar();
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.cancelar()
@@ -151,6 +153,7 @@ export class ReservaProfesorComponent implements OnInit {
           this.cancelar();
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.cancelar()

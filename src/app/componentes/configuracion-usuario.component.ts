@@ -54,6 +54,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
         if (response.status !== 403) {
           this.cursos = response.json();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -69,11 +70,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   }
 
 
-  saveUsuario(formulario, imagen) {
-    console.log(imagen);
-    if (imagen) {
-      this.usuarioSeleccionado.imagen = imagen.name;
-    }
+  saveUsuario(formulario, ) {
     this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
@@ -83,6 +80,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
           this.selectedFiles = undefined;
           this.cerrar.emit("ok");
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.cerrar.emit("fail");
@@ -93,38 +91,51 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       }
     );
   }
+  resetImage() {
+    this.usuarioSeleccionado.imagen = "";
+    this.currentFileUpload = null;
+    this.selectedFiles = undefined;
+  }
+
   selectFile(event) {
+    console.log(event);
     let file = event.target.files.item(0);
 
     if (file.type.match('image.*')) {
       this.selectedFiles = event.target.files;
-    } else {
-      alert('invalid format!');
     }
   }
 
   upload(formulario) {
 
-    this.currentFileUpload = this.selectedFiles.item(0);
-    this.uploadService.saveImage(this.currentFileUpload).subscribe(
-      (response: any) => {
-        console.log(response);
-        if (response.status === 200) {
-          this.saveUsuario(formulario, this.currentFileUpload);
-        } else if (response.status === 403) {
-          this._router.navigate(["login"]);
-        } else if (response.status === 302) {
-          this.saveUsuario(formulario, this.currentFileUpload);
-        } else if (response.status) {
-          this.msgs = [];
-          this.mostrarMensajeIncorrectoImagen();
-        }
+    if (this.selectedFiles !== undefined) {
+      this.currentFileUpload = this.selectedFiles.item(0);
+      this.uploadService.saveImage(this.currentFileUpload).subscribe(
+        (response: any) => {
+          console.log(response);
+          if (response.status === 200) {
+            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+            this.saveUsuario(formulario);
+          } else if (response.status === 403) {
+            localStorage.clear();
+            this._router.navigate(["login"]);
+          } else if (response.status === 302) {
+            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+            this.saveUsuario(formulario);
+          } else if (response.status) {
+            this.msgs = [];
+            this.mostrarMensajeIncorrectoImagen();
+          }
 
-      },
-      error => {
-        console.log(error)
-      }
-    );
+        },
+        error => {
+          console.log(error)
+        }
+      );
+    } else {
+      this.usuarioSeleccionado.imagen = "";
+      this.saveUsuario(formulario);
+    }
   }
 
   mostrarMensajeIncorrecto() {

@@ -40,6 +40,7 @@ export class CursoComponent implements OnInit {
         if (response.status !== 403) {
           this.cursos = response.json();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -77,6 +78,7 @@ export class CursoComponent implements OnInit {
           this.remplazarObjeto(response);
           this.cancelar();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
@@ -98,6 +100,7 @@ export class CursoComponent implements OnInit {
           this.eliminarElementoArray(curso);
           this.cancelar();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
@@ -135,8 +138,7 @@ export class CursoComponent implements OnInit {
   }
 
   eliminarElementoArray(curso: Curso) {
-    let pos = this.cursos.indexOf(curso);
-    this.cursos.splice(pos, 1);
+    this.cursos.splice(this.pos, 1);
   }
 
 

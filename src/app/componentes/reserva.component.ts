@@ -112,6 +112,7 @@ export class ReservaComponent implements OnInit {
           this.horasDisponibles = response.json();
           this.getUsuarios();
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
 
@@ -129,6 +130,7 @@ export class ReservaComponent implements OnInit {
         if (response.status !== 403) {
           this.trasnformarReservasEventos(response.json());
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -168,6 +170,7 @@ export class ReservaComponent implements OnInit {
           console.log(this.fechasNoDisponibles);
           this.fechasNoDisponibles = [...this.fechasNoDisponibles];
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -185,6 +188,7 @@ export class ReservaComponent implements OnInit {
           this.usuarios = response.json();
           console.log(this.usuarios);
         } else {
+          localStorage.clear();
           this._router.navigate(["login"]);
         }
       },
@@ -250,6 +254,7 @@ export class ReservaComponent implements OnInit {
         if (response.status === 201) {
           this.cerrar.emit("ok");
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.cerrar.emit("fail");
@@ -284,6 +289,7 @@ export class ReservaComponent implements OnInit {
           this.cancelarUpdate();
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.cancelarUpdate()
@@ -304,6 +310,7 @@ export class ReservaComponent implements OnInit {
           this.cancelarUpdate();
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.cancelarUpdate()
@@ -346,6 +353,7 @@ export class ReservaComponent implements OnInit {
           this.reservasList = response.json();
           this.formarTabla();
         } else if (response.status === 403) {
+          localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
