@@ -17,12 +17,34 @@
       <input type="password" class="fadeIn third" name="password" pInputText [(ngModel)]="password" placeholder="Contraseña">
       <input (click)="login($event)" type="button" class="fadeIn fourth" value="Entrar">
       <br>
-      <div class="parrafo">
-        He olvidado mi contraseña
+      <div class="parrafo fadeIn third">
+        <p (click)="openDialog()">He olvidado mi contraseña</p>
       </div>
       <br>
     </form>
   </div>
 </div>
-
+<p-dialog [(visible)]="changePass" [autoAlign]="true" [modal]="true" (onHide)="cancelar(); formEmail.reset();">
+  <p-header>
+    Petición de nueva contraseña
+  </p-header>
+  <form #formEmail="ngForm">
+    <br>
+    <div class="ui-grid-row">
+      <span class="ui-float-label">
+        <input id="float-input" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" size="30" pInputText name="nombre" #nombre="ngModel" [(ngModel)]="userChangePass.email"
+          required>
+        <label for="float-input">Email</label>
+      </span>
+    </div>
+  </form>
+  <p-footer>
+    <div class="ui-g">
+      <div class="ui-sm-12 ui-md-12">
+        <button [ngStyle]="{'float':'right'}" pTooltip="Enviar" tooltipPosition="left" [disabled]="!formEmail.form.valid" pButton
+          icon="fa-check" (click)="sendRequest()" class="ui-button-success"></button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
 </html>

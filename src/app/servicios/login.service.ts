@@ -28,6 +28,16 @@ export class LoginService {
 
     }
 
+    changePassword(changePassUser:any) {
+        let json = JSON.stringify(changePassUser);
+        console.log(json);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+
+        return this._http.post(this.url + 'mail/sendMail', json, { headers: headers })
+            .map((res:Response) => res);
+
+    }
+
 
     private handleError(error: any): Promise<any> {
         console.error('Some error occured', error);

@@ -48,7 +48,7 @@
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <input id="float-input" type="email" size="30" [ngStyle]="{'width':'100%'}" pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email"
+            <input id="float-input" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" size="30" [ngStyle]="{'width':'100%'}" pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email"
               required>
             <label for="float-input">Email</label>
           </span>

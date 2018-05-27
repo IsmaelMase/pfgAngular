@@ -9,7 +9,7 @@ import { Message } from 'primeng/api';
   styleUrls: ['../vista/pantallaApp/pantalla-app.component.css']
 })
 export class PantallaAppComponent implements OnInit {
-  oculto = false;
+  public oculto : boolean;
   public usuario: Usuario;
   public msgs: Message[] = [];
   public cambiarConfig:boolean=false;
@@ -20,6 +20,7 @@ export class PantallaAppComponent implements OnInit {
 
   ngOnInit() {
     this.cambiarConfig=false;
+    this.oculto=false;
     this.usuario = JSON.parse(localStorage.getItem("usuario"))
   }
 
