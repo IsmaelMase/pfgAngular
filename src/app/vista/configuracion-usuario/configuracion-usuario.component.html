@@ -5,14 +5,13 @@
   <p-header>
     Formulario Usuario
   </p-header>
-
   <div class="ui-grid-row">
     <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
       height="30%">
     <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
-      [ngStyle]="{'text-align':'center'}" width="30%" height="30%"> 
-    </div>
-    <br>
+      [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+  </div>
+  <br>
   <form #formUsuario="ngForm">
     <div class="ui-g ui-fluid">
       <div class="ui-sm-12 ui-md-6">
@@ -48,30 +47,21 @@
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <input id="float-input" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" size="30" [ngStyle]="{'width':'100%'}" pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email"
-              required>
-            <label for="float-input">Email</label>
-          </span>
-        </div>
-      </div>
-    </div>
-    <br>
-    <div class="ui-g ui-fluid">
-      <div class="ui-sm-12 ui-md-6">
-        <div class="ui-grid-row">
-          <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="telefono" #telefono="ngModel"
               [(ngModel)]="usuarioSeleccionado.telefono">
             <label for="float-input">Teléfono</label>
           </span>
         </div>
       </div>
-      <div class="ui-sm-12 ui-md-6">
+    </div>
+    <br>
+    <div class="ui-g ui-fluid">
+      <div class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password" #password="ngModel"
-              [(ngModel)]="usuarioSeleccionado.password" required>
-            <label for="float-input">Contraseña</label>
+            <input id="float-input" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" size="30" [ngStyle]="{'width':'100%'}"
+              pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email" required>
+            <label for="float-input">Email</label>
           </span>
         </div>
       </div>
@@ -90,13 +80,48 @@
       </div>
     </div>
   </form>
+
+  <p-footer>
+    <div class="ui-g">
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'left'}" pTooltip="Cambiar contraseña" tooltipPosition="bottom" pButton icon="fa-lock" (click)="abrirDialogPass()"
+          class="ui-button-info d-block d-sm-none btn-block"></button>
+        <button [ngStyle]="{'float':'left'}" pTooltip="Cambiar contraseña" tooltipPosition="bottom" pButton icon="fa-lock" (click)="abrirDialogPass()"
+          class="ui-button-info d-none d-sm-block "></button>
+      </div>
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formUsuario.form.valid" pButton
+          icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-block d-sm-none btn-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formUsuario.form.valid" pButton
+          icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-none d-sm-block "></button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="cambioPass" [autoAlign]="true" [modal]="true" (onHide)="cancelarCambioPass()">
+  <p-header>
+    Cambiar contraseña
+  </p-header>
+  <form #formPass="ngForm">
+    <br>
+    <div class="ui-sm-12 ui-md-12">
+      <div class="ui-grid-row">
+        <span class="ui-float-label">
+          <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password" [(ngModel)]="password"
+            required>
+          <label for="float-input">Contraseña</label>
+        </span>
+      </div>
+    </div>
+  </form>
   <p-footer>
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-12">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid" pButton
-          icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-block d-sm-none btn-block"></button>
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid" pButton
-          icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-none d-sm-block "></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formPass.form.valid" pButton
+          icon="fa-check" (click)="setPassword()" class="ui-button-success d-block d-sm-none btn-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formPass.form.valid" pButton
+          icon="fa-check" (click)="setPassword()" class="ui-button-success d-none d-sm-block "></button>
       </div>
     </div>
   </p-footer>

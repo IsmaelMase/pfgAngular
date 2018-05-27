@@ -26,9 +26,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   public cols: any[];
   public colsCursos: any[];
   public abierto: boolean = true;
+  public cambioPass: boolean = false;
   public selectedFiles: FileList;
   public currentFileUpload: File;
-
+  public password: string;
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
@@ -43,9 +44,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.abierto = true;
+    this.cambioPass = false;
+    this.password = "";
     this.getCursos();
     this.usuarioSeleccionado = JSON.parse(localStorage.getItem("usuario"))
-    this.usuarioSeleccionado.password = "";
   }
 
   getCursos() {
@@ -69,9 +71,26 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     this.cerrar.emit("cerrar");
   }
 
+  abrirDialogPass() {
+    this.password = "";
+    this.cambioPass = true;
+  }
 
-  saveUsuario(formulario, ) {
-    this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
+  cancelarCambioPass() {
+    this.password = "";
+    this.cambioPass = false;
+  }
+
+  setPassword() {
+    if (this.password !== "") {
+      this.usuarioSeleccionado.password = btoa(this.password);
+    }
+    this.cambioPass = false;
+  }
+
+
+  saveUsuario(formulario) {
+    console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
         if (response.status === 201) {

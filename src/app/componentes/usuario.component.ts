@@ -27,7 +27,7 @@ export class UsuarioComponent implements OnInit {
   public pos: number = -1;
   public selectedFiles: FileList = undefined;
   public currentFileUpload: File = undefined;
-
+  public password: string;
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
@@ -52,6 +52,7 @@ export class UsuarioComponent implements OnInit {
     if (JSON.parse(localStorage.getItem("usuario")).rol !== "ROL_ADMIN") {
       this._router.navigate(["cursos"]);
     }
+    this.password = "";
     this.getUsuarios();
     this.getCursos();
   }
@@ -95,13 +96,13 @@ export class UsuarioComponent implements OnInit {
     for (let prop in usuario) {
       this.usuarioSeleccionado[prop] = usuario[prop];
     }
-    this.usuarioSeleccionado.password = "";
     this.modificando = true;
   }
 
   cancelar() {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "");
     this.modificando = false;
+    this.password = "";
   }
 
   abrirDialog() {
@@ -110,7 +111,10 @@ export class UsuarioComponent implements OnInit {
   }
 
   saveUsuario(formulario) {
-    this.usuarioSeleccionado.password = btoa(this.usuarioSeleccionado.password);
+    if (this.password !== "") {
+      this.usuarioSeleccionado.password = btoa(this.password);
+    }
+    console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
         console.log(response);

@@ -25,12 +25,16 @@ export class LoginComponent implements OnInit {
     private _router: Router,
   ) {
     this.usuario = new Usuario("", "", "", "", "", "", "", [], "", "");
-    this.userChangePass = new UserChangePass("", "","");
+    this.userChangePass = new UserChangePass("", "", "");
   }
 
   ngOnInit() {
     if (localStorage.getItem("token")) {
-      this._router.navigate(["pantallaApp"]);
+      if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_PROFESOR") {
+        this._router.navigate(["pantallaApp/reservas"]);
+      } else {
+        this._router.navigate(["pantallaApp"]);
+      }
     }
   }
 
@@ -47,7 +51,11 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("token", response.json().authorization);
             localStorage.setItem("usuario", JSON.stringify(response.json().usuario))
             console.log(JSON.stringify(response.json().usuario));
-            this._router.navigate(["pantallaApp"]);
+            if (response.json().usuario.rol === "ROL_PROFESOR") {
+              this._router.navigate(["pantallaApp/reservas"]);
+            } else {
+              this._router.navigate(["pantallaApp"]);
+            }
           }
         },
         error => {
@@ -102,7 +110,7 @@ export class LoginComponent implements OnInit {
   }
 
   cancelar() {
-    this.userChangePass = new UserChangePass("", "","");
+    this.userChangePass = new UserChangePass("", "", "");
     this.changePass = false;
   }
 

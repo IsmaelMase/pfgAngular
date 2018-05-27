@@ -45,8 +45,8 @@
     </p-table>
   </div>
 </div>
-<p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar();formUsuario.reset()" [resizable]="false"
-  [draggable]="false" [appendTo]="body" [responsive]="true">
+<p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar();formUsuario.reset()"
+  [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true">
   <p-header>
     Formulario Usuario
   </p-header>
@@ -93,29 +93,29 @@
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <input id="float-input" type="email" size="30" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [ngStyle]="{'width':'100%'}"
-              pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email" required>
-            <label for="float-input">Email</label>
-          </span>
-        </div>
-      </div>
-    </div>
-    <br>
-    <div class="ui-g ui-fluid">
-      <div class="ui-sm-12 ui-md-6">
-        <div class="ui-grid-row">
-          <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="telefono" #telefono="ngModel"
               [(ngModel)]="usuarioSeleccionado.telefono" pattern="\d*">
             <label for="float-input">Teléfono</label>
           </span>
         </div>
       </div>
-      <div class="ui-sm-12 ui-md-6">
+    </div>
+    <br>
+    <div class="ui-g ui-fluid" [ngSwitch]="usuarioSeleccionado.id">
+      <div [ngClass]="{'ui-sm-12 ui-md-6': !usuarioSeleccionado.id, 'ui-sm-12 ui-md-12': usuarioSeleccionado.id}" class="ui-sm-12 ui-md-12">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password" #password="ngModel"
-              [(ngModel)]="usuarioSeleccionado.password" required>
+            <input id="float-input" type="email" size="30" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [ngStyle]="{'width':'100%'}"
+              pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email" required>
+            <label for="float-input">Email</label>
+          </span>
+        </div>
+      </div>
+      <div *ngSwitchCase="false" class="ui-sm-12 ui-md-6">
+        <div class="ui-grid-row">
+          <span class="ui-float-label">
+            <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password"
+              [(ngModel)]="password" required>
             <label for="float-input">Contraseña</label>
           </span>
         </div>

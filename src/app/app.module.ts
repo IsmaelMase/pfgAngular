@@ -23,6 +23,7 @@ import { ScheduleModule } from 'primeng/schedule';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessageModule } from 'primeng/message';
+import { TabViewModule } from 'primeng/tabview';
 
 
 import { CursoService } from './servicios/curso.service'
@@ -95,9 +96,10 @@ import { HttpClientModule } from '@angular/common/http';
     ScheduleModule,
     ProgressSpinnerModule,
     AutoCompleteModule,
-    MessageModule
+    MessageModule,
+    TabViewModule
   ],
-  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService,UploadService],
+  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService, UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
