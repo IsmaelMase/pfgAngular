@@ -29,6 +29,7 @@ export class PantallaAppComponent implements OnInit {
 
   ocultar() {
     this.oculto = !this.oculto;
+    console.log(this.oculto);
   }
 
   changeOfRoutes() {

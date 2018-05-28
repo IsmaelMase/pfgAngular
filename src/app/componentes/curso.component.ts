@@ -102,13 +102,26 @@ export class CursoComponent implements OnInit {
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
+        } else if (response.status === 409) {
+          this.mostrarMensajeNoPuedeBorrar();
+          this.cancelar();
         } else {
           this.mostrarMensajeIncorrecto();
           this.cancelar();
         }
       },
       error => {
-        this.mostrarMensajeIncorrecto();
+        console.log(error)
+        if (error.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
+        } else if (error.status === 409) {
+          this.mostrarMensajeNoPuedeBorrar();
+          this.cancelar();
+        } else {
+          this.mostrarMensajeIncorrecto();
+          this.cancelar();
+        }
       }
     );
   }
@@ -127,14 +140,13 @@ export class CursoComponent implements OnInit {
   }
 
   remplazarObjeto(response) {
-    console.log(this.cursos)
-    if (this.pos !== -1) {
+    let curso = this.cursos.filter((c: Curso) => c.id === response.json().id);
+    if (curso.length > 0) {
       this.cursos[this.pos] = response.json();
     } else {
       this.cursos.push(response.json());
     }
     this.pos = -1;
-    console.log(this.cursos)
   }
 
   eliminarElementoArray(curso: Curso) {
@@ -150,6 +162,11 @@ export class CursoComponent implements OnInit {
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
+  }
+
+  mostrarMensajeNoPuedeBorrar() {
+    this.msgs = [];
+    this.msgs.push({ severity: 'error', detail: 'El curso no puede ser borrado porque esta asignado a un usuario', summary: 'Eliminación cancelada' });
   }
 
 }

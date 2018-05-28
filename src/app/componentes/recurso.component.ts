@@ -173,8 +173,12 @@ export class RecursoComponent implements OnInit {
           formulario.reset();
           this.currentFileUpload = null;
           this.selectedFiles = undefined;
+        } else if (response.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
+          this.cancelar();
         }
       },
       error => {
@@ -192,12 +196,28 @@ export class RecursoComponent implements OnInit {
           this.mostrarMensajeCorrecto();
           this.eliminarElementoArray(recurso);
           this.cancelar();
+        } else if (response.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
+        } else if (response.status === 409) {
+          this.mostrarMensajeNoPuedeBorrar();
+          this.cancelar();
         } else {
           this.mostrarMensajeIncorrecto();
+          this.cancelar();
         }
       },
       error => {
-        this.mostrarMensajeIncorrecto();
+        if (error.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
+        } else if (error.status === 409) {
+          this.mostrarMensajeNoPuedeBorrar();
+          this.cancelar();
+        } else {
+          this.mostrarMensajeIncorrecto();
+          this.cancelar();
+        }
       }
     );
   }
@@ -304,5 +324,10 @@ export class RecursoComponent implements OnInit {
     this.msgs = [];
     console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
+  }
+
+  mostrarMensajeNoPuedeBorrar() {
+    this.msgs = [];
+    this.msgs.push({ severity: 'error', detail: 'El recurso no puede ser borrado porque tiene reservas realizadas', summary: 'Eliminación cancelada' });
   }
 }

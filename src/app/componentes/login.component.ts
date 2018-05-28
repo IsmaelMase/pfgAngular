@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
   ) {
-    this.usuario = new Usuario("", "", "", "", "", "", "", [], "", "",true);
+    this.usuario = new Usuario("", "", "", "", "", "", "", [], "", "", true);
     this.userChangePass = new UserChangePass("", "", "");
   }
 
@@ -82,7 +82,13 @@ export class LoginComponent implements OnInit {
         }
       },
       error => {
-        this.operationNotDone();
+        if (error.status === 404) {
+          this.usuarioNotFound();
+        } else if (error.status === 400) {
+          this.operationNotDone();
+        } else {
+          this.operationNotDone();
+        }
       }
     );
   }
