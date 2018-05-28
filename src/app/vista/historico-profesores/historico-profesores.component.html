@@ -12,15 +12,9 @@
             (click)="getUsuarios()"></button>
         </div>
       </div>
-      <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Añadir" tooltipPosition="left" pButton icon="fa-plus" class="ui-button-success d-none d-sm-block"
-          (click)="abrirDialog()"></button>
-        <button [ngStyle]="{'float':'right'}" pTooltip="Añadir" tooltipPosition="left" pButton icon="fa-plus" class="ui-button-success d-block d-sm-none btn-block "
-          (click)="abrirDialog()"></button>
-      </div>
     </div>
     <p-table #dt class="hoverTable"  [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [filterDelay]="50" [virtualScroll]="true"
-      [responsive]="true">
+      [responsive]="true" [loading]="loading" [lazy]="true">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th *ngFor="let col of columns" [ngStyle]="{'text-align':'center'}">
@@ -64,7 +58,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="dni" #dni="ngModel" [(ngModel)]="usuarioSeleccionado.dni"
-              required>
+              required readonly>
             <label for="float-input">NIF</label>
           </span>
         </div>
@@ -73,7 +67,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="nombre" #nombre="ngModel" [(ngModel)]="usuarioSeleccionado.nombre"
-              required>
+              required readonly>
             <label for="float-input">Nombre</label>
           </span>
         </div>
@@ -85,7 +79,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="apellido" #apellido="ngModel"
-              [(ngModel)]="usuarioSeleccionado.apellido" required>
+              [(ngModel)]="usuarioSeleccionado.apellido" required readonly>
             <label for="float-input">Apellido</label>
           </span>
         </div>
@@ -94,7 +88,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="telefono" #telefono="ngModel"
-              [(ngModel)]="usuarioSeleccionado.telefono" pattern="\d*">
+              [(ngModel)]="usuarioSeleccionado.telefono" pattern="\d*" readonly>
             <label for="float-input">Teléfono</label>
           </span>
         </div>
@@ -106,7 +100,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="email" size="30" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [ngStyle]="{'width':'100%'}"
-              pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email" required>
+              pInputText name="email" #email="ngModel" [(ngModel)]="usuarioSeleccionado.email" required readonly>
             <label for="float-input">Email</label>
           </span>
         </div>
@@ -115,27 +109,14 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password"
-              [(ngModel)]="password" required>
+              [(ngModel)]="password" required readonly>
             <label for="float-input">Contraseña</label>
           </span>
         </div>
       </div>
     </div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-sm-12 ui-md-12">
-        <div class="ui-grid-row">
-          <label for="float-input">Imagen</label>
-          <div class="ui-inputgroup">
-            <input id="float-input" type="file" size="30" name="imagen" #imagen="ngModel" [(ngModel)]="usuarioSeleccionado.imagen" (change)="selectFile($event)"
-              [ngStyle]="{'width':'100%'}" pInputText>
-            <button pButton type="button" pButton icon="fa-retweet" class="ui-button-info" pTooltip="Imagen por defecto" tooltipPosition="bottom"
-              (click)="resetImage()"></button>
-          </div>
-        </div>
-      </div>
-    </div>
     <br>
-    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="cursos" [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos">
+    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="usuarioSeleccionado.cursos" [filterDelay]="50">
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -144,19 +125,13 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th style="width: 2.25em">
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-          </th>
           <th *ngFor="let col of columns">
             {{col.header}}
           </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
-          <td>
-            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-          </td>
+        <tr >
           <td *ngFor="let col of columns">
             {{rowData[col.field]}}
           </td>

@@ -52,8 +52,7 @@ export class ReservaComponent implements OnInit {
   public reservaSeleccionada: Reserva;
   public pos: number = 0;
   public reservasAMostrar: any[] = [];
-  public loading: boolean = false;
-
+  public loading:boolean=false;
   constructor(
     private _reservaService: ReservaService,
     private _horarioService: HorarioService,
@@ -140,9 +139,9 @@ export class ReservaComponent implements OnInit {
     );
   }
 
-  clickeado(event ) {
-    console.log(event)
+  clickeado(event) {
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
+      this.loading=true;
       console.log(event.getDate()._d.getMonth())
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
@@ -226,7 +225,7 @@ export class ReservaComponent implements OnInit {
     }).finally(() => {
       this.getUsuarios();
       this.reservas = true;
-      console.log(this.eventos)
+      this.loading=false;
     }).subscribe();
   }
 

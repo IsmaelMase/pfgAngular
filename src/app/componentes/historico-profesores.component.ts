@@ -27,6 +27,7 @@ export class HistoricoProfesoresComponent implements OnInit {
   public selectedFiles: FileList = undefined;
   public currentFileUpload: File = undefined;
   public password: string;
+  public loading:boolean;
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
@@ -54,14 +55,17 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.password = "";
     this.getUsuarios();
     this.getCursos();
+    this.loading=true;
   }
 
 
   getUsuarios() {
+    this.loading=true;
     this._usuarioService.getAllUsuarios().subscribe(
       response => {
         if (response.status !== 403) {
           this.usuarios = response.json();
+          this.loading=false;
           console.log(this.usuarios);
         } else {
           localStorage.clear();

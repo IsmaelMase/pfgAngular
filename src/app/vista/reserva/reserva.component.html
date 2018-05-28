@@ -77,8 +77,8 @@
         </div>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <p-table #dt3 *ngIf="reservaSeleccionada.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}" [responsive]="true"
-          [value]="reservaSeleccionada.usuario.cursos" selectionMode="single" [(selection)]="reservaSeleccionada.curso">
+        <p-table #dt3 *ngIf="reservaSeleccionada.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}"
+          [responsive]="true" [value]="reservaSeleccionada.usuario.cursos" selectionMode="single" [(selection)]="reservaSeleccionada.curso">
           <ng-template pTemplate="caption">
             <div style="text-align: right">
               <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -115,8 +115,13 @@
   <p-header>
     Listado de Reservas
   </p-header>
-  <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc,$event)"
-    [events]="eventos" [eventLimit]="4" locale="es" [header]="header" ></p-schedule>
+  <div class="containerCalendar">
+    <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
+      [events]="eventos" [eventLimit]="4" locale="es" [header]="header"></p-schedule>
+    <div class="divLoading" *ngIf="loading">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  </div>
 </p-dialog>
 
 <p-dialog *ngIf="reservaSeleccionada.id" header="Reserva" [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true"
@@ -158,12 +163,4 @@
       </div>
     </div>
   </p-footer>
-</p-dialog>
-
-<p-dialog [(visible)]="loading" [modal]="true" [autoAlign]="true" [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true" >
-  <p-header>
-    Cargando
-  </p-header>
-  <p-progressSpinner [style]="{width: '50%', height: '50%'}" strokeWidth="3" fill="#FFFFFF" animationDuration=".9s"></p-progressSpinner>
-  <span>Espere por favor se esta realizando la operación</span>
 </p-dialog>
