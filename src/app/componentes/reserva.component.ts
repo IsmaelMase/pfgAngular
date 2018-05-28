@@ -140,7 +140,7 @@ export class ReservaComponent implements OnInit {
     );
   }
 
-  clickeado(event) {
+  clickeado(event ) {
     console.log(event)
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
       console.log(event.getDate()._d.getMonth())
@@ -344,31 +344,4 @@ export class ReservaComponent implements OnInit {
     this.eventos.splice(this.pos, 1);
     this.cancelar()
   }
-
-  generar() {
-    this.fechasSeleccionadas.sort();
-    this._reservaService.getReservasByRecursoAndFechas(this.recurso.id, this.fechasSeleccionadas).subscribe(
-      response => {
-        if (response.status === 200) {
-          this.reservasList = response.json();
-          this.formarTabla();
-        } else if (response.status === 403) {
-          localStorage.clear();
-          this._router.navigate(["login"]);
-        } else {
-          this.mostrarMensajeIncorrecto();
-        }
-      },
-      error => {
-        this.mostrarMensajeIncorrecto();
-      }
-    );
-    console.log(this.fechasSeleccionadas);
-  }
-
-  formarTabla() {
-    this.reservasAMostrar.push(this.fechasSeleccionadas);
-    console.log(this.reservasAMostrar);
-  }
-
 }

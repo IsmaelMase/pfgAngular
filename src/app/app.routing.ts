@@ -11,12 +11,14 @@ import { ReservaProfesorComponent } from './componentes/reserva-profesor.compone
 import { MensajeComponent } from './componentes/mensaje.component';
 import { HorarioComponent } from './componentes/horario.component';
 import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
+import { HistoricoProfesoresComponent } from './componentes/historico-profesores.component';
 
 const appRoutes: Routes = [
 	{
 		path: 'pantallaApp', component: PantallaAppComponent, children: [
 			{ path: '', component: UsuarioComponent },
 			{ path: 'profesores', component: UsuarioComponent },
+			{ path: 'historico-profesores', component: HistoricoProfesoresComponent },
 			{ path: 'reservas', component: ReservaProfesorComponent },
 			{ path: 'cursos', component: CursoComponent },
 			{ path: 'horarios', component: HorarioComponent },

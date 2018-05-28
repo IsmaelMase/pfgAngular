@@ -115,7 +115,7 @@
   <p-header>
     Listado de Reservas
   </p-header>
-  <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
+  <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc,$event)"
     [events]="eventos" [eventLimit]="4" locale="es" [header]="header" ></p-schedule>
 </p-dialog>
 

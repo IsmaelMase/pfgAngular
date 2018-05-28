@@ -55,6 +55,12 @@
           Horarios
         </a>
       </li>
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/historico-profesores']">
+        <a>
+          <i class="fa fa-list"></i>
+          Historial de profesores
+        </a>
+      </li>
       <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/generador-calendario']">
         <a>
           <i class="fa fa-print"></i>

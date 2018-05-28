@@ -11,6 +11,7 @@ export class Usuario {
         public password: string,
         public cursos: Curso[],
         public rol: string,
-        public imagen:string
+        public imagen:string,
+        public estado:boolean
     ) { }
 }

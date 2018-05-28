@@ -9,13 +9,12 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { UploadService } from '../servicios/upload.service';
 
-
 @Component({
-  selector: 'usuario',
-  templateUrl: '../vista/usuario/usuario.component.html',
-  styleUrls: ['../vista/usuario/usuario.component.css']
+  selector: 'app-historico-profesores',
+  templateUrl: '../vista/historico-profesores/historico-profesores.component.html',
+  styleUrls: ['../vista/historico-profesores/historico-profesores.component.css']
 })
-export class UsuarioComponent implements OnInit {
+export class HistoricoProfesoresComponent implements OnInit {
 
   public usuarios: Usuario[];
   public cursos: Curso[];
@@ -28,9 +27,6 @@ export class UsuarioComponent implements OnInit {
   public selectedFiles: FileList = undefined;
   public currentFileUpload: File = undefined;
   public password: string;
-  public loading:boolean;
-  public loadingCurso:boolean;
-
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
@@ -58,17 +54,14 @@ export class UsuarioComponent implements OnInit {
     this.password = "";
     this.getUsuarios();
     this.getCursos();
-    this.loading=true;
   }
 
 
   getUsuarios() {
-    this.loading=true;
-    this._usuarioService.getUsuarios().subscribe(
+    this._usuarioService.getAllUsuarios().subscribe(
       response => {
         if (response.status !== 403) {
           this.usuarios = response.json();
-          this.loading=false;
           console.log(this.usuarios);
         } else {
           localStorage.clear();
@@ -116,105 +109,13 @@ export class UsuarioComponent implements OnInit {
     this.modificando = true;
   }
 
-  saveUsuario(formulario) {
-    if (this.password !== "") {
-      this.usuarioSeleccionado.password = btoa(this.password);
-    }
-    console.log(this.usuarioSeleccionado.password);
-    this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
-      response => {
-        console.log(response);
-        if (response.status === 201) {
-          this.mostrarMensajeCorrecto();
-          this.remplazarObjeto(response);
-          this.cancelar();
-          formulario.reset();
-          this.currentFileUpload = null;
-          this.selectedFiles = undefined;
-        } else if (response.status === 403) {
-          localStorage.clear();
-          this._router.navigate(["login"]);
-        } else if (response.status === 409) {
-          this.usuarioSeleccionado.password = "";
-          this.mostrarMensajeDuplicado("NIF");
-        } else if (response.status === 406) {
-          this.usuarioSeleccionado.password = "";
-          this.mostrarMensajeDuplicado("Email");
-        } else {
-          this.usuarioSeleccionado.password = "";
-          this.mostrarMensajeIncorrecto();
-        }
-      },
-      error => {
-        if (error.status === 409) {
-          this.usuarioSeleccionado.password = "";
-          this.mostrarMensajeDuplicado("NIF");
-        } else if (error.status === 406) {
-          this.usuarioSeleccionado.password = "";
-          this.mostrarMensajeDuplicado("Email");
-        } else {
-          this.usuarioSeleccionado.password = "";
-          this.mostrarMensajeIncorrecto();
-        }
-      }
-    );
-  }
-
-  resetImage() {
-    this.usuarioSeleccionado.imagen = "";
-    this.currentFileUpload = null;
-    this.selectedFiles = undefined;
-  }
-
-  selectFile(event) {
-    console.log(event);
-    let file = event.target.files.item(0);
-
-    if (file.type.match('image.*')) {
-      this.selectedFiles = event.target.files;
-    }
-  }
-
-  upload(formulario) {
-    if (this.selectedFiles !== undefined) {
-      this.currentFileUpload = this.selectedFiles.item(0);
-      this.uploadService.saveImage(this.currentFileUpload).subscribe(
-        (response: any) => {
-          console.log(response);
-          if (response.status === 200) {
-            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveUsuario(formulario);
-          } else if (response.status === 403) {
-            localStorage.clear();
-            this._router.navigate(["login"]);
-          } else if (response.status === 302) {
-            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveUsuario(formulario);
-          } else if (response.status || response.status === 0) {
-            this.usuarioSeleccionado.password = "";
-            this.msgs = [];
-            this.mostrarMensajeIncorrectoImagen();
-          }
-
-        },
-        error => {
-          this.usuarioSeleccionado.password = "";
-          console.log(error)
-        }
-      );
-    } else {
-      this.saveUsuario(formulario);
-    }
-  }
-
-
-  removeUsuario(usuario: Usuario) {
+  darAlta(usuario: Usuario) {
     this._usuarioService.removeUsuario(usuario.id).subscribe(
       response => {
         console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
-          this.eliminarElementoArray();
+          this.cambiarEstado();
           this.cancelar();
         } else if (response.status === 403) {
           this._router.navigate(["login"]);
@@ -230,11 +131,11 @@ export class UsuarioComponent implements OnInit {
 
   confirmacionBorrado() {
     this.confirmationService.confirm({
-      message: '¿Desea eliminar el usuario?',
-      header: 'Confirmacion eliminado',
-      icon: 'fa fa-trash',
+      message: '¿Desea dar de alta el usuario?',
+      header: 'Confirmacion alta',
+      icon: 'fa fa-check',
       accept: () => {
-        this.removeUsuario(this.usuarioSeleccionado);
+        this.darAlta(this.usuarioSeleccionado);
       },
       reject: () => {
       }
@@ -252,8 +153,8 @@ export class UsuarioComponent implements OnInit {
     console.log(this.usuarios)
   }
 
-  eliminarElementoArray() {
-    this.usuarios.splice(this.pos, 1);
+  cambiarEstado() {
+    this.usuarios[this.pos].estado=true;
   }
 
   mostrarMensajeCorrecto() {
@@ -264,18 +165,6 @@ export class UsuarioComponent implements OnInit {
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
-  }
-
-  mostrarMensajeIncorrectoImagen() {
-    this.msgs = [];
-    console.log("sdasdasda")
-    this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
-  }
-
-  mostrarMensajeDuplicado(campo: string) {
-    this.msgs = [];
-    console.log("sdasdasda")
-    this.msgs.push({ severity: 'error', summary: 'El campo ' + campo + ' ya esta registrado' });
   }
 
 }

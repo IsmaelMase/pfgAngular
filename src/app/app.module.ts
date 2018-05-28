@@ -52,6 +52,7 @@ import { HorarioComponent } from './componentes/horario.component';
 import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
 import { UploadService } from './servicios/upload.service';
 import { HttpClientModule } from '@angular/common/http';
+import { HistoricoProfesoresComponent } from './componentes/historico-profesores.component';
 
 
 
@@ -68,7 +69,8 @@ import { HttpClientModule } from '@angular/common/http';
     MensajeComponent,
     ConfiguracionUsuarioComponent,
     HorarioComponent,
-    GeneradorCalendarioComponent
+    GeneradorCalendarioComponent,
+    HistoricoProfesoresComponent
   ],
   imports: [
     BrowserModule,

@@ -25,6 +25,12 @@ export class UsuarioService {
         return this._http.get(this.url + 'usuario/usuarios',{headers:headers}).map(res => res);
     }
 
+    getAllUsuarios() {
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+
+        return this._http.get(this.url + 'usuario/allUsuarios',{headers:headers}).map(res => res);
+    }
+
     addUsuario(usuario: Usuario){
         let json = JSON.stringify(usuario);
         let headers = new Headers({'Content-Type':'application/json'});
