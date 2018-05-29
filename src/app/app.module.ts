@@ -53,6 +53,7 @@ import { GeneradorCalendarioComponent } from './componentes/generador-calendario
 import { UploadService } from './servicios/upload.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HistoricoProfesoresComponent } from './componentes/historico-profesores.component';
+import { Nombre } from './pipes/primeraLetraMayus.pipes';
 
 
 
@@ -70,7 +71,8 @@ import { HistoricoProfesoresComponent } from './componentes/historico-profesores
     ConfiguracionUsuarioComponent,
     HorarioComponent,
     GeneradorCalendarioComponent,
-    HistoricoProfesoresComponent
+    HistoricoProfesoresComponent,
+    Nombre
   ],
   imports: [
     BrowserModule,

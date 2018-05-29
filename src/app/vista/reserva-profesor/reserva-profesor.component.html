@@ -2,8 +2,13 @@
 <p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
 <div class="ui-g">
   <div class="ui-g-12">
-    <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
-      [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+    <div class="containerCalendar">
+      <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
+        [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+      <div class="divLoading" *ngIf="loading">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+    </div>
   </div>
 </div>
 

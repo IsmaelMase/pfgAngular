@@ -13,8 +13,8 @@
         </div>
       </div>
     </div>
-    <p-table #dt class="hoverTable"  [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [filterDelay]="50" [virtualScroll]="true"
-      [responsive]="true" [loading]="loading" [lazy]="true">
+    <p-table #dt class="hoverTable" [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [responsive]="true" [loading]="loading"
+      [lazy]="true">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th *ngFor="let col of columns" [ngStyle]="{'text-align':'center'}">
@@ -27,10 +27,13 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body"  let-rowData let-columns="columns">
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [ngClass]="{'cellRed': !rowData.estado}">
           <td *ngFor="let col of columns" (click)="seleccionarUsuario(rowData)" [ngStyle]="{'text-align':'center'}">
-            <div class="scrollable">
+            <div class="scrollable" *ngIf="col.header==='Nombre' || col.header==='Apellido'">
+              <span>{{rowData[col.field] | nombre}}</span>
+            </div>
+            <div class="scrollable" *ngIf="col.header!=='Nombre' && col.header!=='Apellido'">
               <span>{{rowData[col.field]}}</span>
             </div>
           </td>
@@ -108,8 +111,8 @@
       <div *ngSwitchCase="false" class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password"
-              [(ngModel)]="password" required readonly>
+            <input id="float-input" type="password" size="30" [ngStyle]="{'width':'100%'}" pInputText name="password" [(ngModel)]="password"
+              required readonly>
             <label for="float-input">Contraseña</label>
           </span>
         </div>
@@ -131,7 +134,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr >
+        <tr>
           <td *ngFor="let col of columns">
             {{rowData[col.field]}}
           </td>
@@ -143,17 +146,31 @@
   <p-footer>
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
-        <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Dar de alta" (click)="confirmacionBorrado()" tooltipPosition="left"
-          pButton icon="fa-check" class="ui-button-success d-none d-sm-block"></button>
-        <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Dar de alta" (click)="confirmacionBorrado()" tooltipPosition="left"
-          pButton icon="fa-check" class="ui-button-success d-block d-sm-none btn-block "></button>
+        <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Dar de alta" (click)="confirmacionBorrado()"
+          tooltipPosition="left" pButton icon="fa-check" class="ui-button-success d-none d-sm-block"></button>
+        <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Dar de alta" (click)="confirmacionBorrado()"
+          tooltipPosition="left" pButton icon="fa-check" class="ui-button-success d-block d-sm-none btn-block "></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Ver historico de reservas" tooltipPosition="left" [disabled]="!formUsuario.form.valid || !usuarioSeleccionado.cursos[0]"
-          pButton icon="fa-list" (click)="upload(formUsuario)" class="ui-button-info d-none d-sm-block"></button>
+          pButton icon="fa-list" (click)="abrirDialogReservas()" class="ui-button-info d-none d-sm-block"></button>
         <button [ngStyle]="{'float':'right'}" pTooltip="Ver historico de reservas" tooltipPosition="left" [disabled]="!formUsuario.form.valid || !usuarioSeleccionado.cursos[0]"
-          pButton icon="fa-list" (click)="upload(formUsuario)" class="ui-button-info d-block d-sm-none btn-block "></button>
+          pButton icon="fa-list" (click)="abrirDialogReservas()" class="ui-button-info d-block d-sm-none btn-block "></button>
       </div>
     </div>
   </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="historialReservas" [modal]="true" [autoAlign]="true" [width]="700" (onHide)="cancelarDialogReservas()"
+  [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true">
+  <p-header>
+    Historial reservas del usuario
+  </p-header>
+  <div class="containerCalendar">
+    <p-schedule class="calendario" #fc (onEventClick)="seleccionarReserva($event.calEvent.reserva)" (onViewRender)="clickeado(fc)"
+      [events]="eventos" [eventLimit]="4" locale="es" [header]="header" #fc></p-schedule>
+    <div class="divLoading" *ngIf="loadingReservas">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  </div>
 </p-dialog>

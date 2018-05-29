@@ -27,6 +27,13 @@ export class ReservaService {
         return this._http.post(this.url + 'reserva/reservasByRecursoAndFecha/' + id, json, { headers: headers }).map(res => res);
     }
 
+    getReservasByUsuario(id: string, skip:number,top:number) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
+        console.log(this.url + 'reserva/reservasByUsuario/'+id);
+        return this._http.get(this.url + 'reserva/reservasByUsuario/'+id+"/"+skip+"/"+top, { headers: headers }).map(res => res);
+    }
+
     getReservasByUsuarioAndFecha(id: string, fecha) {
         let json = JSON.stringify(fecha);
 

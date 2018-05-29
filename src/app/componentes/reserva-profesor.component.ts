@@ -30,7 +30,7 @@ export class ReservaProfesorComponent implements OnInit {
   public yearMostrado: number = 0;
   public reservaSeleccionada: Reserva;
   public pos: number = 0;
-
+  public loading:boolean=false;
   constructor(
     private _reservaService: ReservaService,
     private _route: ActivatedRoute,
@@ -82,6 +82,7 @@ export class ReservaProfesorComponent implements OnInit {
   }
 
   clickeado(event) {
+    this.loading=true;
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
@@ -113,6 +114,8 @@ export class ReservaProfesorComponent implements OnInit {
         "reserva": reserva
       }
       this.eventos.push(evento);
+    }).finally(() => {
+      this.loading=false;
     }).subscribe();
   }
 
