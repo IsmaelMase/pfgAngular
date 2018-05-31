@@ -33,7 +33,7 @@
       </div>
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
-          <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="dd/mm/yy"
+          <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="yy/mm/dd"
             selectionMode="multiple" [disabledDates]="fechasNoDisponibles" [disabledDays]="[0,6]" name="fechas" #fechas="ngModel"
             [(ngModel)]="reservaSeleccionada.fechas_reservas" dataType="string" [maxDateCount]="maxFechas">
           </p-calendar>
@@ -104,8 +104,8 @@
   <p-footer>
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
-          class="ui-button-success"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" [disabled]="reservaSeleccionada.intervalos_reservas.length===0||reservaSeleccionada.fechas_reservas.length===0||!reservaSeleccionada.usuario||!reservaSeleccionada.curso"
+          (click)="saveReserva()" class="ui-button-success"></button>
       </div>
     </div>
   </p-footer>

@@ -19,6 +19,7 @@ import { Reserva } from '../modelo/reserva';
 export class HistoricoProfesoresComponent implements OnInit {
 
   public usuarios: Usuario[];
+  public usuariosTotales: Usuario[];
   public cursos: Curso[];
   public reservas: Reserva[];
   public usuarioSeleccionado: Usuario;
@@ -53,7 +54,7 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.colsCursos = [
       { field: 'nombre', header: 'Nombre' }
     ];
-    
+
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
   }
 
@@ -74,6 +75,7 @@ export class HistoricoProfesoresComponent implements OnInit {
       response => {
         if (response.status !== 403) {
           this.usuarios = response.json();
+          this.usuariosTotales = response.json();
           this.loading = false;
           console.log(this.usuarios);
         } else {
@@ -165,6 +167,23 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.modificando = true;
   }
 
+  filter(campo, value) {
+    if (campo === 'dni') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.dni.toUpperCase().includes(value.toUpperCase()));
+    } else if (campo === 'email') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.email.toUpperCase().includes(value.toUpperCase()));
+    } else if (campo === 'nombre') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.nombre.toUpperCase().includes(value.toUpperCase()));
+    } else if (campo === 'apellido') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.apellido.toUpperCase().includes(value.toUpperCase()));
+    }
+
+  }
+
   cancelar() {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = false;
@@ -178,7 +197,7 @@ export class HistoricoProfesoresComponent implements OnInit {
   abrirDialogReservas() {
     this.getReservas("05");
     this.reservas = [];
-    this.historialReservas=true;
+    this.historialReservas = true;
   }
 
   cancelarDialogReservas() {

@@ -18,6 +18,7 @@ import { UploadService } from '../servicios/upload.service';
 export class UsuarioComponent implements OnInit {
 
   public usuarios: Usuario[];
+  public usuariosTotales: Usuario[];
   public cursos: Curso[];
   public usuarioSeleccionado: Usuario;
   public modificando: boolean = false;
@@ -28,8 +29,8 @@ export class UsuarioComponent implements OnInit {
   public selectedFiles: FileList = undefined;
   public currentFileUpload: File = undefined;
   public password: string;
-  public loading:boolean;
-  public loadingCurso:boolean;
+  public loading: boolean;
+  public loadingCurso: boolean;
 
   constructor(
     private _usuarioService: UsuarioService,
@@ -57,18 +58,19 @@ export class UsuarioComponent implements OnInit {
     }
     this.password = "";
     this.getUsuarios();
-    this.getCursos();
-    this.loading=true;
+    this.loading = true;
   }
 
 
   getUsuarios() {
-    this.loading=true;
+    this.loading = true;
     this._usuarioService.getUsuarios().subscribe(
       response => {
         if (response.status !== 403) {
           this.usuarios = response.json();
-          this.loading=false;
+          this.usuariosTotales = response.json();
+          this.loading = false;
+          this.getCursos();
           console.log(this.usuarios);
         } else {
           localStorage.clear();
@@ -103,16 +105,17 @@ export class UsuarioComponent implements OnInit {
       this.usuarioSeleccionado[prop] = usuario[prop];
     }
     this.modificando = true;
+    console.log(this.usuarioSeleccionado.cursos);
   }
 
   cancelar() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "",true);
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = false;
     this.password = "";
   }
 
   abrirDialog() {
-    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "",true);
+    this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = true;
   }
 
@@ -270,6 +273,23 @@ export class UsuarioComponent implements OnInit {
     this.msgs = [];
     console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
+  }
+
+  filter(campo, value) {
+    if (campo === 'dni') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.dni.toUpperCase().includes(value.toUpperCase()));
+    } else if (campo === 'email') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.email.toUpperCase().includes(value.toUpperCase()));
+    } else if (campo === 'nombre') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.nombre.toUpperCase().includes(value.toUpperCase()));
+    } else if (campo === 'apellido') {
+      this.usuarios = this.usuariosTotales.filter(
+        (usuario: Usuario) => usuario.apellido.toUpperCase().includes(value.toUpperCase()));
+    }
+
   }
 
   mostrarMensajeDuplicado(campo: string) {

@@ -59,3 +59,7 @@ div.scrollable {
     opacity: 0.5;
     background: rgb(226, 226, 226);
 }
+
+.containerTabla{
+    position: relative;
+}

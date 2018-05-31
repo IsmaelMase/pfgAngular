@@ -1,8 +1,8 @@
-<img src="../../../assets/logo.png" alt="">
+<img src="../../../assets/logo.png" alt="" width="20%" height="8%">
 <div class="ui-g ui-fluid hidden-print">
   <div class="ui-sm-12 ui-md-6">
     <div class="ui-grid-row">
-      <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="dd/mm/yy"
+      <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="yy/mm/dd"
         selectionMode="multiple" [disabledDays]="[0,6]" name="fechas" [maxDateCount]="5" #fechas="ngModel" [(ngModel)]="fechasSeleccionadas" dataType="string"></p-calendar>
     </div>
   </div>
