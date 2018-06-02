@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { HorarioService } from '../servicios/horario.service';
 import { Horario } from '../modelo/horario';
 import { Intervalo } from '../modelo/intervalo';
@@ -13,8 +13,9 @@ import { ConfirmationService } from 'primeng/api';
   styleUrls: ['../vista/horario/horario.component.css']
 })
 export class HorarioComponent implements OnInit {
-  
+
   public minDate = new Date();
+  public selectedDate: Date;
   public horarios: Horario[] = [];
   public intervalo: Intervalo;
   public intervalos: Intervalo[];
@@ -22,19 +23,20 @@ export class HorarioComponent implements OnInit {
   public modificando: boolean = false;
   public msgs: Message[] = [];
   public pos: number = -1;
-  public es:any;
+  public es: any;
   constructor(
     private _horarioService: HorarioService,
     private _route: ActivatedRoute,
     private _router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private zone: NgZone
   ) {
 
   }
 
   ngOnInit() {
     this.getHorarios();
-    this.horarioSeleccionado = new Horario("", "", [],null);
+    this.horarioSeleccionado = new Horario("", "", [], null);
     this.intervalo = new Intervalo("", "", false);
     this.intervalos = [];
     this.es = {
@@ -62,11 +64,25 @@ export class HorarioComponent implements OnInit {
   }
 
   comprobar() {
-    if (this.intervalo.inicio < this.intervalo.fin) {
-      this.intervalo.valido = false;
-    } else {
-      this.intervalo.valido = true;
-    }
+    console.log(event);
+    console.log(this.intervalo.inicio);
+    console.log(this.intervalo.fin);
+    this.zone.run(() => {
+      if (this.intervalo.inicio !== "" && this.intervalo.fin !== "") {
+        if (this.intervalo.inicio > this.intervalo.fin) {
+          this.intervalo.valido = false;
+        } else {
+          let intervalos = this.intervalos.filter(intervalo => intervalo.inicio === this.intervalo.inicio && intervalo.fin === this.intervalo.fin);
+          if (intervalos.length == 0) {
+            this.intervalo.valido = true;
+          } else {
+            this.intervalo.valido = false;
+          }
+        }
+      } else {
+        this.intervalo.valido = false;
+      }
+    });
   }
 
 
@@ -97,18 +113,27 @@ export class HorarioComponent implements OnInit {
         this.intervalos.push(new Intervalo(intervaloSeparado[0], intervaloSeparado[1], true));
       }
     }
+    console.log(this.horarioSeleccionado.fecha_max)
+    this.selectedDate = new Date(this.horarioSeleccionado.fecha_max);
+    console.log(this.selectedDate);
     this.modificando = true;
   }
 
   cancelar() {
-    this.horarioSeleccionado = new Horario("", "", [],null);
+    this.horarioSeleccionado = new Horario("", "", [], null);
     this.intervalos = [];
     this.modificando = false;
+    this.selectedDate = null;
+    this.intervalo = new Intervalo("", "", false);
   }
 
   abrirDialog() {
-    this.horarioSeleccionado = new Horario("", "", [],null);
+    this.horarioSeleccionado = new Horario("", "", [], null);
     this.modificando = true;
+  }
+
+  seleccionarFecha(value: Date) {
+    this.horarioSeleccionado.fecha_max = value.toDateString();
   }
 
   saveHorario() {
@@ -124,6 +149,7 @@ export class HorarioComponent implements OnInit {
         console.log(response);
         if (response.status === 201) {
           this.intervalos = [];
+          this.selectedDate = null;
           this.mostrarMensajeCorrecto();
           this.remplazarObjeto(response);
           this.cancelar();
@@ -132,7 +158,6 @@ export class HorarioComponent implements OnInit {
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
-          this.cancelar();
         }
       },
       error => {

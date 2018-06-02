@@ -87,8 +87,8 @@
         <div class="ui-grid-row">
           <label for="float-input">Fecha máxima</label>
           <br>
-          <p-calendar [ngStyle]="{'width':'100%'}" [(ngModel)]="horarioSeleccionado.fecha_max" [locale]="es" [disabledDays]="[0,6]"
-            name="fechas"  [minDate]="minDate" [defaultDate]="horarioSeleccionado.fecha_max" [showIcon]="true" required></p-calendar>
+          <p-calendar *ngIf="selectedDate" [ngStyle]="{'width':'100%'}" (onSelect)="seleccionarFecha($event)" [(ngModel)]="selectedDate" [locale]="es" [disabledDays]="[0,6]"
+            name="fechas"  [minDate]="minDate" [defaultDate]="selectedDate" [showIcon]="true" dateFormat="dd/mm/yy" required></p-calendar>
         </div>
       </div>
       <br>
@@ -113,7 +113,7 @@
         </div>
         <div class="ui-sm-12 ui-md-2">
           <button [ngStyle]="{'float':'right'}" pTooltip="Añadir Intervalo" tooltipPosition="left" pButton icon="fa-plus" (click)="addIntervalo()"
-            class="ui-button-success" [disabled]="intervalo.valido"></button>
+            class="ui-button-success" [disabled]="!intervalo.valido"></button>
         </div>
       </div>
 
@@ -138,9 +138,9 @@
             icon="fa-trash" (click)="confirmacionBorrado()" class="ui-button-danger d-none d-sm-block"></button>
         </div>
         <div class="ui-sm-12 ui-md-6">
-          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0]"
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0] || !horarioSeleccionado.fecha_max"
             pButton icon="fa-check" (click)="saveHorario(); formHorario.reset();" class="ui-button-success d-block d-sm-none btn-block"></button>
-          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0]"
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0] || !horarioSeleccionado.fecha_max"
             pButton icon="fa-check" (click)="saveHorario(); formHorario.reset();" class="ui-button-success d-none d-sm-block"></button>
         </div>
       </div>

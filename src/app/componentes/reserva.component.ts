@@ -76,6 +76,7 @@ export class ReservaComponent implements OnInit {
         this.maxFechas = 30;
       }
       this.reservaSeleccionada.recurso = this.recurso;
+      this.maxDate= new Date(this.recurso.intervalo.fecha_max);
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
       this.mesMostrado = 0;
@@ -86,7 +87,6 @@ export class ReservaComponent implements OnInit {
       };
       this.getReservas("2018/05");
     }
-    this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
     this.es = {
       firstDayOfWeek: 1,
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],

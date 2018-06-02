@@ -24,6 +24,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessageModule } from 'primeng/message';
 import { TabViewModule } from 'primeng/tabview';
+import { SpinnerModule } from 'primeng/spinner';
 
 
 import { CursoService } from './servicios/curso.service'
@@ -103,7 +104,8 @@ import { HomeComponent } from './componentes/home.component';
     ProgressSpinnerModule,
     AutoCompleteModule,
     MessageModule,
-    TabViewModule
+    TabViewModule,
+    SpinnerModule
   ],
   providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService, UploadService],
   bootstrap: [AppComponent]
