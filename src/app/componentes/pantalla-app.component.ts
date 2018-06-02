@@ -13,6 +13,7 @@ export class PantallaAppComponent implements OnInit {
   public usuario: Usuario;
   public msgs: Message[] = [];
   public cambiarConfig: boolean = false;
+  public sitioActual:string;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -48,6 +49,7 @@ export class PantallaAppComponent implements OnInit {
   }
 
   cerrarDialogReservas(e) {
+    console.log(e);
     if (e === "ok") {
       this.cambiarConfig = false;
       this.usuario = JSON.parse(localStorage.getItem("usuario"))
@@ -68,5 +70,9 @@ export class PantallaAppComponent implements OnInit {
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
+  }
+
+  cambiarRuta(ruta){
+    this.sitioActual=ruta;
   }
 }

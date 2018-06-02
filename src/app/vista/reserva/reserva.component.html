@@ -18,6 +18,11 @@
         <div class="ui-grid-row">
           <p-table [ngStyle]="{'width':'100%'}" [responsive]="true" (onRowSelect)="getFechasNoDisponibles()" (onRowUnselect)="getFechasNoDisponibles()"
             [value]="recurso.intervalo.intervalos" selectionMode="multiple" [(selection)]="reservaSeleccionada.intervalos_reservas">
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <th>No hay registros</th>
+              </tr>
+            </ng-template>
             <ng-template pTemplate="header">
               <tr>
                 <th>Horas</th>
@@ -35,7 +40,7 @@
         <div class="ui-grid-row">
           <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="yy/mm/dd"
             selectionMode="multiple" [disabledDates]="fechasNoDisponibles" [disabledDays]="[0,6]" name="fechas" #fechas="ngModel"
-            [(ngModel)]="reservaSeleccionada.fechas_reservas" dataType="string" [maxDateCount]="maxFechas">
+            [(ngModel)]="reservaSeleccionada.fechas_reservas" dataType="string" [maxDateCount]="maxFechas" [disabled]="!haveFechas">
           </p-calendar>
         </div>
       </div>
@@ -44,6 +49,11 @@
     <br>
     <p-table *ngIf="usuario.rol==='ROL_ADMIN'" #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reservaSeleccionada.usuario"
       [filterDelay]="50" selectionMode="single" [responsive]="true" required>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <th>No hay registros</th>
+        </tr>
+      </ng-template>
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -79,6 +89,11 @@
       <div class="ui-sm-12 ui-md-6">
         <p-table #dt3 *ngIf="reservaSeleccionada.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}"
           [responsive]="true" [value]="reservaSeleccionada.usuario.cursos" selectionMode="single" [(selection)]="reservaSeleccionada.curso">
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <th>No hay registros</th>
+            </tr>
+          </ng-template>
           <ng-template pTemplate="caption">
             <div style="text-align: right">
               <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -104,7 +119,7 @@
   <p-footer>
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" [disabled]="reservaSeleccionada.intervalos_reservas.length===0||reservaSeleccionada.fechas_reservas.length===0||!reservaSeleccionada.usuario||!reservaSeleccionada.curso"
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" [disabled]="reservaSeleccionada.intervalos_reservas.length===0||reservaSeleccionada.fechas_reservas.length===0||!reservaSeleccionada.usuario||!reservaSeleccionada.curso || doingReserva"
           (click)="saveReserva()" class="ui-button-success"></button>
       </div>
     </div>
@@ -136,7 +151,7 @@
   </div>
   <div>
     <b>Fecha:</b>
-    <span>{{reservaSeleccionada.fechas_reservas[0]}}</span>
+    <span>{{reservaSeleccionada.fechas_reservas[0] | date: 'dd/MM/yyyy' }}</span>
   </div>
   <div>
     <b>Hora:</b>

@@ -3,7 +3,8 @@
 
 <div class="ui-g">
   <div class="ui-g-12">
-    <p-dataView class="ui-table-responsive" #dv [value]="horarios" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+    <p-dataView class="ui-table-responsive" #dv [value]="horarios" emptyMessage="No hay registros" [paginator]="true" [rows]="12"
+      filterBy="nombre" layout="grid">
       <p-header>
         <div class="ui-helper-clearfix">
           <div class="ui-g">
@@ -14,8 +15,8 @@
             </div>
             <div class="ui-g-4 ui-md-4 ui-sm-12 filter-container">
               <div style="position:relative">
-                  <input type="search" [ngStyle]="{'width':'100%'}" pInputText placeholder="Buscar por nombre" class="d-none d-sm-block" (keyup)="dv.filter($event.target.value)">
-                  <input type="search" [ngStyle]="{'width':'100%'}" pInputText placeholder="Buscar por nombre" class="d-block d-sm-none" (keyup)="dv.filter($event.target.value)">
+                <input type="search" [ngStyle]="{'width':'100%'}" pInputText placeholder="Buscar por nombre" class="d-none d-sm-block" (keyup)="dv.filter($event.target.value)">
+                <input type="search" [ngStyle]="{'width':'100%'}" pInputText placeholder="Buscar por nombre" class="d-block d-sm-none" (keyup)="dv.filter($event.target.value)">
               </div>
             </div>
             <div class="ui-g-4 ui-md-4 ui-g-4 ui-md-4 d-none d-sm-block">
@@ -23,7 +24,8 @@
             </div>
             <div class="ui-g-4 ui-md-2 ui-sm-12">
               <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success d-none d-sm-block" icon="fa-plus" (click)="abrirDialog()"></button>
-              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success d-block d-sm-none btn-block" icon="fa-plus" (click)="abrirDialog()"></button>
+              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success d-block d-sm-none btn-block" icon="fa-plus"
+                (click)="abrirDialog()"></button>
             </div>
           </div>
         </div>
@@ -80,6 +82,15 @@
         </span>
       </div>
       <br>
+      <div class="ui-sm-12 ui-md-12">
+        <div class="ui-grid-row">
+          <label for="float-input">Fecha máxima</label>
+          <br>
+          <p-calendar [ngStyle]="{'width':'100%'}" [(ngModel)]="horarioSeleccionado.fecha_max" [locale]="es" [disabledDays]="[0,6]"
+            name="fechas"  [minDate]="minDate" [defaultDate]="horarioSeleccionado.fecha_max" [showIcon]="true" required></p-calendar>
+        </div>
+      </div>
+      <br>
       <div class="ui-g">
         <div class="ui-sm-12 ui-md-10">
           <b>Nuevo Intervalo</b>
@@ -122,13 +133,13 @@
         <div class="ui-sm-12 ui-md-6">
           <button *ngIf="horarioSeleccionado.id" pTooltip="Borrar horario" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton
             icon="fa-trash" (click)="confirmacionBorrado()" class="ui-button-danger d-block d-sm-none btn-block"></button>
-            <button *ngIf="horarioSeleccionado.id" pTooltip="Borrar horario" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton
+          <button *ngIf="horarioSeleccionado.id" pTooltip="Borrar horario" [ngStyle]="{'float':'left'}" tooltipPosition="bottom" pButton
             icon="fa-trash" (click)="confirmacionBorrado()" class="ui-button-danger d-none d-sm-block"></button>
         </div>
         <div class="ui-sm-12 ui-md-6">
           <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0]"
             pButton icon="fa-check" (click)="saveHorario(); formHorario.reset();" class="ui-button-success d-block d-sm-none btn-block"></button>
-            <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0]"
+          <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formHorario.form.valid || !intervalos[0]"
             pButton icon="fa-check" (click)="saveHorario(); formHorario.reset();" class="ui-button-success d-none d-sm-block"></button>
         </div>
       </div>

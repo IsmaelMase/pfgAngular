@@ -45,7 +45,7 @@ export class UsuarioService {
         let headers = new Headers({'Content-Type':'application/json'});
         headers.append('Authorization', localStorage.getItem("token"));
 
-        return this._http.delete(this.url+'usuario/removeUsuario/'+id, {headers: headers})
+        return this._http.put(this.url+'usuario/removeUsuario/'+id, {headers: headers})
                          .map(res => res);
                        
     }

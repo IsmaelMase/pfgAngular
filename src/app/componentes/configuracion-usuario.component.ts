@@ -93,7 +93,9 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
+        console.log(response);
         if (response.status === 201) {
+          console.log("hola");
           localStorage.setItem("usuario", JSON.stringify(response.json()))
           this.currentFileUpload = null;
           this.selectedFiles = undefined;

@@ -53,6 +53,8 @@ export class ReservaComponent implements OnInit {
   public pos: number = 0;
   public reservasAMostrar: any[] = [];
   public loading:boolean=false;
+  public doingReserva:boolean=false;
+  public haveFechas:boolean=false;
   constructor(
     private _reservaService: ReservaService,
     private _horarioService: HorarioService,
@@ -82,7 +84,7 @@ export class ReservaComponent implements OnInit {
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       };
-      this.getReservas("05/2018");
+      this.getReservas("2018/05");
     }
     this.maxDate.setFullYear(this.minDate.getFullYear() + 1);
     this.es = {
@@ -108,6 +110,7 @@ export class ReservaComponent implements OnInit {
 
     this._reservaService.getReservasByRecursoAndFecha(this.recurso.id, fecha).subscribe(
       response => {
+        console.log(response);
         if (response.status !== 403) {
           this.trasnformarReservasEventos(response.json());
         } else {
@@ -139,6 +142,7 @@ export class ReservaComponent implements OnInit {
   }
 
   getFechasNoDisponibles() {
+    this.haveFechas=false;
     console.log(this.reservaSeleccionada.intervalos_reservas.length === 0);
     this.fechasNoDisponibles = [];
     this._reservaService.getFechasNoDisponibles(this.reservaSeleccionada.intervalos_reservas, this.recurso.id).subscribe(
@@ -150,6 +154,7 @@ export class ReservaComponent implements OnInit {
           }
           console.log(this.fechasNoDisponibles);
           this.fechasNoDisponibles = [...this.fechasNoDisponibles];
+          this.haveFechas=true;
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -228,6 +233,7 @@ export class ReservaComponent implements OnInit {
   }
 
   saveReserva() {
+    this.doingReserva=true;
     console.log(this.reservaSeleccionada)
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
@@ -237,10 +243,13 @@ export class ReservaComponent implements OnInit {
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
+        } else if (response.status === 409) {
+          
         } else {
           this.cerrar.emit("fail");
           this.mostrarMensajeIncorrecto();
         }
+        this.doingReserva=false;
       },
       error => {
         this.mostrarMensajeIncorrecto();

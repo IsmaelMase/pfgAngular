@@ -29,6 +29,7 @@ export class RecursoComponent implements OnInit {
   public intervalos: Horario;
   public selectedFiles: FileList;
   public currentFileUpload: File;
+  public loading: boolean=true;
 
   constructor(
     private _recursoService: RecursoService,
@@ -44,7 +45,7 @@ export class RecursoComponent implements OnInit {
     this._route.params.forEach((params: Params) => {
       this.tipo = params['tipo'];
       this.usuario = JSON.parse(localStorage.getItem("usuario"))
-      this.getRecursos();
+      this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
       this.getHorasDisponibles();
     });
   }
@@ -55,6 +56,7 @@ export class RecursoComponent implements OnInit {
         if (response.status !== 403) {
           console.log(response.json());
           this.intervalos = response.json();
+          this.getRecursos();
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -68,10 +70,12 @@ export class RecursoComponent implements OnInit {
   }
 
   getAulas() {
+    this.loading = true;
     this._recursoService.getAulas().subscribe(
       response => {
         if (response.status !== 403) {
           this.recursos = response;
+          this.loading = false;
           console.log(this.recursos);
         } else {
           localStorage.clear();
@@ -90,10 +94,12 @@ export class RecursoComponent implements OnInit {
   }
 
   getOtros() {
+    this.loading = true;
     this._recursoService.getOtros().subscribe(
       response => {
         if (response.status !== 403) {
           this.recursos = response;
+          this.loading = false;
           console.log(this.recursos);
         } else {
           localStorage.clear();

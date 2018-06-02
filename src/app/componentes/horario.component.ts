@@ -13,7 +13,8 @@ import { ConfirmationService } from 'primeng/api';
   styleUrls: ['../vista/horario/horario.component.css']
 })
 export class HorarioComponent implements OnInit {
-
+  
+  public minDate = new Date();
   public horarios: Horario[] = [];
   public intervalo: Intervalo;
   public intervalos: Intervalo[];
@@ -21,7 +22,7 @@ export class HorarioComponent implements OnInit {
   public modificando: boolean = false;
   public msgs: Message[] = [];
   public pos: number = -1;
-
+  public es:any;
   constructor(
     private _horarioService: HorarioService,
     private _route: ActivatedRoute,
@@ -33,9 +34,19 @@ export class HorarioComponent implements OnInit {
 
   ngOnInit() {
     this.getHorarios();
-    this.horarioSeleccionado = new Horario("", "", []);
+    this.horarioSeleccionado = new Horario("", "", [],null);
     this.intervalo = new Intervalo("", "", false);
     this.intervalos = [];
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+      dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+      dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+      today: 'Hoy',
+      clear: 'Borrar'
+    }
   }
 
   addIntervalo() {
@@ -90,13 +101,13 @@ export class HorarioComponent implements OnInit {
   }
 
   cancelar() {
-    this.horarioSeleccionado = new Horario("", "", []);
+    this.horarioSeleccionado = new Horario("", "", [],null);
     this.intervalos = [];
     this.modificando = false;
   }
 
   abrirDialog() {
-    this.horarioSeleccionado = new Horario("", "", []);
+    this.horarioSeleccionado = new Horario("", "", [],null);
     this.modificando = true;
   }
 

@@ -12,11 +12,13 @@ import { MensajeComponent } from './componentes/mensaje.component';
 import { HorarioComponent } from './componentes/horario.component';
 import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
 import { HistoricoProfesoresComponent } from './componentes/historico-profesores.component';
+import { HomeComponent } from './componentes/home.component';
 
 const appRoutes: Routes = [
 	{
 		path: 'pantallaApp', component: PantallaAppComponent, children: [
-			{ path: '', component: UsuarioComponent },
+			{ path: '', component: HomeComponent },
+			{ path: 'inicio', component: HomeComponent },
 			{ path: 'profesores', component: UsuarioComponent },
 			{ path: 'historico-profesores', component: HistoricoProfesoresComponent },
 			{ path: 'reservas', component: ReservaProfesorComponent },
@@ -24,7 +26,7 @@ const appRoutes: Routes = [
 			{ path: 'horarios', component: HorarioComponent },
 			{ path: 'generador-calendario', component: GeneradorCalendarioComponent },
 			{ path: 'recursos/:tipo', component: RecursoComponent },
-			{ path: '**', component: UsuarioComponent }
+			{ path: '**', component: HomeComponent }
 		]
 	},
 	{ path: 'login', component: LoginComponent },

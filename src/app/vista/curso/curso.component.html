@@ -3,7 +3,7 @@
 
 <div class="ui-g">
   <div class="ui-g-12">
-    <p-dataView class="ui-table-responsive" #dv [value]="cursos" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+    <p-dataView class="ui-table-responsive" #dv [value]="cursos" emptyMessage="No hay registros" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
       <p-header>
         <div class="ui-helper-clearfix">
           <div class="ui-g">

@@ -14,7 +14,12 @@
       </div>
     </div>
     <div class="containerTabla">
-      <p-table #dt class="hoverTable" [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [responsive]="true" >
+      <p-table #dt class="hoverTable" [columns]="cols" [value]="usuarios" [paginator]="true" [rows]="10" [responsive]="true">
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <th>No hay registros</th>
+          </tr>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th *ngFor="let col of columns" [ngStyle]="{'text-align':'center'}">
@@ -124,6 +129,11 @@
     </div>
     <br>
     <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="usuarioSeleccionado.cursos" [filterDelay]="50">
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <th>No hay registros</th>
+        </tr>
+      </ng-template>
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>

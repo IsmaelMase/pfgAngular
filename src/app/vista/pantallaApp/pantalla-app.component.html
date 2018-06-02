@@ -3,6 +3,12 @@
   <!-- Sidebar Holder -->
   <nav id="sidebar" class="hidden-print d-block d-sm-none">
     <ul class="list-unstyled components">
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" (click)="abrirDialogConfiguracion()">
+        <a>
+          <i class="fa fa-user"></i>
+          Perfil
+        </a>
+      </li>
       <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/profesores']">
         <a>
           <i class="fa fa-graduation-cap"></i>
@@ -43,13 +49,19 @@
       <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/historico-profesores']">
         <a>
           <i class="fa fa-list"></i>
-          Historial de profesores
+          Histórico de profesores
         </a>
       </li>
       <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/generador-calendario']">
         <a>
           <i class="fa fa-print"></i>
           Imprimir Calendario
+        </a>
+      </li>
+      <li *ngIf="usuario.rol==='ROL_ADMIN'" (click)="logout()">
+        <a>
+          <i class="fa fa-sign-out"></i>
+          Cerrar Sesión
         </a>
       </li>
     </ul>
@@ -81,27 +93,27 @@
                 Profesores
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" [routerLink]="['/pantallaApp/profesores']">Profesores Activos</a>
+                <a class="dropdown-item" [routerLink]="['/pantallaApp/profesores']" (click)="cambiarRuta('Profesores > Profesores Activos')">Profesores Activos</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" [routerLink]="['/pantallaApp/historico-profesores']">Historio profesores</a>
+                <a class="dropdown-item" [routerLink]="['/pantallaApp/historico-profesores']" (click)="cambiarRuta('Profesores > Histórico Profesores')">Historio profesores</a>
               </div>
             </li>
-            <li class="nav-item" [routerLink]="['/pantallaApp/recursos','aulas']">
+            <li class="nav-item" [routerLink]="['/pantallaApp/recursos','aulas']" (click)="cambiarRuta('Aulas')">
               <a>
                 <a class="nav-link">Aulas</a>
               </a>
             </li>
-            <li class="nav-item" [routerLink]="['/pantallaApp/recursos','otros']">
+            <li class="nav-item" [routerLink]="['/pantallaApp/recursos','otros']" (click)="cambiarRuta('Recursos')">
               <a>
                 <a class="nav-link">Recursos</a>
               </a>
             </li>
-            <li class="nav-item" *ngIf="usuario.rol!=='ROL_ADMIN'" [routerLink]="['/pantallaApp/reservas']">
+            <li class="nav-item" *ngIf="usuario.rol!=='ROL_ADMIN'" [routerLink]="['/pantallaApp/reservas']" (click)="cambiarRuta('Reservas')">
               <a>
                 <a class="nav-link">Reservas</a>
               </a>
             </li>
-            <li class="nav-item" *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/cursos']">
+            <li class="nav-item" *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/cursos']" (click)="cambiarRuta('Cursos')">
               <a>
                 <a class="nav-link">Cursos</a>
               </a>
@@ -111,9 +123,9 @@
                 Configuración
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                <a *ngIf="usuario.rol==='ROL_ADMIN'" class="dropdown-item" [routerLink]="['/pantallaApp/horarios']">Horarios</a>
+                <a *ngIf="usuario.rol==='ROL_ADMIN'" class="dropdown-item" [routerLink]="['/pantallaApp/horarios']" (click)="cambiarRuta('Configuración > Horarios')">Horarios</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" [routerLink]="['/pantallaApp/generador-calendario']">Generar calendario</a>
+                <a class="dropdown-item" [routerLink]="['/pantallaApp/generador-calendario']" (click)="cambiarRuta('Configuración > Generador Calendarios')">Generar calendario</a>
               </div>
             </li>
           </ul>
@@ -140,6 +152,7 @@
       </nav>
     </div>
     <div class="content-app">
+      <h3>{{sitioActual}}</h3>
       <router-outlet (activate)="changeOfRoutes()" class="visible-print">
       </router-outlet>
     </div>

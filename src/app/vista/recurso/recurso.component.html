@@ -3,8 +3,7 @@
 
 <div class="ui-g">
   <div class="ui-g-12">
-
-    <p-dataView class="ui-table-responsive" #dv [value]="recursos" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+    <p-dataView class="ui-table-responsive" #dv [value]="recursos" emptyMessage="No hay registros" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
       <p-header>
         <div class="ui-helper-clearfix">
           <div class="ui-g">
@@ -30,75 +29,80 @@
           </div>
         </div>
       </p-header>
-      <ng-template let-recurso pTemplate="listItem">
-        <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
-          <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
-            <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="50%" height="100%">
-            <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="50%" height="100%">
-          </div>
-          <div class="ui-g-12 ui-md-8 recurso-details">
-            <div class="ui-g">
-              <div class="ui-g-2 ui-sm-6">Nombre: </div>
-              <div class="ui-g-10 ui-sm-6">
-                <b>{{recurso.nombre}}</b>
+      <div class="containerTabla">
+        <ng-template let-recurso pTemplate="listItem">
+          <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+            <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
+              <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="50%" height="100%">
+              <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="50%" height="100%">
+            </div>
+            <div class="ui-g-12 ui-md-8 recurso-details">
+              <div class="ui-g">
+                <div class="ui-g-2 ui-sm-6">Nombre: </div>
+                <div class="ui-g-10 ui-sm-6">
+                  <b>{{recurso.nombre}}</b>
+                </div>
+              </div>
+              <div *ngIf="tipo == 'aulas'" class="ui-g">
+                <div class="ui-g-2 ui-sm-6">Capacidad: </div>
+                <div class="ui-g-10 ui-sm-6">
+                  <b>{{recurso.capacidad}}</b>
+                </div>
+              </div>
+              <div class="ui-g">
+                <span *ngIf="recurso.incidencia" pTooltip="{{recurso.incidencia}}" tooltipPosition="bottom">
+                  <i class="fa fa-exclamation-triangle icon"></i>
+                </span>
+                <span *ngIf="recurso.datos" pTooltip="{{recurso.datos}}" tooltipPosition="bottom">
+                  <i class="fa fa-info-circle icon2"></i>
+                </span>
               </div>
             </div>
-            <div *ngIf="tipo == 'aulas'" class="ui-g">
-              <div class="ui-g-2 ui-sm-6">Capacidad: </div>
-              <div class="ui-g-10 ui-sm-6">
-                <b>{{recurso.capacidad}}</b>
+            <div class="ui-g-12 ui-md-2 search-icon">
+              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
+                style="margin-top:0"></button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template let-recurso pTemplate="gridItem">
+          <div style="padding:.5em" class="ui-g-12 ui-md-2">
+            <p-panel [ngStyle]="{'text-align':'center'}">
+              <p-header>
+                <div class="scrollable">
+                  {{recurso.nombre}}
+                </div>
+              </p-header>
+              <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="25%" height="25%">
+              <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="25%" height="25%">
+              <div class="recurso-detail" [ngStyle]="{'text-align':'center'}">
+                <div *ngIf="tipo == 'aulas'">
+                  <b>Capacidad: </b>{{recurso.capacidad}}
+                </div>
+                <span *ngIf="recurso.incidencia" pTooltip="{{recurso.incidencia}}" tooltipPosition="bottom">
+                  <i class="fa fa-exclamation-triangle icon"></i>
+                </span>
+                <span *ngIf="recurso.datos" pTooltip="{{recurso.datos}}" tooltipPosition="bottom">
+                  <i class="fa fa-info-circle icon2"></i>
+                </span>
               </div>
-            </div>
-            <div class="ui-g">
-              <span *ngIf="recurso.incidencia" pTooltip="{{recurso.incidencia}}" tooltipPosition="bottom">
-                <i class="fa fa-exclamation-triangle icon"></i>
-              </span>
-              <span *ngIf="recurso.datos" pTooltip="{{recurso.datos}}" tooltipPosition="bottom">
-                <i class="fa fa-info-circle icon2"></i>
-              </span>
-            </div>
+              <hr class="ui-widget-content" style="border-top:0">
+              <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
+                style="margin-top:0"></button>
+              <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
+                style="margin-top:0"></button>
+            </p-panel>
           </div>
-          <div class="ui-g-12 ui-md-2 search-icon">
-            <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
-              style="margin-top:0"></button>
-            <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
-              style="margin-top:0"></button>
-            <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
-              style="margin-top:0"></button>
-          </div>
+        </ng-template>
+        <div class="divLoading" *ngIf="loading">
+          <p-progressSpinner></p-progressSpinner>
         </div>
-      </ng-template>
-      <ng-template let-recurso pTemplate="gridItem">
-        <div style="padding:.5em" class="ui-g-12 ui-md-2">
-          <p-panel [ngStyle]="{'text-align':'center'}">
-            <p-header>
-              <div class="scrollable">
-                {{recurso.nombre}}
-              </div>
-            </p-header>
-            <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="25%" height="25%">
-            <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="25%" height="25%">
-            <div class="recurso-detail" [ngStyle]="{'text-align':'center'}">
-              <div *ngIf="tipo == 'aulas'">
-                <b>Capacidad: </b>{{recurso.capacidad}}
-              </div>
-              <span *ngIf="recurso.incidencia" pTooltip="{{recurso.incidencia}}" tooltipPosition="bottom">
-                <i class="fa fa-exclamation-triangle icon"></i>
-              </span>
-              <span *ngIf="recurso.datos" pTooltip="{{recurso.datos}}" tooltipPosition="bottom">
-                <i class="fa fa-info-circle icon2"></i>
-              </span>
-            </div>
-            <hr class="ui-widget-content" style="border-top:0">
-            <button pButton pTooltip="Ver información" tooltipPosition="bottom" type="button" icon="fa-pencil" (click)="seleccionarRecurso(recurso)"
-              style="margin-top:0"></button>
-            <button pButton pTooltip="Realizar Reserva" tooltipPosition="bottom" type="button" icon="fa-clock" (click)="abrirDialogReserva(recurso,'diaria')"
-              style="margin-top:0"></button>
-            <button pButton pTooltip="Ver Reservas" tooltipPosition="bottom" type="button" icon="fa-calendar" (click)="abrirDialogReserva(recurso,'reservas')"
-              style="margin-top:0"></button>
-          </p-panel>
-        </div>
-      </ng-template>
+      </div>
     </p-dataView>
   </div>
 </div>
@@ -135,7 +139,7 @@
         <div class="ui-grid-row">
           <span class="ui-float-label">
             <input id="float-input" type="number" size="30" [ngStyle]="{'width':'100%'}" pInputText name="capacidad" #capacidad="ngModel"
-              [(ngModel)]="recursoSeleccionado.capacidad" required>
+              [(ngModel)]="recursoSeleccionado.capacidad" min="1" required>
             <label for="float-input">Capacidad</label>
           </span>
         </div>
@@ -151,8 +155,10 @@
         <div class="ui-grid-row">
           <label for="float-input">Imagen</label>
           <div class="ui-inputgroup">
-            <input id="float-input" type="file" name="imagen" #imagen="ngModel" [(ngModel)]="recursoSeleccionado.imagen" size="30" (change)="selectFile($event)" [ngStyle]="{'width':'100%'}" pInputText>
-            <button pButton type="button" pButton icon="fa-retweet" class="ui-button-info" pTooltip="Imagen por defecto" tooltipPosition="bottom" (click)="resetImage()"></button>
+            <input id="float-input" type="file" name="imagen" #imagen="ngModel" [(ngModel)]="recursoSeleccionado.imagen" size="30" (change)="selectFile($event)"
+              [ngStyle]="{'width':'100%'}" pInputText>
+            <button pButton type="button" pButton icon="fa-retweet" class="ui-button-info" pTooltip="Imagen por defecto" tooltipPosition="bottom"
+              (click)="resetImage()"></button>
           </div>
         </div>
       </div>
