@@ -79,8 +79,8 @@
     </nav>
     <div class="d-none d-sm-block">
       <nav class="navbar navbar-expand-lg navBarMovil">
-        <a class="navbar-brand">
-          <img src="../../../assets/logo.png" alt="" width="100px">
+        <a class="navbar-brand imagenLogo">
+          <img  src="../../../assets/logo.png" alt="" width="100px" [routerLink]="['/pantallaApp']">
         </a>
         <!-- Collapse button -->
 
@@ -152,7 +152,6 @@
       </nav>
     </div>
     <div class="content-app">
-      <h3>{{sitioActual}}</h3>
       <router-outlet (activate)="changeOfRoutes()" class="visible-print">
       </router-outlet>
     </div>

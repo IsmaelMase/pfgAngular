@@ -5,4 +5,7 @@ img{
 
 .texto h2{
     text-align: center;
+    font-size: 35px;
+    font-style: bold;
+    color: rgb(69, 168, 235)
 }
