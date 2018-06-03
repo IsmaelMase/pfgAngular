@@ -6,7 +6,7 @@ import { Message } from 'primeng/api';
 @Component({
   selector: 'app-pantalla-app',
   templateUrl: '../vista/pantallaApp/pantalla-app.component.html',
-  styleUrls: ['../vista/pantallaApp/pantalla-app.component.scss']
+  styleUrls: ['../vista/pantallaApp/pantalla-app.component.css']
 })
 export class PantallaAppComponent implements OnInit {
   public oculto: boolean;
