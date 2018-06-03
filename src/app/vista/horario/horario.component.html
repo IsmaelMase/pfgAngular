@@ -102,14 +102,14 @@
           <div class="textoHorario">De</div>
         </div>
         <div class="ui-sm-12 ui-md-4">
-          <input [ngStyle]="{'width':'100%'}" pInputText type="time" name="inicio" #inicio="ngModel" (ngModelChange)="comprobar()"
+          <input [ngStyle]="{'width':'100%'}" #inicioInput pInputText type="time" name="inicio" #inicio="ngModel" (ngModelChange)="comprobar(inicioInput.value,'inicio')"
             [(ngModel)]="intervalo.inicio">
         </div>
         <div class="ui-sm-12 ui-md-1">
           <div class="textoHorario">A</div>
         </div>
         <div class="ui-sm-12 ui-md-4">
-          <input [ngStyle]="{'width':'100%'}" pInputText type="time" name="fin" #fin="ngModel" [(ngModel)]="intervalo.fin" (ngModelChange)="comprobar()">
+          <input [ngStyle]="{'width':'100%'}" #finInput pInputText type="time" name="fin" #fin="ngModel" [(ngModel)]="intervalo.fin" (ngModelChange)="comprobar(finInput.value,'fin')">
         </div>
         <div class="ui-sm-12 ui-md-2">
           <button [ngStyle]="{'float':'right'}" pTooltip="Añadir Intervalo" tooltipPosition="left" pButton icon="fa-plus" (click)="addIntervalo()"

@@ -63,26 +63,26 @@ export class HorarioComponent implements OnInit {
     this.intervalos = [...this.intervalos];
   }
 
-  comprobar() {
-    console.log(event);
-    console.log(this.intervalo.inicio);
-    console.log(this.intervalo.fin);
-    this.zone.run(() => {
-      if (this.intervalo.inicio !== "" && this.intervalo.fin !== "") {
-        if (this.intervalo.inicio > this.intervalo.fin) {
-          this.intervalo.valido = false;
-        } else {
-          let intervalos = this.intervalos.filter(intervalo => intervalo.inicio === this.intervalo.inicio && intervalo.fin === this.intervalo.fin);
-          if (intervalos.length == 0) {
-            this.intervalo.valido = true;
-          } else {
-            this.intervalo.valido = false;
-          }
-        }
-      } else {
+  comprobar(value: string, campo: string) {
+    if (campo === "inicio") {
+      this.intervalo.inicio = value;
+    } else {
+      this.intervalo.fin = value;
+    }
+    if (this.intervalo.inicio !== "" && this.intervalo.fin !== "") {
+      if (this.intervalo.inicio >= this.intervalo.fin) {
         this.intervalo.valido = false;
+      } else {
+        let intervalos = this.intervalos.filter(intervalo => intervalo.inicio === this.intervalo.inicio && intervalo.fin === this.intervalo.fin);
+        if (intervalos.length == 0) {
+          this.intervalo.valido = true;
+        } else {
+          this.intervalo.valido = false;
+        }
       }
-    });
+    } else {
+      this.intervalo.valido = false;
+    }
   }
 
 
@@ -120,10 +120,10 @@ export class HorarioComponent implements OnInit {
   }
 
   cancelar() {
-    this.horarioSeleccionado = new Horario("", "", [], null);
     this.intervalos = [];
     this.modificando = false;
     this.selectedDate = null;
+    this.horarioSeleccionado = new Horario("", "", [], null);
     this.intervalo = new Intervalo("", "", false);
   }
 
