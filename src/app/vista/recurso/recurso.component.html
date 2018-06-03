@@ -23,9 +23,9 @@
               <p-dataViewLayoutOptions [ngStyle]="{'float':'left'}"></p-dataViewLayoutOptions>
             </div>
             <div class="ui-g-2 ui-md-2 ui-sm-12">
-              <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-none d-sm-block" (click)="seleccionarRecurso(recurso)"></button>
+              <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-none d-sm-block" (click)="abrirDialog()"></button>
               <button pButton type="button" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-block d-sm-none btn-block"
-                (click)="seleccionarRecurso(recurso)"></button>
+                (click)="abrirDialog()"></button>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
   </div>
 </div>
 <p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar()" [resizable]="false"
-  [draggable]="false" [appendTo]="body" [responsive]="true">
+  [draggable]="false" [responsive]="true">
   <p-header>
     Formulario Recurso
   </p-header>

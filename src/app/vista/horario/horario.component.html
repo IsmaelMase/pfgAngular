@@ -87,7 +87,7 @@
         <div class="ui-grid-row">
           <label for="float-input">Fecha máxima</label>
           <br>
-          <p-calendar *ngIf="selectedDate" [ngStyle]="{'width':'100%'}" (onSelect)="seleccionarFecha($event)" [(ngModel)]="selectedDate" [locale]="es" [disabledDays]="[0,6]"
+          <p-calendar [ngStyle]="{'width':'100%'}" (onSelect)="seleccionarFecha($event)" [(ngModel)]="selectedDate" [locale]="es" [disabledDays]="[0,6]"
             name="fechas"  [minDate]="minDate" [defaultDate]="selectedDate" [showIcon]="true" dateFormat="dd/mm/yy" required></p-calendar>
         </div>
       </div>

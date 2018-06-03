@@ -29,7 +29,7 @@ export class RecursoComponent implements OnInit {
   public intervalos: Horario;
   public selectedFiles: FileList;
   public currentFileUpload: File;
-  public loading: boolean=true;
+  public loading: boolean = true;
 
   constructor(
     private _recursoService: RecursoService,
@@ -142,7 +142,8 @@ export class RecursoComponent implements OnInit {
       this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
     } else {
       this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null, "");
-    } this.modificando = true;
+    }
+    this.modificando = true;
   }
 
   abrirDialogReserva(recurso: Recurso, tipoDialog: string) {

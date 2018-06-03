@@ -71,7 +71,9 @@
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
           <td *ngFor="let col of columns">
-            {{rowData[col.field]}}
+            <div class="scrollable">
+              {{rowData[col.field]}}
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -110,7 +112,9 @@
           </ng-template>
           <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
             <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
-              {{rowData.nombre}}
+              <div class="scrollable">
+                {{rowData.nombre}}
+              </div>
             </tr>
           </ng-template>
         </p-table>

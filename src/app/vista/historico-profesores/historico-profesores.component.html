@@ -53,7 +53,7 @@
   </div>
 </div>
 <p-dialog [(visible)]="modificando" [modal]="true" [autoAlign]="true" [width]="500" (onHide)="cancelar();formUsuario.reset()"
-  [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true">
+  [resizable]="false" [draggable]="false" [responsive]="true">
   <p-header>
     Formulario Usuario
   </p-header>
@@ -177,7 +177,7 @@
 </p-dialog>
 
 <p-dialog [(visible)]="historialReservas" [modal]="true" [autoAlign]="true" [width]="700" (onHide)="cancelarDialogReservas()"
-  [resizable]="false" [draggable]="false" [appendTo]="body" [responsive]="true">
+  [resizable]="false" [draggable]="false" [responsive]="true">
   <p-header>
     Historial reservas del usuario
   </p-header>
@@ -188,4 +188,45 @@
       <p-progressSpinner></p-progressSpinner>
     </div>
   </div>
+</p-dialog>
+
+<p-dialog *ngIf="reservaSeleccionada.id" header="Reserva" [(visible)]="reservaSeleccionada.id" [modal]="true" [autoAlign]="true"
+  (onHide)="cancelarBorrado()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
+  <div>
+    <b>Profesor:</b>
+    <span>{{reservaSeleccionada.usuario.nombre}}</span>
+  </div>
+  <div>
+    <b>Recurso:</b>
+    <span>{{reservaSeleccionada.recurso.nombre}}</span>
+  </div>
+  <div>
+    <b>Fecha:</b>
+    <span>{{reservaSeleccionada.fechas_reservas[0] | date: 'dd/MM/yyyy' }}</span>
+  </div>
+  <div>
+    <b>Hora:</b>
+    <span>{{reservaSeleccionada.intervalos_reservas[0]}}</span>
+  </div>
+  <div>
+    <b>Curso:</b>
+    <span>{{reservaSeleccionada.curso.nombre}}</span>
+  </div>
+  <div>
+    <b>Anotación:</b>
+    <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="anotacion"
+      #anotacion="ngModel" [(ngModel)]="reservaSeleccionada.anotacion"></textarea>
+  </div>
+  <p-footer>
+    <div class="ui-g">
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'left'}" pTooltip="Cancelar reserva" (click)="confirmacionBorrado()" tooltipPosition="left" pButton
+          icon="fa-trash" class="ui-button-danger"></button>
+      </div>
+      <div class="ui-sm-12 ui-md-6">
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
+          class="ui-button-success"></button>
+      </div>
+    </div>
+  </p-footer>
 </p-dialog>

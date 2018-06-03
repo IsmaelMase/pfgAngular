@@ -52,9 +52,9 @@ export class ReservaComponent implements OnInit {
   public reservaSeleccionada: Reserva;
   public pos: number = 0;
   public reservasAMostrar: any[] = [];
-  public loading:boolean=false;
-  public doingReserva:boolean=false;
-  public haveFechas:boolean=false;
+  public loading: boolean = false;
+  public doingReserva: boolean = false;
+  public haveFechas: boolean = false;
   constructor(
     private _reservaService: ReservaService,
     private _horarioService: HorarioService,
@@ -76,7 +76,7 @@ export class ReservaComponent implements OnInit {
         this.maxFechas = 30;
       }
       this.reservaSeleccionada.recurso = this.recurso;
-      this.maxDate= new Date(this.recurso.intervalo.fecha_max);
+      this.maxDate = new Date(this.recurso.intervalo.fecha_max);
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
       this.mesMostrado = 0;
@@ -126,7 +126,7 @@ export class ReservaComponent implements OnInit {
 
   clickeado(event) {
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
-      this.loading=true;
+      this.loading = true;
       console.log(event.getDate()._d.getMonth())
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
@@ -142,7 +142,7 @@ export class ReservaComponent implements OnInit {
   }
 
   getFechasNoDisponibles() {
-    this.haveFechas=false;
+    this.haveFechas = false;
     console.log(this.reservaSeleccionada.intervalos_reservas.length === 0);
     this.fechasNoDisponibles = [];
     this._reservaService.getFechasNoDisponibles(this.reservaSeleccionada.intervalos_reservas, this.recurso.id).subscribe(
@@ -154,7 +154,7 @@ export class ReservaComponent implements OnInit {
           }
           console.log(this.fechasNoDisponibles);
           this.fechasNoDisponibles = [...this.fechasNoDisponibles];
-          this.haveFechas=true;
+          this.haveFechas = true;
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -212,7 +212,7 @@ export class ReservaComponent implements OnInit {
     }).finally(() => {
       this.getUsuarios();
       this.reservas = true;
-      this.loading=false;
+      this.loading = false;
     }).subscribe();
   }
 
@@ -233,23 +233,28 @@ export class ReservaComponent implements OnInit {
   }
 
   saveReserva() {
-    this.doingReserva=true;
+    this.doingReserva = true;
     console.log(this.reservaSeleccionada)
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
         console.log(response)
         if (response.status === 201) {
-          this.cerrar.emit("ok");
+          if (this.dialog == "diaria") {
+            this.cerrar.emit("ok");
+          } else {
+            this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
+            this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+          }
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
         } else if (response.status === 409) {
-          
+
         } else {
           this.cerrar.emit("fail");
           this.mostrarMensajeIncorrecto();
         }
-        this.doingReserva=false;
+        this.doingReserva = false;
       },
       error => {
         this.mostrarMensajeIncorrecto();

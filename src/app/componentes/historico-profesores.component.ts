@@ -30,12 +30,13 @@ export class HistoricoProfesoresComponent implements OnInit {
   public colsCursos: any[];
   public pos: number = -1;
   public loading: boolean;
-  public loadingReservas: boolean;
+  public loadingReservas: boolean = false;
   public es: any;
   public eventos: any[];
   public mesMostrado: any = 0;
   public yearMostrado: number = 0;
-
+  public header: any;
+  public reservaSeleccionada: Reserva;
   constructor(
     private _usuarioService: UsuarioService,
     private _reservaService: ReservaService,
@@ -55,6 +56,12 @@ export class HistoricoProfesoresComponent implements OnInit {
       { field: 'nombre', header: 'Nombre' }
     ];
 
+    this.header = {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    };
+    this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
   }
 
@@ -65,7 +72,8 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.getUsuarios();
     this.getCursos();
     this.loading = true;
-    this.reservas = [];
+    this.loadingReservas = false,
+      this.reservas = [];
   }
 
 
@@ -90,8 +98,10 @@ export class HistoricoProfesoresComponent implements OnInit {
   }
 
   getReservas(fecha) {
+    console.log(fecha);
     this._reservaService.getReservasByUsuarioAndFecha(this.usuarioSeleccionado.id, fecha).subscribe(
       response => {
+        console.log(response);
         if (response.status !== 403) {
           this.trasnformarReservasEventos(response.json());
         } else {
@@ -106,17 +116,17 @@ export class HistoricoProfesoresComponent implements OnInit {
   }
 
   clickeado(event) {
-    this.loadingReservas = true;
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
+      this.loadingReservas = true;
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
 
       if (Number(event.getDate()._d.getUTCMonth() + 1) < 10) {
         this.mesMostrado = "0" + this.mesMostrado;
-        this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
+        this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
 
       } else {
-        this.getReservas(this.mesMostrado + "/" + this.yearMostrado);
+        this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
       }
     }
   }
@@ -132,8 +142,8 @@ export class HistoricoProfesoresComponent implements OnInit {
       let fechaSeparada = reserva.fechas_reservas[0].split("/")
       evento = {
         "title": reserva.recurso.nombre,
-        "start": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[0],
-        "end": fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[1],
+        "start": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[0],
+        "end": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[1],
         "color": "#0767a3",
         "reserva": reserva
       }
@@ -195,9 +205,18 @@ export class HistoricoProfesoresComponent implements OnInit {
   }
 
   abrirDialogReservas() {
-    this.getReservas("05");
+    this.getReservas("2018/06");
     this.reservas = [];
     this.historialReservas = true;
+  }
+
+  seleccionarReserva(reserva: Reserva) {
+    let reservas = this.eventos.filter((e: any) => e.reserva.id === reserva.id);
+    this.pos = this.eventos.indexOf(reservas[0]);
+    for (let prop in reserva) {
+      this.reservaSeleccionada[prop] = reserva[prop];
+    }
+    console.log(this.pos);
   }
 
   cancelarDialogReservas() {
@@ -260,6 +279,73 @@ export class HistoricoProfesoresComponent implements OnInit {
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
+  }
+
+  removeReserva(reserva: Reserva) {
+    this._reservaService.removeReserva(reserva.id).subscribe(
+      response => {
+        if (response.status === 200) {
+          this.cancelarReserva();
+          this.eliminarElementoArray();
+          this.mostrarMensajeCorrecto();
+        } else if (response.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
+        } else {
+          this.cancelar()
+          this.mostrarMensajeIncorrecto();
+        }
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+  }
+
+  saveReserva() {
+    this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
+      response => {
+        console.log(response.json())
+        if (response.status === 201) {
+          this.cancelarReserva();
+          this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
+          this.mostrarMensajeCorrecto();
+        } else if (response.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
+        } else {
+          this.cancelar()
+          this.mostrarMensajeIncorrecto();
+        }
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+  }
+
+  confirmacionBorrado() {
+    this.confirmationService.confirm({
+      message: '¿Desea cancelar la reserva?',
+      header: 'Confirmacion eliminado',
+      icon: 'fa fa-trash',
+      accept: () => {
+        this.removeReserva(this.reservaSeleccionada);
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  cancelarReserva() {
+    this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+  }
+
+  eliminarElementoArray() {
+    console.log(this.pos);
+    this.eventos.splice(this.pos, 1);
+    this.pos = -1
+    this.cancelar()
   }
 
 }
