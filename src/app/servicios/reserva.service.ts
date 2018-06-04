@@ -79,6 +79,14 @@ export class ReservaService {
 
     }
 
+    removeReservaMass(ids: string[]) {
+        let json = JSON.stringify(ids);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', localStorage.getItem("token"));
+
+        return this._http.post(this.url + 'reserva/removeReservasMass', json, { headers: headers }).map(res => res);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('Some error occured', error);
         return Promise.reject(error.message || error);

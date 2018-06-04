@@ -19,7 +19,7 @@ import { CONSTANTS } from '../servicios/serviceConstants';
 })
 export class HistoricoProfesoresComponent implements OnInit {
 
-  public url=CONSTANTS.url;
+  public url = CONSTANTS.url;
   public usuarios: Usuario[];
   public usuariosTotales: Usuario[];
   public cursos: Curso[];
@@ -310,6 +310,7 @@ export class HistoricoProfesoresComponent implements OnInit {
         console.log(response.json())
         if (response.status === 201) {
           this.cancelarReserva();
+          this.loadingReservas=true;
           this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
@@ -350,4 +351,48 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.cancelar()
   }
 
+  removeReservasMass(ids: string[]) {
+    this.loadingReservas = true;
+    this._reservaService.removeReservaMass(ids).subscribe(
+      response => {
+        console.log(response);
+        if (response.status === 200) {
+          this.mostrarMensajeCorrecto();
+          this.eventos = [];
+        } else if (response.status === 403) {
+          localStorage.clear();
+          this._router.navigate(["login"]);
+        } else {
+          this.mostrarMensajeIncorrecto();
+          this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
+        }
+        this.loadingReservas = false;
+      },
+      error => {
+        this.mostrarMensajeIncorrecto();
+      }
+    );
+  }
+  confirmacionBorradoMass() {
+    this.confirmationService.confirm({
+      message: '¿Desea cancelar todas las reservas del mes?',
+      header: 'Confirmacion eliminado',
+      icon: 'fa fa-trash',
+      accept: () => {
+        this.cancelarReservasMensules();
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  cancelarReservasMensules() {
+    let observableReservas = Observable.from(this.eventos);
+    let ids: string[] = [];
+    observableReservas.map((evento: any) => {
+      ids.push(evento.reserva.id);
+    }).finally(() => {
+      this.removeReservasMass(ids);
+    }).subscribe();
+  }
 }
