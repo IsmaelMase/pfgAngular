@@ -10,6 +10,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { UploadService } from '../servicios/upload.service';
 import { Reserva } from '../modelo/reserva';
+import { CONSTANTS } from '../servicios/serviceConstants';
 
 @Component({
   selector: 'app-historico-profesores',
@@ -18,6 +19,7 @@ import { Reserva } from '../modelo/reserva';
 })
 export class HistoricoProfesoresComponent implements OnInit {
 
+  public url=CONSTANTS.url;
   public usuarios: Usuario[];
   public usuariosTotales: Usuario[];
   public cursos: Curso[];
@@ -49,7 +51,7 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.cols = [
       { field: 'dni', header: 'DNI' },
       { field: 'nombre', header: 'Nombre' },
-      { field: 'apellido', header: 'Apellido' },
+      { field: 'apellido', header: 'Apellidos' },
       { field: 'email', header: 'Email' }
     ];
     this.colsCursos = [

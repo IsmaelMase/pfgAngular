@@ -1,30 +1,34 @@
 <img src="../../../assets/logo.png" alt="" width="20%" height="8%">
-<h3 class="hidden-print">Generador de calendarios</h3>
+<h3 class="d-print-none">Generador de calendarios</h3>
 
-<div class="ui-g ui-fluid hidden-print">
-  <div class="ui-sm-12 ui-md-6">
+<div class="ui-g ui-fluid d-print-none">
+  <div class="ui-sm-12 ui-md-5">
     <div class="ui-grid-row">
       <p-calendar [ngStyle]="{'width':'100%'}" [minDate]="minDate" [maxDate]="maxDate" [showIcon]="true" [locale]="es" dateFormat="yy/mm/dd"
-        selectionMode="multiple" [disabledDays]="[0,6]" name="fechas" [maxDateCount]="5" #fechas="ngModel" [(ngModel)]="fechasSeleccionadas" dataType="string"></p-calendar>
+        selectionMode="multiple" [disabledDays]="[0,6]" name="fechas" [maxDateCount]="5" #fechas="ngModel" [(ngModel)]="fechasSeleccionadas"
+        dataType="string"></p-calendar>
     </div>
   </div>
-  <div class="ui-sm-12 ui-md-6">
+  <div class="ui-sm-12 ui-md-5">
     <div class="ui-grid-row">
       <p-dropdown [options]="recursos" placeholder="Seleccione recurso..." (onChange)="getReservas()" [(ngModel)]="recursoSeleccionado"
         name="recurso" #recurso="ngModel" [style]="{'width':'100%'}" optionLabel="nombre" [showClear]="true" filter="true"
         required></p-dropdown>
     </div>
   </div>
+  <div class="ui-sm-12 ui-md-1">
+    <div class="ui-grid-row">
+      <button [ngStyle]="{'float':'right'}" pButton icon="fa-print" onclick="print()"
+        class="ui-button-warning hidden-print" dragScroll="false"></button>
+    </div>
+  </div>
 </div>
-<div id="mydiv">
+<div>
   <table *ngIf="visible">
     <tr *ngFor="let filas of getKeys(calendario); let i = index" [ngClass]="{'primeraFila': i===0 }">
       <td [ngClass]="{'primeraColumna': j===0 && i!==0 }" *ngFor="let dato of filas; let j=index">
-        {{dato}}
+        {{dato | nombre}}
       </td>
     </tr>
   </table>
 </div>
-<button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" onclick="print()"
-  class="ui-button-success hidden-print" dragScroll="false"></button>
-

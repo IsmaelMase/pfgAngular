@@ -6,10 +6,10 @@
     Formulario Usuario
   </p-header>
   <div class="ui-grid-row">
-    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
-      height="30%">
-    <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
-      [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px"
+      height="150px">
+    <img *ngIf="usuarioSeleccionado.imagen" src="{{url}}upload/files/{{usuarioSeleccionado.imagen}}"
+      alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px" height="150px">
   </div>
   <br>
   <form #formUsuario="ngForm">
@@ -40,7 +40,7 @@
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="apellido" #apellido="ngModel"
               [(ngModel)]="usuarioSeleccionado.apellido" required>
-            <label for="float-input">Apellido</label>
+            <label for="float-input">Apellidos</label>
           </span>
         </div>
       </div>

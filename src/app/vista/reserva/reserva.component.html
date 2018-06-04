@@ -125,7 +125,9 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" [disabled]="reservaSeleccionada.intervalos_reservas.length===0||reservaSeleccionada.fechas_reservas.length===0||!reservaSeleccionada.usuario||!reservaSeleccionada.curso || doingReserva"
-          (click)="saveReserva()" class="ui-button-success"></button>
+          (click)="saveReserva()" class="ui-button-success d-none d-sm-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" [disabled]="reservaSeleccionada.intervalos_reservas.length===0||reservaSeleccionada.fechas_reservas.length===0||!reservaSeleccionada.usuario||!reservaSeleccionada.curso || doingReserva"
+          (click)="saveReserva()" class="ui-button-success d-sm-none btn-block"></button>
       </div>
     </div>
   </p-footer>
@@ -148,11 +150,11 @@
   (onHide)="cancelarBorrado()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
   <div>
     <b>Profesor:</b>
-    <span>{{reservaSeleccionada.usuario.nombre}}</span>
+    <span>{{reservaSeleccionada.usuario.nombre | nombre}} {{reservaSeleccionada.usuario.apellido | nombre}}</span>
   </div>
   <div>
     <b>Recurso:</b>
-    <span>{{reservaSeleccionada.recurso.nombre}}</span>
+    <span>{{reservaSeleccionada.recurso.nombre | nombre}}</span>
   </div>
   <div>
     <b>Fecha:</b>
@@ -164,7 +166,7 @@
   </div>
   <div>
     <b>Curso:</b>
-    <span>{{reservaSeleccionada.curso.nombre}}</span>
+    <span>{{reservaSeleccionada.curso.nombre | nombre}}</span>
   </div>
   <div>
     <b>Anotación:</b>
@@ -175,11 +177,15 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'left'}" pTooltip="Cancelar reserva" (click)="confirmacionBorrado()" tooltipPosition="left" pButton
-          icon="fa-trash" class="ui-button-danger"></button>
+          icon="fa-trash" class="ui-button-danger d-none d-sm-block"></button>
+        <button [ngStyle]="{'float':'left'}" pTooltip="Cancelar reserva" (click)="confirmacionBorrado()" tooltipPosition="left" pButton
+          icon="fa-trash" class="ui-button-danger d-sm-none btn-block"></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
         <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
-          class="ui-button-success"></button>
+          class="ui-button-success d-none d-sm-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" pButton icon="fa-check" (click)="saveReserva()"
+          class="ui-button-success d-sm-none btn-block"></button>
       </div>
     </div>
   </p-footer>

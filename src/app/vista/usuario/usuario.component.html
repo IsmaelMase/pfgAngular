@@ -29,8 +29,9 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th *ngFor="let col of columns" [ngStyle]="{'text-align':'center'}">
+            <th *ngFor="let col of columns" [ngStyle]="{'text-align':'center'}" [pSortableColumn]="col.field">
               {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>
           </tr>
           <tr>
@@ -42,10 +43,10 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" (click)="seleccionarUsuario(rowData)" [ngStyle]="{'text-align':'center'}">
-              <div class="scrollable" *ngIf="col.header==='Nombre' || col.header==='Apellido'">
+              <div class="scrollable" *ngIf="col.header==='Nombre' || col.header==='Apellidos'">
                 {{rowData[col.field] | nombre}}
               </div>
-              <div *ngIf="col.header!=='Nombre' && col.header!=='Apellido'" class="scrollable">
+              <div *ngIf="col.header!=='Nombre' && col.header!=='Apellidos'" class="scrollable">
                 {{rowData[col.field]}}
               </div>
             </td>
@@ -66,10 +67,10 @@
   </p-header>
 
   <div class="ui-grid-row">
-    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
-      height="30%">
-    <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
-      [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px"
+      height="150px">
+    <img *ngIf="usuarioSeleccionado.imagen" src="{{url}}upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
+      [ngStyle]="{'text-align':'center'}" width="150px" height="150px">
   </div>
   <br>
   <form #formUsuario="ngForm">
@@ -100,7 +101,7 @@
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="apellido" #apellido="ngModel"
               [(ngModel)]="usuarioSeleccionado.apellido" required>
-            <label for="float-input">Apellido</label>
+            <label for="float-input">Apellidos</label>
           </span>
         </div>
       </div>
@@ -149,6 +150,7 @@
       </div>
     </div>
     <br>
+    <label>Cursos</label>
     <p-table #dt2 [columns]="colsCursos" [loading]="loadingCurso" [lazy]="true" [paginator]="true" [rows]="10" [value]="cursos"
       [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos">
       <ng-template pTemplate="emptymessage">

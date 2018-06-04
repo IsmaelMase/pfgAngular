@@ -99,7 +99,7 @@ export class ReservaComponent implements OnInit {
     }
     this.cols = [
       { field: 'nombre', header: 'Nombre' },
-      { field: 'apellido', header: 'Apellido' }
+      { field: 'apellido', header: 'Apellidos' }
     ];
     this.colsCursos = [
       { field: 'nombre', header: 'Nombre' }
@@ -226,6 +226,11 @@ export class ReservaComponent implements OnInit {
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
 
+  mostrarMensajeConflicto() {
+    this.msgs = [];
+    this.msgs.push({ severity: 'error', summary: 'Reserva ocupada por otro usuario' });
+  }
+
   cancelar() {
     this.reservaDiaria = false;
     this.recurso = null;
@@ -249,7 +254,7 @@ export class ReservaComponent implements OnInit {
           localStorage.clear();
           this._router.navigate(["login"]);
         } else if (response.status === 409) {
-
+          this.mostrarMensajeConflicto();
         } else {
           this.cerrar.emit("fail");
           this.mostrarMensajeIncorrecto();

@@ -5,7 +5,6 @@ import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 
 import { CONSTANTS } from './serviceConstants';
-{ }
 
 @Injectable()
 export class LoginService {

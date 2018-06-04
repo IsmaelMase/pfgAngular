@@ -10,12 +10,15 @@ import { Usuario } from '../modelo/usuario';
 import { HorarioService } from "../servicios/horario.service";
 import { Horario } from '../modelo/horario';
 import { UploadService } from '../servicios/upload.service';
+import { CONSTANTS } from '../servicios/serviceConstants';
+
 @Component({
   selector: 'recurso',
   templateUrl: '../vista/recurso/recurso.component.html',
   styleUrls: ['../vista/recurso/recurso.component.css']
 })
 export class RecursoComponent implements OnInit {
+  public url=CONSTANTS.url;
   public recursos: Recurso[];
   public recursoSeleccionado: Recurso;
   public modificando: boolean = false;
@@ -30,7 +33,7 @@ export class RecursoComponent implements OnInit {
   public selectedFiles: FileList;
   public currentFileUpload: File;
   public loading: boolean = true;
-
+  public titulo:string;
   constructor(
     private _recursoService: RecursoService,
     private _route: ActivatedRoute,
@@ -115,8 +118,10 @@ export class RecursoComponent implements OnInit {
   getRecursos() {
     if (this.tipo === 'aulas') {
       this.cambiarAulas();
+      this.titulo="Aulas";
     } else {
       this.cambiarOtros();
+      this.titulo="Recursos";
     }
   }
 

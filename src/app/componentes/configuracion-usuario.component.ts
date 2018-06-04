@@ -8,6 +8,7 @@ import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { UploadService } from '../servicios/upload.service';
+import { CONSTANTS } from '../servicios/serviceConstants';
 
 @Component({
   selector: 'configuracion-usuario',
@@ -18,6 +19,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   @Output()
   cerrar: EventEmitter<string> = new EventEmitter<string>();
 
+  public url=CONSTANTS.url
   public usuarios: Usuario[];
   public cursos: Curso[];
   public usuarioSeleccionado: Usuario;

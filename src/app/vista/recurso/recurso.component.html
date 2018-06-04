@@ -1,6 +1,6 @@
 <p-growl [(value)]="msgs"></p-growl>
 <p-confirmDialog acceptLabel="Si" rejectLabel="No"></p-confirmDialog>
-<h3>Recursos</h3>
+<h3>{{titulo}}</h3>
 
 <div class="ui-g">
   <div class="ui-g-12">
@@ -34,8 +34,9 @@
         <ng-template let-recurso pTemplate="listItem">
           <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
             <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
-              <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="50%" height="100%">
-              <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="50%" height="100%">
+              <img *ngIf="!recurso.imagen && tipo==='aulas'" src="../../../assets/aula.png" width="125px" height="100px">
+              <img *ngIf="!recurso.imagen && tipo==='otros'" src="../../../assets/recurso.png" width="125px" height="100px">
+              <img *ngIf="recurso.imagen" src="{{url}}upload/files/{{recurso.imagen}}" width="100px" height="100px">
             </div>
             <div class="ui-g-12 ui-md-8 recurso-details">
               <div class="ui-g">
@@ -77,8 +78,9 @@
                   {{recurso.nombre}}
                 </div>
               </p-header>
-              <img *ngIf="!recurso.imagen" src="../../../assets/recurso.png" width="25%" height="25%">
-              <img *ngIf="recurso.imagen" src="http://localhost:8080/api/upload/files/{{recurso.imagen}}" width="25%" height="25%">
+              <img *ngIf="!recurso.imagen && tipo==='aulas'" src="../../../assets/aula.png" width="25%" height="25%">
+              <img *ngIf="!recurso.imagen && tipo==='otros'" src="../../../assets/recurso.png" width="25%" height="25%">
+              <img *ngIf="recurso.imagen" src="{{url}}upload/files/{{recurso.imagen}}" width="25%" height="25%">
               <div class="recurso-detail" [ngStyle]="{'text-align':'center'}">
                 <div *ngIf="tipo == 'aulas'">
                   <b>Capacidad: </b>{{recurso.capacidad}}
@@ -117,7 +119,7 @@
       <div class="ui-grid-row">
         <img *ngIf="!recursoSeleccionado.imagen" class="imgFormulario" src="../assets/recurso.png" alt="Nombre" [ngStyle]="{'text-align':'center'}"
           width="30%" height="30%">
-        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="http://localhost:8080/api/upload/files/{{recursoSeleccionado.imagen}}"
+        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="{{url}}upload/files/{{recursoSeleccionado.imagen}}"
           alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
       </div>
     </div>

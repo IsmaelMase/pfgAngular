@@ -21,4 +21,12 @@ body{
  color: white;
 }
 
+@media print
+{    
+    @page {size: A4 landscape; }
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
 

@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import { Curso } from '../modelo/curso';
 
 import { CONSTANTS } from './serviceConstants';
-{ }
 
 @Injectable()
 export class CursoService {

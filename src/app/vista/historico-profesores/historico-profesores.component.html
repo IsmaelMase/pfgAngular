@@ -36,10 +36,10 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr [pSelectableRow]="rowData" [ngClass]="{'cellRed': !rowData.estado}">
             <td *ngFor="let col of columns" (click)="seleccionarUsuario(rowData)" [ngStyle]="{'text-align':'center'}">
-              <div class="scrollable" *ngIf="col.header==='Nombre' || col.header==='Apellido'">
+              <div class="scrollable" *ngIf="col.header==='Nombre' || col.header==='Apellidos'">
                 <span>{{rowData[col.field] | nombre}}</span>
               </div>
-              <div class="scrollable" *ngIf="col.header!=='Nombre' && col.header!=='Apellido'">
+              <div class="scrollable" *ngIf="col.header!=='Nombre' && col.header!=='Apellidos'">
                 <span>{{rowData[col.field]}}</span>
               </div>
             </td>
@@ -61,7 +61,7 @@
   <div class="ui-grid-row">
     <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
       height="30%">
-    <img *ngIf="usuarioSeleccionado.imagen" src="http://localhost:8080/api/upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
+    <img *ngIf="usuarioSeleccionado.imagen" src="{{url}}upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
       [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
   </div>
   <br>
@@ -93,7 +93,7 @@
           <span class="ui-float-label">
             <input id="float-input" type="text" size="30" [ngStyle]="{'width':'100%'}" pInputText name="apellido" #apellido="ngModel"
               [(ngModel)]="usuarioSeleccionado.apellido" required readonly>
-            <label for="float-input">Apellido</label>
+            <label for="float-input">Apellidos</label>
           </span>
         </div>
       </div>
@@ -129,6 +129,7 @@
       </div>
     </div>
     <br>
+    <label>Cursos</label>
     <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="usuarioSeleccionado.cursos" [filterDelay]="50">
       <ng-template pTemplate="emptymessage">
         <tr>
@@ -194,11 +195,11 @@
   (onHide)="cancelarBorrado()" [resizable]="false" [draggable]="false" [closable]="true" [appendTo]="body" [responsive]="true">
   <div>
     <b>Profesor:</b>
-    <span>{{reservaSeleccionada.usuario.nombre}}</span>
+    <span>{{reservaSeleccionada.usuario.nombre | nombre}}  {{reservaSeleccionada.usuario.apellido | nombre}}</span>
   </div>
   <div>
     <b>Recurso:</b>
-    <span>{{reservaSeleccionada.recurso.nombre}}</span>
+    <span>{{reservaSeleccionada.recurso.nombre | nombre}}</span>
   </div>
   <div>
     <b>Fecha:</b>
@@ -210,7 +211,7 @@
   </div>
   <div>
     <b>Curso:</b>
-    <span>{{reservaSeleccionada.curso.nombre}}</span>
+    <span>{{reservaSeleccionada.curso.nombre | nombre}}</span>
   </div>
   <div>
     <b>Anotación:</b>

@@ -8,6 +8,7 @@ import { Message } from 'primeng/api';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { UploadService } from '../servicios/upload.service';
+import { CONSTANTS } from '../servicios/serviceConstants';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { UploadService } from '../servicios/upload.service';
 })
 export class UsuarioComponent implements OnInit {
 
+  public url=CONSTANTS.url;
   public usuarios: Usuario[];
   public usuariosTotales: Usuario[];
   public cursos: Curso[];
@@ -43,7 +45,7 @@ export class UsuarioComponent implements OnInit {
     this.cols = [
       { field: 'dni', header: 'DNI' },
       { field: 'nombre', header: 'Nombre' },
-      { field: 'apellido', header: 'Apellido' },
+      { field: 'apellido', header: 'Apellidos' },
       { field: 'email', header: 'Email' }
     ];
     this.colsCursos = [

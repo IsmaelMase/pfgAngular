@@ -3,82 +3,95 @@
 
 
 <div class="wrapper">
-  <nav id="sidebar">
-    <div class="sidebar-header">
-      <img src="../../../assets/logo.png" alt="" width="200px" [routerLink]="['/pantallaApp']">
-    </div>
+  <div class="no-print">
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <img src="../../../assets/logo.png" alt="" width="200px" [routerLink]="['/pantallaApp']">
+      </div>
 
-    <ul class="list-unstyled components">
-      <li *ngIf="usuario.rol==='ROL_ADMIN'">
-        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
-          <i class="fa fa-graduation-cap"></i>
-          Profesores &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <i class="fa fa-caret-down" aria-hidden="true"></i>
-        </a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/profesores']">
-            <a>
-              <i class="fa fa-users"></i>
-              Profesores Activos
-            </a>
-          </li>
-          <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/historico-profesores']">
-            <a>
-              <i class="fa fa-list"></i>
-              Histórico de profesores
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/cursos']">
-        <a>
-          <i class="fa fa-columns"></i>
-          Cursos
-        </a>
-      </li>
-      <li [routerLink]="['/pantallaApp/recursos','aulas']">
-        <a>
-          <i class="fas fa-chalkboard"></i>
-          Aulas
-        </a>
-      </li>
-      <li [routerLink]="['/pantallaApp/recursos','otros']">
-        <a>
-          <i class="far fa-keyboard"></i>
-          Recursos
-        </a>
-      </li>
-      <li *ngIf="usuario.rol!=='ROL_ADMIN'" [routerLink]="['/pantallaApp/reservas']">
-        <a>
-          <i class="fa fa-calendar"></i>
-          Reservas
-        </a>
-      </li>
-      <li>
-        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">
-          <i class="fa fa-cogs"></i>
-          Configuración &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <i class="fa fa-caret-down" aria-hidden="true"></i>
-        </a>
-        <ul class="collapse list-unstyled" id="pageSubmenu">
-          <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/horarios']">
-            <a>
-              <i class="fa fa-clock"></i>
-              Horarios
-            </a>
-          </li>
-          <li [routerLink]="['/pantallaApp/generador-calendario']">
-            <a>
-              <i class="fa fa-print"></i>
-              Imprimir Calendario
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
+      <ul class="list-unstyled components">
+        <li *ngIf="usuario.rol==='ROL_ADMIN'">
+          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
+            <i class="fa fa-graduation-cap"></i>
+            Profesores &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </a>
+          <ul class="collapse list-unstyled" id="homeSubmenu">
+            <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/profesores']">
+              <a>
+                <i class="fa fa-users"></i>
+                Profesores Activos
+              </a>
+            </li>
+            <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/historico-profesores']">
+              <a>
+                <i class="fa fa-list"></i>
+                Histórico de profesores
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/cursos']">
+          <a>
+            <i class="fa fa-columns"></i>
+            Cursos
+          </a>
+        </li>
+        <li [routerLink]="['/pantallaApp/recursos','aulas']">
+          <a>
+            <i class="fas fa-chalkboard"></i>
+            Aulas
+          </a>
+        </li>
+        <li [routerLink]="['/pantallaApp/recursos','otros']">
+          <a>
+            <i class="far fa-keyboard"></i>
+            Recursos
+          </a>
+        </li>
+        <li *ngIf="usuario.rol!=='ROL_ADMIN'" [routerLink]="['/pantallaApp/reservas']">
+          <a>
+            <i class="fa fa-calendar"></i>
+            Reservas
+          </a>
+        </li>
+        <li>
+          <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">
+            <i class="fa fa-cogs"></i>
+            Configuración &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </a>
+          <ul class="collapse list-unstyled" id="pageSubmenu">
+            <li *ngIf="usuario.rol==='ROL_ADMIN'" [routerLink]="['/pantallaApp/horarios']">
+              <a>
+                <i class="fa fa-clock"></i>
+                Horarios
+              </a>
+            </li>
+            <li [routerLink]="['/pantallaApp/generador-calendario']" class="d-none d-sm-block">
+              <a>
+                <i class="fa fa-print"></i>
+                Imprimir Calendario
+              </a>
+            </li>
+            <li (click)="abrirDialogConfiguracion()" class="d-block d-sm-none">
+              <a>
+                <i class="fa fa-user"></i>
+                Perfil
+              </a>
+            </li>
+            <li (click)="logout()" class="d-block d-sm-none">
+              <a>
+                <i class="fa fa-sign-out"></i>
+                Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
   <div id="content">
-
     <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xs navBarMovil">
       <a class="navbar-brand">
         <button type="button" id="sidebarCollapse" class="btn btn-bars navbar-btn">
@@ -91,7 +104,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div>
                 <img *ngIf="!usuario.imagen" style="vertical-align:middle" src="../assets/avatar.png" alt="Nombre" width="30px" height="30px">
-                <img *ngIf="usuario.imagen" style="vertical-align:middle" src="http://localhost:8080/api/upload/files/{{usuario.imagen}}"
+                <img *ngIf="usuario.imagen" style="vertical-align:middle" src="{{url}}upload/files/{{usuario.imagen}}"
                   alt="Nombre" width="30" height="30">
                 <span style="">{{usuario.nombre | nombre}} {{usuario.apellido | nombre}}</span>
               </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Usuario } from "../modelo/usuario";
 import { Message } from 'primeng/api';
+import { CONSTANTS } from '../servicios/serviceConstants';
 
 @Component({
   selector: 'app-pantalla-app',
@@ -9,6 +10,7 @@ import { Message } from 'primeng/api';
   styleUrls: ['../vista/pantallaApp/pantalla-app.component.css']
 })
 export class PantallaAppComponent implements OnInit {
+  public url=CONSTANTS.url;
   public oculto: boolean;
   public usuario: Usuario;
   public msgs: Message[] = [];
