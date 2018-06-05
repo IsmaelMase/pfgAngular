@@ -23,7 +23,7 @@
     </div>
   </div>
 </div>
-<div>
+<div class="output">
   <table *ngIf="visible">
     <tr *ngFor="let filas of getKeys(calendario); let i = index" [ngClass]="{'primeraFila': i===0 }">
       <td [ngClass]="{'primeraColumna': j===0 && i!==0 }" *ngFor="let dato of filas; let j=index">

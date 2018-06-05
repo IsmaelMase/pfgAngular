@@ -32,7 +32,6 @@ export class UsuarioComponent implements OnInit {
   public currentFileUpload: File = undefined;
   public password: string;
   public loading: boolean;
-  public loadingCurso: boolean;
 
   constructor(
     private _usuarioService: UsuarioService,
@@ -254,11 +253,13 @@ export class UsuarioComponent implements OnInit {
       this.usuarios.push(response.json());
     }
     this.pos = -1;
+    this.usuarios=[...this.usuarios];
     console.log(this.usuarios)
   }
 
   eliminarElementoArray() {
     this.usuarios.splice(this.pos, 1);
+    this.usuarios=[...this.usuarios];
   }
 
   mostrarMensajeCorrecto() {

@@ -151,7 +151,7 @@
     </div>
     <br>
     <label>Cursos</label>
-    <p-table #dt2 [columns]="colsCursos" [loading]="loadingCurso" [lazy]="true" [paginator]="true" [rows]="10" [value]="cursos"
+    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="cursos"
       [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos">
       <ng-template pTemplate="emptymessage">
         <tr>

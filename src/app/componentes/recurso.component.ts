@@ -255,6 +255,7 @@ export class RecursoComponent implements OnInit {
       this.recursos.push(response.json());
     }
     this.pos = -1;
+    this.recursos=[...this.recursos];
   }
 
   resetImage() {

@@ -147,10 +147,15 @@ export class CursoComponent implements OnInit {
       this.cursos.push(response.json());
     }
     this.pos = -1;
+    this.cursos=[...this.cursos];
+    // if(this.cursos.length%10===0){
+    //   this.getCursos();
+    // }
   }
 
   eliminarElementoArray(curso: Curso) {
     this.cursos.splice(this.pos, 1);
+    this.cursos=[...this.cursos];
   }
 
 

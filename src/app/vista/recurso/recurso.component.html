@@ -4,7 +4,8 @@
 
 <div class="ui-g">
   <div class="ui-g-12">
-    <p-dataView class="ui-table-responsive" #dv [value]="recursos" emptyMessage="No hay registros" [paginator]="true" [rows]="12" filterBy="nombre" layout="grid">
+    <p-dataView class="ui-table-responsive" #dv [value]="recursos" emptyMessage="No hay registros" [paginator]="true" [rows]="12"
+      filterBy="nombre" layout="grid">
       <p-header>
         <div class="ui-helper-clearfix">
           <div class="ui-g">
@@ -117,10 +118,12 @@
   <div class="ui-g ui-fluid">
     <div class="ui-sm-12 ui-md-12">
       <div class="ui-grid-row">
-        <img *ngIf="!recursoSeleccionado.imagen" class="imgFormulario" src="../assets/recurso.png" alt="Nombre" [ngStyle]="{'text-align':'center'}"
+        <img *ngIf="!recursoSeleccionado.imagen && tipo==='aulas'" class="imgFormulario" src="../../../assets/aula.png" [ngStyle]="{'text-align':'center'}"
           width="30%" height="30%">
-        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="{{url}}upload/files/{{recursoSeleccionado.imagen}}"
-          alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+        <img *ngIf="!recursoSeleccionado.imagen && tipo==='otros'" class="imgFormulario" src="../../../assets/recurso.png" [ngStyle]="{'text-align':'center'}"
+          width="30%" height="30%">
+        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="{{url}}upload/files/{{recursoSeleccionado.imagen}}" alt="Nombre"
+          [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
       </div>
     </div>
   </div>

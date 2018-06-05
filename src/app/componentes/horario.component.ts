@@ -221,6 +221,7 @@ export class HorarioComponent implements OnInit {
       this.horarios.push(response.json());
     }
     this.pos = -1;
+    this.horarios=[...this.horarios];
   }
 
   eliminarElementoArray(horario: Horario) {

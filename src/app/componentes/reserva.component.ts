@@ -76,7 +76,10 @@ export class ReservaComponent implements OnInit {
         this.maxFechas = 30;
       }
       this.reservaSeleccionada.recurso = this.recurso;
-      this.maxDate = new Date(this.recurso.intervalo.fecha_max);
+      if(this.usuario.rol==='ROL_ADMIN'){
+        this.maxDate = new Date(this.recurso.intervalo.fecha_max);
+      }else{
+      }
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {
       this.mesMostrado = 0;
@@ -228,7 +231,7 @@ export class ReservaComponent implements OnInit {
 
   mostrarMensajeConflicto() {
     this.msgs = [];
-    this.msgs.push({ severity: 'error', summary: 'Reserva ocupada por otro usuario' });
+    this.msgs.push({ severity: 'error', summary: 'Algunas de las reservas ya estan ocupadas por otro usuario' });
   }
 
   cancelar() {
@@ -264,7 +267,12 @@ export class ReservaComponent implements OnInit {
         this.doingReserva = false;
       },
       error => {
-        this.mostrarMensajeIncorrecto();
+        if (error.status === 409) {
+          this.mostrarMensajeConflicto();
+          this.doingReserva = false;
+        } else {
+          this.mostrarMensajeIncorrecto();
+        }
       }
     );
   }
