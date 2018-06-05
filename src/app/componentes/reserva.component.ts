@@ -79,6 +79,13 @@ export class ReservaComponent implements OnInit {
       if(this.usuario.rol==='ROL_ADMIN'){
         this.maxDate = new Date(this.recurso.intervalo.fecha_max);
       }else{
+        let date=new Date();
+        date.setMonth(date.getMonth()+1);
+        if(date>new Date(this.recurso.intervalo.fecha_max)){
+          this.maxDate = new Date(this.recurso.intervalo.fecha_max);
+        }else{
+          this.maxDate=date;
+        }
       }
       this.reservaDiaria = true;
     } else if (this.dialog === "reservas") {

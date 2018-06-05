@@ -24,6 +24,9 @@ img{
     display:block;
     margin:auto;
 }
+caption{
+    font-size: 25px;
+    color: rgb(3, 110, 160);
 
-
+}
 

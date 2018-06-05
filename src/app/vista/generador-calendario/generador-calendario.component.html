@@ -1,4 +1,5 @@
 <img src="../../../assets/logo.png" alt="" width="20%" height="8%">
+
 <h3 class="d-print-none">Generador de calendarios</h3>
 
 <div class="ui-g ui-fluid d-print-none">
@@ -18,13 +19,13 @@
   </div>
   <div class="ui-sm-12 ui-md-1">
     <div class="ui-grid-row">
-      <button [ngStyle]="{'float':'right'}" pButton icon="fa-print" onclick="print()"
-        class="ui-button-warning hidden-print" dragScroll="false"></button>
+      <button [ngStyle]="{'float':'right'}" pButton icon="fa-print" onclick="print()" class="ui-button-warning hidden-print" dragScroll="false"></button>
     </div>
   </div>
 </div>
 <div class="output">
   <table *ngIf="visible">
+    <caption>{{recursoSeleccionado.nombre}}</caption>
     <tr *ngFor="let filas of getKeys(calendario); let i = index" [ngClass]="{'primeraFila': i===0 }">
       <td [ngClass]="{'primeraColumna': j===0 && i!==0 }" *ngFor="let dato of filas; let j=index">
         {{dato | nombre}}

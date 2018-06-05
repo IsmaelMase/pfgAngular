@@ -23,15 +23,28 @@ body{
 
 @media print
 {    
-    .output {
-        -ms-transform: rotate(270deg);
-        /* IE 9 */
-        -webkit-transform: rotate(270deg);
-        /* Chrome, Safari, Opera */
-        transform: rotate(270deg);
-        top: 1.5in;
-        left: -1in;
-      }
+    #content{
+        height:auto !important;
+        width: 100% !important;
+        margin:auto;
+        padding:0;
+    }
+    td{
+        font-size: 28px;
+    }
+    caption{
+        font-size: 35px !important;
+    }
+    img{
+        height: 150px;
+        width: 400px;
+    }
+    .visible-print{
+        height:auto !important;
+        width: 100% !important;
+        margin:auto;
+        padding:0;
+    }
     .no-print, .no-print *
     {
         display: none !important;

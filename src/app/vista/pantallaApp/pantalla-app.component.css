@@ -82,7 +82,8 @@ a, a:hover, a:focus {
 }
 #sidebar ul li a:hover {
     background-color: #AFB42B;
-    color:#FFF
+    color:#FFF;
+    cursor: pointer;
 }
 
 a[data-toggle="collapse"] {
@@ -155,6 +156,7 @@ ul ul a {
 
 .dropdown a:hover{
     background-color: #AFB42B;
+    cursor: pointer;
 }
 .dropdown .nav-link:hover{
     background-color: inherit;

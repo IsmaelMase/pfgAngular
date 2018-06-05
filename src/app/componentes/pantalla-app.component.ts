@@ -29,12 +29,6 @@ export class PantallaAppComponent implements OnInit {
       this._router.navigate(["pantallaApp/reservas"]);
     }
   }
-
-  ocultar() {
-    this.oculto = !this.oculto;
-    console.log(this.oculto);
-  }
-
   changeOfRoutes() {
     if (localStorage.getItem("token") === undefined || localStorage.getItem("token") === null) {
       this._router.navigate(["login"]);
@@ -76,5 +70,9 @@ export class PantallaAppComponent implements OnInit {
 
   cambiarRuta(ruta){
     this.sitioActual=ruta;
+  }
+
+  ocultarMenu(){
+    this.oculto = !this.oculto;
   }
 }

@@ -106,25 +106,19 @@ export class ConfiguracionUsuarioComponent implements OnInit {
           localStorage.clear();
           this._router.navigate(["login"]);
         } else if (response.status === 409) {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeDuplicado("NIF");
         } else if (response.status === 406) {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeDuplicado("Email");
         } else {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeIncorrecto();
         }
       },
       error => {
         if (error.status === 409) {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeDuplicado("NIF");
         } else if (error.status === 406) {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeDuplicado("Email");
         } else {
-          this.usuarioSeleccionado.password = "";
           this.mostrarMensajeIncorrecto();
         }
       }

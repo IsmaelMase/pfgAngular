@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     if (localStorage.getItem("token")) {
       if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_PROFESOR") {
-        this._router.navigate(["pantallaApp/reservas"]);
+        this._router.navigate(["pantallaApp"]);
       } else {
         this._router.navigate(["pantallaApp"]);
       }
@@ -48,14 +48,17 @@ export class LoginComponent implements OnInit {
             this.mostrarMensajeIncorrecto();
             this.password = "";
           } else {
+            window.location.reload();
             localStorage.setItem("token", response.json().authorization);
             localStorage.setItem("usuario", JSON.stringify(response.json().usuario))
-            console.log(JSON.stringify(response.json().usuario));
-            if (response.json().usuario.rol === "ROL_PROFESOR") {
-              this._router.navigate(["pantallaApp/reservas"]);
-            } else {
-              this._router.navigate(["pantallaApp"]);
-            }
+            setTimeout(() => {  
+              console.log(JSON.stringify(response.json().usuario));
+              if (response.json().usuario.rol === "ROL_PROFESOR") {
+                this._router.navigate(["pantallaApp/reservas"]);
+              } else {
+                this._router.navigate(["pantallaApp"]);
+              }
+            }, 2000);
           }
         },
         error => {
