@@ -4,7 +4,7 @@
 
 <div class="wrapper">
   <div class="no-print">
-    <nav id="sidebar" [ngClass]="{'activo': oculto}">
+    <nav id="sidebar">
       <div class="sidebar-header">
         <img src="../../../assets/logo.png" alt="" width="200px" [routerLink]="['/pantallaApp']">
       </div>
@@ -100,7 +100,7 @@
   <div id="content">
     <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xs navBarMovil">
       <a class="navbar-brand">
-        <button type="button" id="sidebarCollapse" (click)="ocultarMenu()" class="btn btn-bars navbar-btn">
+        <button type="button" id="sidebarCollapse" class="btn btn-bars navbar-btn">
           <i class="fa fa-bars"></i>
         </button>
       </a>

@@ -71,8 +71,4 @@ export class PantallaAppComponent implements OnInit {
   cambiarRuta(ruta){
     this.sitioActual=ruta;
   }
-
-  ocultarMenu(){
-    this.oculto = !this.oculto;
-  }
 }

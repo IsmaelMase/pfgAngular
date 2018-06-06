@@ -1,5 +1,6 @@
 .imgFormulario{
-    margin-left: 35%;
+    display:block;
+    margin:auto;
 }
 
 .icon {
@@ -61,4 +62,8 @@ div.scrollable {
     z-index: 10;
     opacity: 0.5;
     background: rgb(226, 226, 226);
+}
+
+.campOrdenar .ui-dropdowns{
+    width: 100% !important;
 }

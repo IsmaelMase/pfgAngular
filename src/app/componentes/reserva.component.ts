@@ -214,7 +214,7 @@ export class ReservaComponent implements OnInit {
       evento = {
         "title": reserva.usuario.nombre + " " + reserva.curso.nombre,
         "start": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[0],
-        "end": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0] + "T" + horas[1],
+        "end": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[1],
         "color": "#0767a3",
         "reserva": reserva
       }

@@ -18,7 +18,7 @@ import { CONSTANTS } from '../servicios/serviceConstants';
   styleUrls: ['../vista/recurso/recurso.component.css']
 })
 export class RecursoComponent implements OnInit {
-  public url=CONSTANTS.url;
+  public url = CONSTANTS.url;
   public recursos: Recurso[];
   public recursoSeleccionado: Recurso;
   public modificando: boolean = false;
@@ -33,7 +33,10 @@ export class RecursoComponent implements OnInit {
   public selectedFiles: FileList;
   public currentFileUpload: File;
   public loading: boolean = true;
-  public titulo:string;
+  public titulo: string;
+  public order: number=1;
+  public opcionesOrdenar: any[];
+  public opcionSeleccionada:string;
   constructor(
     private _recursoService: RecursoService,
     private _route: ActivatedRoute,
@@ -49,6 +52,11 @@ export class RecursoComponent implements OnInit {
       this.tipo = params['tipo'];
       this.usuario = JSON.parse(localStorage.getItem("usuario"))
       this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
+      this.opcionesOrdenar = [
+        { label: 'A-Z', value: 'nombre1' },
+        { label: 'Z-A', value: 'nombre2' }
+      ];
+      this.opcionSeleccionada='nombre1';
       this.getHorasDisponibles();
     });
   }
@@ -79,7 +87,7 @@ export class RecursoComponent implements OnInit {
         if (response.status !== 403) {
           this.recursos = response;
           this.loading = false;
-          console.log(this.recursos);
+          this.ordenar();
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -103,7 +111,7 @@ export class RecursoComponent implements OnInit {
         if (response.status !== 403) {
           this.recursos = response;
           this.loading = false;
-          console.log(this.recursos);
+          this.ordenar();
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -118,10 +126,10 @@ export class RecursoComponent implements OnInit {
   getRecursos() {
     if (this.tipo === 'aulas') {
       this.cambiarAulas();
-      this.titulo="Aulas";
+      this.titulo = "Aulas";
     } else {
       this.cambiarOtros();
-      this.titulo="Recursos";
+      this.titulo = "Recursos";
     }
   }
 
@@ -255,7 +263,7 @@ export class RecursoComponent implements OnInit {
       this.recursos.push(response.json());
     }
     this.pos = -1;
-    this.recursos=[...this.recursos];
+    this.recursos = [...this.recursos];
   }
 
   resetImage() {
@@ -342,5 +350,28 @@ export class RecursoComponent implements OnInit {
   mostrarMensajeNoPuedeBorrar() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', detail: 'El recurso no puede ser borrado porque tiene reservas realizadas', summary: 'Eliminación cancelada' });
+  }
+
+  ordenar() {
+    if (this.opcionSeleccionada === "nombre1") {
+      this.recursos.sort(this.ordenarAZ);
+    } else if (this.opcionSeleccionada === "nombre2") {
+      this.recursos.sort(this.ordenarZA);
+    }
+  }
+
+  ordenarAZ(a, b) {
+    if (a.nombre.toLowerCase() < b.nombre.toLowerCase())
+      return -1;
+    if (a.nombre.toLowerCase() > b.nombre.toLowerCase())
+      return 1;
+    return 0;
+  }
+  ordenarZA(a, b) {
+    if (a.nombre.toLowerCase() > b.nombre.toLowerCase())
+      return -1;
+    if (a.nombre.toLowerCase() < b.nombre.toLowerCase())
+      return 1;
+    return 0;
   }
 }

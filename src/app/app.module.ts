@@ -56,6 +56,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HistoricoProfesoresComponent } from './componentes/historico-profesores.component';
 import { Nombre } from './pipes/primeraLetraMayus.pipes';
 import { HomeComponent } from './componentes/home.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 
 
@@ -105,7 +106,8 @@ import { HomeComponent } from './componentes/home.component';
     AutoCompleteModule,
     MessageModule,
     TabViewModule,
-    SpinnerModule
+    SpinnerModule,
+    SelectButtonModule
   ],
   providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService, UploadService],
   bootstrap: [AppComponent]

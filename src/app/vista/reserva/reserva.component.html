@@ -48,7 +48,7 @@
 
     </div>
     <br>
-    <p-table *ngIf="usuario.rol==='ROL_ADMIN'" #dt2 [columns]="cols" [paginator]="true" [rows]="3" [value]="usuarios" [(selection)]="reservaSeleccionada.usuario"
+    <p-table *ngIf="usuario.rol==='ROL_ADMIN'" #dt2 [columns]="cols" [paginator]="true" [rows]="10" [value]="usuarios" [(selection)]="reservaSeleccionada.usuario"
       [filterDelay]="50" selectionMode="single" [responsive]="true" required>
       <ng-template pTemplate="emptymessage">
         <tr>
@@ -83,14 +83,14 @@
       <div class="ui-sm-12 ui-md-6">
         <div class="ui-grid-row">
           <span class="ui-float-label">
-            <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="anotacion"
+            <textarea rows="7" cols="30" pInputTextarea autoResize="autoResize" [ngStyle]="{'width':'100%'}" pInputText name="anotacion"
               #anotacion="ngModel" [(ngModel)]="reservaSeleccionada.anotacion"></textarea>
             <label for="float-input">Anotación</label>
           </span>
         </div>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <p-table #dt3 *ngIf="reservaSeleccionada.usuario" [columns]="colsCursos" [paginator]="true" [rows]="4" [ngStyle]="{'width':'100%'}"
+        <p-table #dt3 *ngIf="reservaSeleccionada.usuario" [columns]="colsCursos" [paginator]="true" [rows]="5" [ngStyle]="{'width':'100%'}"
           [responsive]="true" [value]="reservaSeleccionada.usuario.cursos" selectionMode="single" [(selection)]="reservaSeleccionada.curso">
           <ng-template pTemplate="emptymessage">
             <tr>
