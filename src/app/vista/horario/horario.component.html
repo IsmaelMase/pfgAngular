@@ -10,8 +10,8 @@
         <div class="ui-helper-clearfix">
           <div class="ui-g">
             <div class="ui-g-2 ui-md-2 ui-sm-12">
-              <button pButton type="button" [ngStyle]="{'float':'left'}" class="ui-button-info d-none d-sm-block" icon="fa-retweet" (click)="getHorarios()"></button>
-              <button pButton type="button" [ngStyle]="{'float':'left'}" class="ui-button-info d-block d-sm-none btn-block" icon="fa-retweet"
+              <button pButton type="button"  pTooltip="Refrescar" tooltipPosition="bottom" [ngStyle]="{'float':'left'}" class="ui-button-info d-none d-sm-block" icon="fa-retweet" (click)="getHorarios()"></button>
+              <button pButton type="button"  pTooltip="Refrescar" tooltipPosition="bottom" [ngStyle]="{'float':'left'}" class="ui-button-info d-block d-sm-none btn-block" icon="fa-retweet"
                 (click)="getHorarios()"></button>
             </div>
             <div class="ui-g-4 ui-md-4 ui-sm-12 filter-container">
@@ -24,8 +24,8 @@
               <p-dataViewLayoutOptions [ngStyle]="{'float':'left'}"></p-dataViewLayoutOptions>
             </div>
             <div class="ui-g-4 ui-md-2 ui-sm-12">
-              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success d-none d-sm-block" icon="fa-plus" (click)="abrirDialog()"></button>
-              <button pButton type="button" [ngStyle]="{'float':'right'}" class="ui-button-success d-block d-sm-none btn-block" icon="fa-plus"
+              <button pButton type="button"  pTooltip="Añadir" tooltipPosition="bottom" [ngStyle]="{'float':'right'}" class="ui-button-success d-none d-sm-block" icon="fa-plus" (click)="abrirDialog()"></button>
+              <button pButton type="button"  pTooltip="Añadir" tooltipPosition="bottom" [ngStyle]="{'float':'right'}" class="ui-button-success d-block d-sm-none btn-block" icon="fa-plus"
                 (click)="abrirDialog()"></button>
             </div>
           </div>

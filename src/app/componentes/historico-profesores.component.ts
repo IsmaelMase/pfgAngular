@@ -68,8 +68,8 @@ export class HistoricoProfesoresComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (JSON.parse(localStorage.getItem("usuario")).rol !== "ROL_ADMIN") {
-      this._router.navigate(["cursos"]);
+    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_PROFESOR"){
+      this._router.navigate(["pantallaApp/inicio"]);
     }
     this.getUsuarios();
     this.getCursos();

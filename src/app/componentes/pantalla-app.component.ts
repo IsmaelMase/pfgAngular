@@ -10,12 +10,12 @@ import { CONSTANTS } from '../servicios/serviceConstants';
   styleUrls: ['../vista/pantallaApp/pantalla-app.component.css']
 })
 export class PantallaAppComponent implements OnInit {
-  public url=CONSTANTS.url;
+  public url = CONSTANTS.url;
   public oculto: boolean;
   public usuario: Usuario;
   public msgs: Message[] = [];
   public cambiarConfig: boolean = false;
-  public sitioActual:string;
+  public sitioActual: string;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -25,9 +25,6 @@ export class PantallaAppComponent implements OnInit {
     this.cambiarConfig = false;
     this.oculto = false;
     this.usuario = JSON.parse(localStorage.getItem("usuario"))
-    if (this.usuario.rol === "ROL_PROFESOR") {
-      this._router.navigate(["pantallaApp/reservas"]);
-    }
   }
   changeOfRoutes() {
     if (localStorage.getItem("token") === undefined || localStorage.getItem("token") === null) {
@@ -68,7 +65,7 @@ export class PantallaAppComponent implements OnInit {
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
 
-  cambiarRuta(ruta){
-    this.sitioActual=ruta;
+  cambiarRuta(ruta) {
+    this.sitioActual = ruta;
   }
 }

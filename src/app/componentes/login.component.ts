@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
             setTimeout(() => {  
               console.log(JSON.stringify(response.json().usuario));
               if (response.json().usuario.rol === "ROL_PROFESOR") {
-                this._router.navigate(["pantallaApp/reservas"]);
+                this._router.navigate(["pantallaApp"]);
               } else {
                 this._router.navigate(["pantallaApp"]);
               }

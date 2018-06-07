@@ -37,6 +37,9 @@ export class ReservaProfesorComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_ADMIN"){
+      this._router.navigate(["pantallaApp/inicio"]);
+    }
     registerLocaleData(localeEs, 'es', localeEsExtra);
     moment.lang("es");
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");

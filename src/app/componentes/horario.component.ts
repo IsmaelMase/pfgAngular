@@ -35,6 +35,9 @@ export class HorarioComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_PROFESOR") {
+      this._router.navigate(["pantallaApp/inicio"]);
+    }
     this.getHorarios();
     this.horarioSeleccionado = new Horario("", "", [], null);
     this.intervalo = new Intervalo("", "", false);
@@ -221,7 +224,7 @@ export class HorarioComponent implements OnInit {
       this.horarios.push(response.json());
     }
     this.pos = -1;
-    this.horarios=[...this.horarios];
+    this.horarios = [...this.horarios];
   }
 
   eliminarElementoArray(horario: Horario) {

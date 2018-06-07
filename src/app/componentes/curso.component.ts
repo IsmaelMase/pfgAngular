@@ -29,6 +29,9 @@ export class CursoComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_PROFESOR"){
+      this._router.navigate(["pantallaApp/inicio"]);
+    }
     this.getCursos();
     this.cursoSeleccionado = new Curso("", "");
   }
