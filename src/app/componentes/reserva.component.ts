@@ -76,15 +76,15 @@ export class ReservaComponent implements OnInit {
         this.maxFechas = 30;
       }
       this.reservaSeleccionada.recurso = this.recurso;
-      if(this.usuario.rol==='ROL_ADMIN'){
+      if (this.usuario.rol === 'ROL_ADMIN') {
         this.maxDate = new Date(this.recurso.intervalo.fecha_max);
-      }else{
-        let date=new Date();
-        date.setMonth(date.getMonth()+1);
-        if(date>new Date(this.recurso.intervalo.fecha_max)){
+      } else {
+        let date = new Date();
+        date.setMonth(date.getMonth() + 1);
+        if (date > new Date(this.recurso.intervalo.fecha_max)) {
           this.maxDate = new Date(this.recurso.intervalo.fecha_max);
-        }else{
-          this.maxDate=date;
+        } else {
+          this.maxDate = date;
         }
       }
       this.reservaDiaria = true;
@@ -260,6 +260,7 @@ export class ReservaComponent implements OnInit {
             this.loading = true;
             this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
             this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+            this.mostrarMensajeCorrecto();
           }
         } else if (response.status === 403) {
           localStorage.clear();
@@ -268,8 +269,13 @@ export class ReservaComponent implements OnInit {
           this.mostrarMensajeConflicto();
           this.doingReserva = false;
         } else {
-          this.cerrar.emit("fail");
-          this.mostrarMensajeIncorrecto();
+          if (this.dialog == "diaria") {
+            this.cerrar.emit("fail");
+            this.mostrarMensajeIncorrecto();
+          } else {
+            this.mostrarMensajeIncorrecto();
+          }
+
         }
         this.doingReserva = false;
       },
@@ -341,13 +347,13 @@ export class ReservaComponent implements OnInit {
   }
 
   removeReservasMass(ids: string[]) {
-    this.loading=true;
+    this.loading = true;
     this._reservaService.removeReservaMass(ids).subscribe(
       response => {
         console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
-          this.eventos=[];
+          this.eventos = [];
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -355,7 +361,7 @@ export class ReservaComponent implements OnInit {
           this.mostrarMensajeIncorrecto();
           this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
         }
-        this.loading=false;
+        this.loading = false;
       },
       error => {
         this.mostrarMensajeIncorrecto();
@@ -398,9 +404,9 @@ export class ReservaComponent implements OnInit {
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
 
-  cancelarReservasMensules(){
+  cancelarReservasMensules() {
     let observableReservas = Observable.from(this.eventos);
-    let ids:string[]=[];
+    let ids: string[] = [];
     observableReservas.map((evento: any) => {
       ids.push(evento.reserva.id);
     }).finally(() => {
