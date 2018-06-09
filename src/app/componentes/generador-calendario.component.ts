@@ -24,11 +24,11 @@ export class GeneradorCalendarioComponent implements OnInit {
   public eventos: any[] = [];
   public recursos: Recurso[];
   public recursoSeleccionado: Recurso;
-  public calendario :Map<number,String[]>;
-  public visible:boolean=false;
+  public calendario: Map<number, String[]>;
+  public visible: boolean = false;
   public numeroFilas
-  public mapa=new Map<number, string[]>();
-  public filas:any[];
+  public mapa = new Map<number, string[]>();
+  public filas: any[];
 
   constructor(
     private _reservaService: ReservaService,
@@ -51,7 +51,9 @@ export class GeneradorCalendarioComponent implements OnInit {
     }
     this.getRecursos();
   }
-
+  /**
+   * Obtener recursos
+   */
   getRecursos() {
     this._recursoService.getRecursos().subscribe(
       response => {
@@ -68,13 +70,15 @@ export class GeneradorCalendarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Obtener reservas
+   */
   getReservas() {
     this.fechasSeleccionadas.sort();
     this._reservaService.getReservasByRecursoAndFechas(this.recursoSeleccionado.id, this.fechasSeleccionadas).subscribe(
       response => {
         if (response.status !== 403) {
-          this.calendario=response.json();
+          this.calendario = response.json();
           this.getKeys(this.calendario);
         } else {
           localStorage.clear();
@@ -86,24 +90,34 @@ export class GeneradorCalendarioComponent implements OnInit {
       }
     );
   }
-
-  convertirAMap(map){
-    for(let filas in map){
-      this.mapa.set(Number(filas),map[filas]);
+  /**
+   * Convertir respuesta a map
+   * @param map Map
+   */
+  convertirAMap(map) {
+    for (let filas in map) {
+      this.mapa.set(Number(filas), map[filas]);
     }
   }
-  getKeys(map){
+
+  /**
+   * Obtener claves Map
+   * @param map Map
+   */
+  getKeys(map) {
     console.log(map);
-    this.filas=[];
-    for(let filas in map){
+    this.filas = [];
+    for (let filas in map) {
       this.filas.push(map[filas]);
     }
-    this.visible=true;
+    this.visible = true;
     console.log(this.filas);
     return this.filas;
   }
- 
-  print(){
+  /**
+   * Imprimir pantalla
+   */
+  print() {
     window.print();
   }
 }

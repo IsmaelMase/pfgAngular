@@ -27,16 +27,20 @@ export class CursoComponent implements OnInit {
   ) {
 
   }
-
+  /**
+   * Metodo al incializar vista
+   */
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_PROFESOR"){
+    if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_PROFESOR") {
       this._router.navigate(["pantallaApp/inicio"]);
     }
     this.getCursos();
     this.cursoSeleccionado = new Curso("", "");
   }
 
-
+  /**
+   * Obtener cursos
+   */
   getCursos() {
     this._cursoService.getCursos().subscribe(
       response => {
@@ -52,7 +56,10 @@ export class CursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Seleccionar curso
+   * @param curso Curso
+   */
   seleccionarCurso(curso: Curso) {
     this.pos = this.cursos.indexOf(curso);
     for (let prop in curso) {
@@ -60,17 +67,23 @@ export class CursoComponent implements OnInit {
     }
     this.modificando = true;
   }
-
+  /**
+   * Cerrar dialog modificacion
+   */
   cancelar() {
     this.cursoSeleccionado = new Curso("", "");
     this.modificando = false;
   }
-
+  /**
+   * Abrir dialog modificacion
+   */
   abrirDialog() {
     this.cursoSeleccionado = new Curso("", "");
     this.modificando = true;
   }
-
+  /**
+   * Guardar curso
+   */
   saveCurso() {
     console.log(this.cursoSeleccionado)
     this._cursoService.addCurso(this.cursoSeleccionado).subscribe(
@@ -78,7 +91,7 @@ export class CursoComponent implements OnInit {
         console.log(response);
         if (response.status === 201) {
           this.mostrarMensajeCorrecto();
-          this.remplazarObjeto(response);
+          this.reemplazarObjeto(response);
           this.cancelar();
         } else if (response.status === 403) {
           localStorage.clear();
@@ -93,7 +106,10 @@ export class CursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Borrar curso
+   * @param curso Curso
+   */
   removeCurso(curso: Curso) {
     this._cursoService.removeCurso(curso.id).subscribe(
       response => {
@@ -128,7 +144,10 @@ export class CursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmar borrado
+   * @param curso Curso
+   */
   confirmacionBorrado(curso: Curso) {
     this.confirmationService.confirm({
       message: '¿Desea elminiar el curso?',
@@ -141,8 +160,11 @@ export class CursoComponent implements OnInit {
       }
     });
   }
-
-  remplazarObjeto(response) {
+  /**
+   * Reemplazar objeto cuando se modifica
+   * @param response Response
+   */
+  reemplazarObjeto(response) {
     let curso = this.cursos.filter((c: Curso) => c.id === response.json().id);
     if (curso.length > 0) {
       this.cursos[this.pos] = response.json();
@@ -150,28 +172,34 @@ export class CursoComponent implements OnInit {
       this.cursos.push(response.json());
     }
     this.pos = -1;
-    this.cursos=[...this.cursos];
-    // if(this.cursos.length%10===0){
-    //   this.getCursos();
-    // }
+    this.cursos = [...this.cursos];
   }
-
+  /**
+   * Eliminar curso de array
+   * @param curso Curso
+   */
   eliminarElementoArray(curso: Curso) {
     this.cursos.splice(this.pos, 1);
-    this.cursos=[...this.cursos];
+    this.cursos = [...this.cursos];
   }
 
-
+  /**
+   * Mostrar mensaje operacion realizada con exito
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
-
+  /**
+   * Mostrar mensaje error en el borrado
+   */
   mostrarMensajeNoPuedeBorrar() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', detail: 'El curso no puede ser borrado porque esta asignado a un usuario', summary: 'Eliminación cancelada' });

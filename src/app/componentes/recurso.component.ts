@@ -34,9 +34,9 @@ export class RecursoComponent implements OnInit {
   public currentFileUpload: File;
   public loading: boolean = true;
   public titulo: string;
-  public order: number=1;
+  public order: number = 1;
   public opcionesOrdenar: any[];
-  public opcionSeleccionada:string;
+  public opcionSeleccionada: string;
   constructor(
     private _recursoService: RecursoService,
     private _route: ActivatedRoute,
@@ -56,11 +56,13 @@ export class RecursoComponent implements OnInit {
         { label: 'A-Z', value: 'nombre1' },
         { label: 'Z-A', value: 'nombre2' }
       ];
-      this.opcionSeleccionada='nombre1';
+      this.opcionSeleccionada = 'nombre1';
       this.getHorasDisponibles();
     });
   }
-
+  /**
+   * Obtener horarios
+   */
   getHorasDisponibles() {
     this._horarioService.getHoras().subscribe(
       response => {
@@ -79,7 +81,9 @@ export class RecursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Obtener aulas
+   */
   getAulas() {
     this.loading = true;
     this._recursoService.getAulas().subscribe(
@@ -98,12 +102,9 @@ export class RecursoComponent implements OnInit {
       }
     );
   }
-
-  imprimir(event) {
-    console.log(event.value);
-    console.log(this.recursoSeleccionado);
-  }
-
+  /**
+   * Obtener recursos
+   */
   getOtros() {
     this.loading = true;
     this._recursoService.getOtros().subscribe(
@@ -122,7 +123,9 @@ export class RecursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Cambiar vista entre aulas y recursos
+   */
   getRecursos() {
     if (this.tipo === 'aulas') {
       this.cambiarAulas();
@@ -132,7 +135,10 @@ export class RecursoComponent implements OnInit {
       this.titulo = "Recursos";
     }
   }
-
+  /**
+   * Seleccionar recurso
+   * @param recurso Recurso
+   */
   seleccionarRecurso(recurso: Recurso) {
     this.pos = this.recursos.indexOf(recurso);
     for (let prop in recurso) {
@@ -140,7 +146,9 @@ export class RecursoComponent implements OnInit {
     }
     this.modificando = true;
   }
-
+  /**
+   * Cerrar dialog modificacion/creacion de recurso
+   */
   cancelar() {
     if (this.tipo === 'aulas') {
       this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
@@ -149,7 +157,9 @@ export class RecursoComponent implements OnInit {
     }
     this.modificando = false;
   }
-
+  /**
+   * Abrir dialog modificacion/creacion de recurso
+   */
   abrirDialog() {
     if (this.tipo === 'aulas') {
       this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
@@ -158,13 +168,20 @@ export class RecursoComponent implements OnInit {
     }
     this.modificando = true;
   }
-
+  /**
+   * Abrir dialog para reservas
+   * @param recurso Recurso
+   * @param tipoDialog Dialog que se quiere abrir
+   */
   abrirDialogReserva(recurso: Recurso, tipoDialog: string) {
     this.opcionReservaSeleccionada = tipoDialog;
     console.log(recurso);
     this.recursoReserva = recurso;
   }
-
+  /**
+   * Cerrar dialog reservas
+   * @param e Evento
+   */
   cerrarDialogReservas(e) {
     if (e === "cerrar") {
       this.opcionReservaSeleccionada = "";
@@ -180,7 +197,10 @@ export class RecursoComponent implements OnInit {
       this.mostrarMensajeIncorrecto();
     }
   }
-
+  /**
+   * Guardar recursos
+   * @param formulario ngForm
+   */
   saveRecurso(formulario) {
     console.log(this.recursoSeleccionado)
     this._recursoService.addRecurso(this.recursoSeleccionado).subscribe(
@@ -188,7 +208,7 @@ export class RecursoComponent implements OnInit {
         console.log(response)
         if (response.status === 201) {
           this.mostrarMensajeCorrecto();
-          this.remplazarObjeto(response);
+          this.reemplazarObjeto(response);
           this.cancelar();
           formulario.reset();
           this.currentFileUpload = null;
@@ -206,7 +226,10 @@ export class RecursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Borrar recurso
+   * @param recurso Recurso
+   */
   removeRecurso(recurso: Recurso) {
     console.log(recurso)
     this._recursoService.removeRecurso(recurso.id).subscribe(
@@ -241,7 +264,9 @@ export class RecursoComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmacion borrado
+   */
   confirmacionBorrado() {
     this.confirmationService.confirm({
       message: '¿Desea elminiar el recurso?',
@@ -254,8 +279,11 @@ export class RecursoComponent implements OnInit {
       }
     });
   }
-
-  remplazarObjeto(response) {
+  /**
+   * Reempalzar 
+   * @param response Response
+   */
+  reemplazarObjeto(response) {
     let recurso = this.recursos.filter((r: Recurso) => r.id === response.json().id);
     if (recurso.length > 0) {
       this.recursos[this.pos] = response.json();
@@ -265,13 +293,18 @@ export class RecursoComponent implements OnInit {
     this.pos = -1;
     this.recursos = [...this.recursos];
   }
-
+  /**
+   * Poner imagen recurso por defecto
+   */
   resetImage() {
     this.recursoSeleccionado.imagen = "";
     this.currentFileUpload = null;
     this.selectedFiles = undefined;
   }
-
+  /**
+   * Seleccionar imagen
+   * @param event Evento
+   */
   selectFile(event) {
     console.log(event);
     let file = event.target.files.item(0);
@@ -280,7 +313,10 @@ export class RecursoComponent implements OnInit {
       this.selectedFiles = event.target.files;
     }
   }
-
+  /**
+   * Subir imagen 
+   * @param formulario ngForm
+   */
   upload(formulario) {
     console.log(this.selectedFiles)
     if (this.selectedFiles !== undefined) {
@@ -316,42 +352,60 @@ export class RecursoComponent implements OnInit {
       this.saveRecurso(formulario);
     }
   }
-
+  /**
+   * Eliminar recurso del array
+   * @param recurso Recurso
+   */
   eliminarElementoArray(recurso: Recurso) {
     this.recursos.splice(this.pos, 1);
   }
 
+  /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
-
+  /**
+   * Cambiar vista a aulas
+   */
   cambiarAulas() {
     this.getAulas();
     this.recursoSeleccionado = new Recurso("", "", "", "", 0, "a", null, "");
   }
-
+  /**
+   * Cambiar vista a recursos
+   */
   cambiarOtros() {
     this.getOtros();
     this.recursoSeleccionado = new Recurso("", "", "", "", 0, "r", null, "");
   }
-
+  /**
+   * Mostrar mensaje error en la subida de la imagen
+   */
   mostrarMensajeIncorrectoImagen() {
     this.msgs = [];
     console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
-
+  /**
+   * Mostrar error no se puede realizar el borrado
+   */
   mostrarMensajeNoPuedeBorrar() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', detail: 'El recurso no puede ser borrado porque tiene reservas realizadas', summary: 'Eliminación cancelada' });
   }
-
+  /**
+   * Ordenar alfabeticamente recursos/aulas
+   */
   ordenar() {
     if (this.opcionSeleccionada === "nombre1") {
       this.recursos.sort(this.ordenarAZ);
@@ -359,7 +413,11 @@ export class RecursoComponent implements OnInit {
       this.recursos.sort(this.ordenarZA);
     }
   }
-
+  /**
+   * Ordenar de la A-Z
+   * @param a Recurso
+   * @param b Recurso
+   */
   ordenarAZ(a, b) {
     if (a.nombre.toLowerCase() < b.nombre.toLowerCase())
       return -1;
@@ -367,6 +425,11 @@ export class RecursoComponent implements OnInit {
       return 1;
     return 0;
   }
+  /**
+   * Ordenar de la Z-A
+   * @param a Recurso
+   * @param b Recurso
+   */
   ordenarZA(a, b) {
     if (a.nombre.toLowerCase() > b.nombre.toLowerCase())
       return -1;

@@ -10,30 +10,39 @@ import { CONSTANTS } from './serviceConstants';
 export class LoginService {
 
     public url: string;
-
+    /**
+     * Contructor parametrizado
+     * @param _http Http
+     */
     constructor(
         public _http: Http
     ) {
         this.url = CONSTANTS.url;
     }
-
-    login(usuarioLogin:any) {
+    /**
+     * Metodo envia peticion de login
+     * @param usuarioLogin Datos de usuario
+     */
+    login(usuarioLogin: any) {
         let json = JSON.stringify(usuarioLogin);
         console.log(json);
         let headers = new Headers({ 'Content-Type': 'application/json' });
 
         return this._http.post(this.url + 'login', json, { headers: headers })
-            .map((res:Response) => res);
+            .map((res: Response) => res);
 
     }
-
-    changePassword(changePassUser:any) {
+    /**
+     * Peticion cambio de contraseña
+     * @param changePassUser Datos usuario
+     */
+    changePassword(changePassUser: any) {
         let json = JSON.stringify(changePassUser);
         console.log(json);
         let headers = new Headers({ 'Content-Type': 'application/json' });
 
         return this._http.post(this.url + 'mail/sendMail', json, { headers: headers })
-            .map((res:Response) => res);
+            .map((res: Response) => res);
 
     }
 

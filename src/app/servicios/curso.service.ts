@@ -11,18 +11,26 @@ import { CONSTANTS } from './serviceConstants';
 export class CursoService {
 
     public url: string;
-
+    /**
+     * Contructor paremtrizado
+     * @param _http Http 
+     */
     constructor(
         public _http: Http
     ) {
         this.url = CONSTANTS.url;
     }
-
+    /**
+     * Devuelve cursos
+     */
     getCursos() {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
         return this._http.get(this.url + 'curso/cursos', { headers: headers }).map(res => res);
     }
-
+    /**
+     * Guardar curso
+     * @param curso Curso
+     */
     addCurso(curso: Curso) {
         let json = JSON.stringify(curso);
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -32,7 +40,10 @@ export class CursoService {
             .map(res => res);
 
     }
-
+    /**
+     * Borrar curso
+     * @param id String id curso
+     */
     removeCurso(id: String) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         headers.append('Authorization', localStorage.getItem("token"));

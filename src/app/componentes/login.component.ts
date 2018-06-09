@@ -37,9 +37,13 @@ export class LoginComponent implements OnInit {
       }
     }
   }
-
+  /**
+   * Metodo para loguearse en la aplicacion
+   * @param event Evento cuando pulsa enter o click
+   */
   login(event) {
     if (event.keyCode == 13 || event.type == "click") {
+      //se encripta la contraseña
       this.usuario.password = btoa(this.password);
       this._loginService.login(this.usuario).subscribe(
         response => {
@@ -48,10 +52,11 @@ export class LoginComponent implements OnInit {
             this.mostrarMensajeIncorrecto();
             this.password = "";
           } else {
+            //se recarga la pagina y se guardan datos en cache
             window.location.reload();
             localStorage.setItem("token", response.json().authorization);
             localStorage.setItem("usuario", JSON.stringify(response.json().usuario))
-            setTimeout(() => {  
+            setTimeout(() => {
               console.log(JSON.stringify(response.json().usuario));
               if (response.json().usuario.rol === "ROL_PROFESOR") {
                 this._router.navigate(["pantallaApp"]);
@@ -67,7 +72,9 @@ export class LoginComponent implements OnInit {
       );
     }
   }
-
+  /**
+   * Metodo para generar nueva contraseña y envir peticion para cambiarla
+   */
   sendRequest() {
     let password = this.generatePass();
     this.userChangePass.passEncr = btoa(password);
@@ -95,34 +102,50 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Mostrar mensaje erro en la aplicacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Usuario o contraseña incorrectos' });
   }
-
+  /**
+   * Mostrar mensaje usuario no encontrado
+   */
   usuarioNotFound() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'El email introducido no esta regristrado' });
   }
+  /**
+   * Cambio de contraseña no se ha podido realizar
+   */
   operationNotDone() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
+  /**
+   * Cambio de contrañesa realizado
+   */
   operationDone() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Contraseña modificada', detail: 'Contraseña enviada al email' });
   }
-
+  /**
+   * Abrir dialog cambio de contraseña
+   */
   openDialog() {
     this.changePass = true;
   }
-
+  /**
+   * Cerrar dialog cambio de contraseña
+   */
   cancelar() {
     this.userChangePass = new UserChangePass("", "", "");
     this.changePass = false;
   }
-
+  /**
+   * Generar contraseñas aleatoria
+   */
   generatePass() {
     var chars = "ABCDEFGHIJKLMNOP1234567890";
     var pass = "";

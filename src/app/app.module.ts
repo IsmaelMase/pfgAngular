@@ -33,7 +33,6 @@ import { RecursoService } from './servicios/recurso.service'
 import { HorarioService } from './servicios/horario.service'
 import { ReservaService } from './servicios/reserva.service'
 import { LoginService } from './servicios/login.service'
-import { MensajeService } from './servicios/mensaje.service'
 
 import { routing, appRoutingProviders } from './app.routing';
 import { ConfirmationService } from 'primeng/api';
@@ -47,7 +46,6 @@ import { ReservaComponent } from './componentes/reserva.component';
 import { PantallaAppComponent } from './componentes/pantalla-app.component';
 import { LoginComponent } from './componentes/login.component';
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
-import { MensajeComponent } from './componentes/mensaje.component';
 import { ConfiguracionUsuarioComponent } from './componentes/configuracion-usuario.component';
 import { HorarioComponent } from './componentes/horario.component';
 import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
@@ -70,7 +68,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     PantallaAppComponent,
     LoginComponent,
     ReservaProfesorComponent,
-    MensajeComponent,
     ConfiguracionUsuarioComponent,
     HorarioComponent,
     GeneradorCalendarioComponent,
@@ -109,7 +106,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     SpinnerModule,
     SelectButtonModule
   ],
-  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, MensajeService, HorarioService, UploadService],
+  providers: [CursoService, UsuarioService, RecursoService, HorarioService, ReservaService, appRoutingProviders, ConfirmationService, LoginService, HorarioService, UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

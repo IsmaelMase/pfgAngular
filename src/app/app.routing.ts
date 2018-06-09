@@ -8,7 +8,6 @@ import { UsuarioComponent } from './componentes/usuario.component'
 import { PantallaAppComponent } from './componentes/pantalla-app.component'
 import { LoginComponent } from './componentes/login.component'
 import { ReservaProfesorComponent } from './componentes/reserva-profesor.component';
-import { MensajeComponent } from './componentes/mensaje.component';
 import { HorarioComponent } from './componentes/horario.component';
 import { GeneradorCalendarioComponent } from './componentes/generador-calendario.component';
 import { HistoricoProfesoresComponent } from './componentes/historico-profesores.component';

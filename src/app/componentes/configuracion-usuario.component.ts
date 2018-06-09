@@ -18,8 +18,10 @@ import { CONSTANTS } from '../servicios/serviceConstants';
 export class ConfiguracionUsuarioComponent implements OnInit {
   @Output()
   cerrar: EventEmitter<string> = new EventEmitter<string>();
-
-  public url=CONSTANTS.url
+  /**
+   * Variables
+   */
+  public url = CONSTANTS.url
   public usuarios: Usuario[];
   public cursos: Curso[];
   public usuarioSeleccionado: Usuario;
@@ -32,6 +34,15 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   public selectedFiles: FileList;
   public currentFileUpload: File;
   public password: string;
+
+  /**
+   * Constructor
+   * @param _usuarioService UsuarioService
+   * @param _cursoService  CursoService
+   * @param _route ActivatedRoute
+   * @param _router Router
+   * @param uploadService UploadService
+   */
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
@@ -43,7 +54,9 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       { field: 'nombre', header: 'Nombre' }
     ];
   }
-
+  /**
+   * Metodo iniciar vista
+   */
   ngOnInit() {
     this.abierto = true;
     this.cambioPass = false;
@@ -51,7 +64,9 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     this.getCursos();
     this.usuarioSeleccionado = JSON.parse(localStorage.getItem("usuario"))
   }
-
+  /**
+   * Obtener cursos
+   */
   getCursos() {
     this._cursoService.getCursos().subscribe(
       response => {
@@ -67,22 +82,30 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Cerra dialog
+   */
   cancelar() {
     this.abierto = false;
     this.cerrar.emit("cerrar");
   }
-
+  /**
+   * Abrir dialog password
+   */
   abrirDialogPass() {
     this.password = "";
     this.cambioPass = true;
   }
-
+  /**
+   * Cerrar dialog password
+   */
   cancelarCambioPass() {
     this.password = "";
     this.cambioPass = false;
   }
-
+  /**
+   * Introducir password
+   */
   setPassword() {
     if (this.password !== "") {
       this.usuarioSeleccionado.password = btoa(this.password);
@@ -90,7 +113,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     this.cambioPass = false;
   }
 
-
+  /**
+   * Guardar datos
+   * @param formulario ngForm
+   */
   saveUsuario(formulario) {
     console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
@@ -124,12 +150,18 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       }
     );
   }
+  /**
+   * Cambiar imagen usuario por defecto
+   */
   resetImage() {
     this.usuarioSeleccionado.imagen = "";
     this.currentFileUpload = null;
     this.selectedFiles = undefined;
   }
-
+  /**
+   * Seleccionar imagenes
+   * @param event Event seleccion de imagen
+   */
   selectFile(event) {
     console.log(event);
     let file = event.target.files.item(0);
@@ -138,7 +170,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       this.selectedFiles = event.target.files;
     }
   }
-
+  /**
+   * Subir imagen
+   * @param formulario ngForm
+   */
   upload(formulario) {
 
     if (this.selectedFiles !== undefined) {
@@ -171,18 +206,25 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       this.saveUsuario(formulario);
     }
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
-
+  /**
+   * Mostrar mensaje error al subir la imagen
+   */
   mostrarMensajeIncorrectoImagen() {
     this.msgs = [];
     console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
-
+  /**
+   * Mostrar mensaje valor existente
+   * @param campo Campo duplicado
+   */
   mostrarMensajeDuplicado(campo: string) {
     this.msgs = [];
     console.log("sdasdasda")

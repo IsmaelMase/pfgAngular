@@ -68,7 +68,7 @@ export class HistoricoProfesoresComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_PROFESOR"){
+    if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_PROFESOR") {
       this._router.navigate(["pantallaApp/inicio"]);
     }
     this.getUsuarios();
@@ -78,7 +78,9 @@ export class HistoricoProfesoresComponent implements OnInit {
       this.reservas = [];
   }
 
-
+  /**
+   * Obtener todos los usuarios
+   */
   getUsuarios() {
     this.loading = true;
     this._usuarioService.getAllUsuarios().subscribe(
@@ -98,7 +100,10 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Obtener reservas
+   * @param fecha String fecha
+   */
   getReservas(fecha) {
     console.log(fecha);
     this._reservaService.getReservasByUsuarioAndFecha(this.usuarioSeleccionado.id, fecha).subscribe(
@@ -116,7 +121,10 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Metodo que se ejecuto cuando se pulsa sobre una reserva
+   * @param event Event
+   */
   clickeado(event) {
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
       this.loadingReservas = true;
@@ -132,7 +140,10 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     }
   }
-
+  /**
+   * Transformar reservas en eventos
+   * @param reservas Reservas
+   */
   trasnformarReservasEventos(reservas: Reserva[]) {
     this.eventos = [];
     let evento = {};
@@ -154,7 +165,9 @@ export class HistoricoProfesoresComponent implements OnInit {
       this.loadingReservas = false;
     }).subscribe();
   }
-
+  /**
+   * Obtener cursos
+   */
   getCursos() {
     this._cursoService.getCursos().subscribe(
       response => {
@@ -170,7 +183,10 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Seleccionar usuario
+   * @param usuario Usuario
+   */
   seleccionarUsuario(usuario: Usuario) {
     this.pos = this.usuarios.indexOf(usuario);
     for (let prop in usuario) {
@@ -178,7 +194,11 @@ export class HistoricoProfesoresComponent implements OnInit {
     }
     this.modificando = true;
   }
-
+  /**
+   * Filtar listado de usuarios
+   * @param campo campo
+   * @param value valor
+   */
   filter(campo, value) {
     if (campo === 'dni') {
       this.usuarios = this.usuariosTotales.filter(
@@ -195,23 +215,32 @@ export class HistoricoProfesoresComponent implements OnInit {
     }
 
   }
-
+  /**
+   * Cerrar dialog modificacion
+   */
   cancelar() {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = false;
   }
-
+  /**
+   * Abrir dialog modificacion
+   */
   abrirDialog() {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = true;
   }
-
+  /**
+   * Abrir dialog reservas
+   */
   abrirDialogReservas() {
     this.getReservas("2018/06");
     this.reservas = [];
     this.historialReservas = true;
   }
-
+  /**
+   * Seleccionar reservas
+   * @param reserva Reserva
+   */
   seleccionarReserva(reserva: Reserva) {
     let reservas = this.eventos.filter((e: any) => e.reserva.id === reserva.id);
     this.pos = this.eventos.indexOf(reservas[0]);
@@ -220,11 +249,16 @@ export class HistoricoProfesoresComponent implements OnInit {
     }
     console.log(this.pos);
   }
-
+  /**
+   * Cerrar dialog reservas
+   */
   cancelarDialogReservas() {
     this.historialReservas = false;
   }
-
+  /**
+   * Dar de alta usuario
+   * @param usuario Usuario
+   */
   darAlta(usuario: Usuario) {
     this._usuarioService.removeUsuario(usuario.id).subscribe(
       response => {
@@ -244,7 +278,9 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmar alta
+   */
   confirmarDarAlta() {
     this.confirmationService.confirm({
       message: '¿Desea dar de alta el usuario?',
@@ -257,8 +293,11 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     });
   }
-
-  remplazarObjeto(response) {
+  /**
+  * Reemplazar objeto cuando se modifica
+  * @param response Response
+  */
+  reemplazarObjeto(response) {
     let usuario = this.usuarios.filter((u: Usuario) => u.id === response.json().id);
     if (usuario.length > 0) {
       this.usuarios[this.pos] = response.json();
@@ -268,21 +307,30 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.pos = -1;
     console.log(this.usuarios)
   }
-
+  /**
+   * Cambiar estado usuario
+   */
   cambiarEstado() {
     this.usuarios[this.pos].estado = true;
   }
-
+  /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
-
+  /**
+   * Borrar reserva
+   * @param reserva Reserva
+   */
   removeReserva(reserva: Reserva) {
     this._reservaService.removeReserva(reserva.id).subscribe(
       response => {
@@ -303,14 +351,16 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Guardar reserva
+   */
   saveReserva() {
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
         console.log(response.json())
         if (response.status === 201) {
           this.cancelarReserva();
-          this.loadingReservas=true;
+          this.loadingReservas = true;
           this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
           this.mostrarMensajeCorrecto();
         } else if (response.status === 403) {
@@ -326,7 +376,9 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmar borrado de reserva
+   */
   confirmacionBorrado() {
     this.confirmationService.confirm({
       message: '¿Desea cancelar la reserva?',
@@ -339,18 +391,25 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * Cerrar dialog de reserva
+   */
   cancelarReserva() {
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
-
+  /**
+   * Eliminar reserva del array
+   */
   eliminarElementoArray() {
     console.log(this.pos);
     this.eventos.splice(this.pos, 1);
     this.pos = -1
     this.cancelar()
   }
-
+  /**
+   * Borrar listado de reservas
+   * @param ids String[] ids
+   */
   removeReservasMass(ids: string[]) {
     this.loadingReservas = true;
     this._reservaService.removeReservaMass(ids).subscribe(
@@ -373,6 +432,9 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     );
   }
+  /**
+   * Confirmar borrado de reservas
+   */
   confirmacionBorradoMass() {
     this.confirmationService.confirm({
       message: '¿Desea cancelar todas las reservas del mes?',
@@ -385,7 +447,9 @@ export class HistoricoProfesoresComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * obtener id de las reservas de los evento antes de borrarlas
+   */
   cancelarReservasMensules() {
     let observableReservas = Observable.from(this.eventos);
     let ids: string[] = [];

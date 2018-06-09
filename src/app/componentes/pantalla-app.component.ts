@@ -26,21 +26,31 @@ export class PantallaAppComponent implements OnInit {
     this.oculto = false;
     this.usuario = JSON.parse(localStorage.getItem("usuario"))
   }
+  /**
+   * Metodo para comprobar si hay token guardado
+   */
   changeOfRoutes() {
     if (localStorage.getItem("token") === undefined || localStorage.getItem("token") === null) {
       this._router.navigate(["login"]);
     }
   }
-
+  /**
+   * Cerrar sesion
+   */
   logout() {
     localStorage.clear();
     this._router.navigate(["login"]);
   }
-
+  /**
+   * Abrir dialog cambiar datos del usuario
+   */
   abrirDialogConfiguracion() {
     this.cambiarConfig = true;
   }
-
+  /**
+   * Cerrar dialog reservas
+   * @param e Event 
+   */
   cerrarDialogReservas(e) {
     console.log(e);
     if (e === "ok") {
@@ -54,12 +64,16 @@ export class PantallaAppComponent implements OnInit {
       this.cambiarConfig = false;
     }
   }
-
+ /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });

@@ -130,7 +130,7 @@ export class UsuarioComponent implements OnInit {
         console.log(response);
         if (response.status === 201) {
           this.mostrarMensajeCorrecto();
-          this.remplazarObjeto(response);
+          this.reemplazarObjeto(response);
           this.cancelar();
           formulario.reset();
           this.currentFileUpload = null;
@@ -245,7 +245,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  remplazarObjeto(response) {
+  reemplazarObjeto(response) {
     let usuario = this.usuarios.filter((u: Usuario) => u.id === response.json().id);
     if (usuario.length > 0) {
       this.usuarios[this.pos] = response.json();

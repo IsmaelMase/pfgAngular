@@ -6,11 +6,19 @@ import { CONSTANTS } from './serviceConstants';
 @Injectable()
 export class UploadService {
     public url: string;
-
+    /**
+     * Contructor parametrizado
+     * @param _http Http
+     */
     constructor(
         private _http: Http) {
         this.url = CONSTANTS.url;
     }
+
+    /**
+     * Guardar imagen
+     * @param file Imagen
+     */
     saveImage(file: File) {
         let formdata: FormData = new FormData();
 

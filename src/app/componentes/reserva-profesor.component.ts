@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReservaService } from '../servicios/reserva.service';
 import { Recurso } from '../modelo/recurso';
 import { Curso } from '../modelo/curso';
@@ -34,10 +34,10 @@ export class ReservaProfesorComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private confirmationService: ConfirmationService
-    ) { }
+  ) { }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_ADMIN"){
+    if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_ADMIN") {
       this._router.navigate(["pantallaApp/inicio"]);
     }
     registerLocaleData(localeEs, 'es', localeEsExtra);
@@ -65,7 +65,10 @@ export class ReservaProfesorComponent implements OnInit {
   }
 
 
-
+  /**
+   * Obtener Reservas
+   * @param fecha String fecha
+   */
   getReservas(fecha) {
     this._reservaService.getReservasByUsuarioAndFecha(this.usuario.id, fecha).subscribe(
       response => {
@@ -81,7 +84,10 @@ export class ReservaProfesorComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Seleccionas una reserva
+   * @param event Event
+   */
   clickeado(event) {
     this.loading = true;
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
@@ -97,7 +103,10 @@ export class ReservaProfesorComponent implements OnInit {
       }
     }
   }
-
+  /**
+   * Transformar reservas en evento para el calendario
+   * @param reservas Reserva
+   */
   trasnformarReservasEventos(reservas: Reserva[]) {
     this.eventos = [];
     let evento = {};
@@ -119,7 +128,10 @@ export class ReservaProfesorComponent implements OnInit {
       this.loading = false;
     }).subscribe();
   }
-
+  /**
+   * Seleccionar reserva
+   * @param reserva Reserva
+   */
   seleccionarReserva(reserva: Reserva) {
     let reservas = this.eventos.filter((e: any) => e.reserva.id === reserva.id);
     this.pos = this.eventos.indexOf(reservas[0]);
@@ -128,7 +140,9 @@ export class ReservaProfesorComponent implements OnInit {
     }
     console.log(this.pos);
   }
-
+  /**
+   * Guardar reserva
+   */
   saveReserva() {
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
@@ -151,7 +165,10 @@ export class ReservaProfesorComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Borrar reserva
+   * @param reserva Reserva
+   */
   removeReserva(reserva: Reserva) {
     this._reservaService.removeReserva(reserva.id).subscribe(
       response => {
@@ -172,30 +189,9 @@ export class ReservaProfesorComponent implements OnInit {
       }
     );
   }
-
-  // remplazarObjeto(response) {
-  //   let reservas = this.eventos.filter((e: any) => e.reserva.id === response[0].id);
-  //   if (reservas.length > 0) {
-  //     let pos = this.eventos.indexOf(reservas[0]);
-  //     this.eventos[pos].reserva = response[0];
-  //   } else {
-  //     let evento;
-  //     let horas = response[0].intervalos_reservas[0].split("-");
-  //     let fechaSeparada = response[0].fechas_reservas[0].split("/")
-  //     evento = {
-  //       "title": response[0].recurso.nombre,
-  //       "start": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[0],
-  //       "end": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[1],
-  //       "color": "#0767a3",
-  //       "reserva": response[0]
-  //     }
-  //     this.eventos.push(evento);
-  //   }
-  //   this.eventos=[...this.eventos];
-  //   this.cargarEventos();
-  //   this.pos = -1;
-  // }
-
+  /**
+   * Confirmar borrado
+   */
   confirmacionBorrado() {
     this.confirmationService.confirm({
       message: '¿Desea cancelar la reserva?',
@@ -208,11 +204,15 @@ export class ReservaProfesorComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * Cerrar dialog reserva
+   */
   cancelar() {
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
-
+  /**
+   * Eliminar reserva del array
+   */
   eliminarElementoArray() {
     console.log(this.pos);
     this.eventos.splice(this.pos, 1);
@@ -220,11 +220,16 @@ export class ReservaProfesorComponent implements OnInit {
     this.cancelar()
   }
 
+  /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });

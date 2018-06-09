@@ -53,19 +53,29 @@ export class HorarioComponent implements OnInit {
       clear: 'Borrar'
     }
   }
-
+  /**
+   * Añadir intervalo al horario
+   */
   addIntervalo() {
     this.intervalos.push(this.intervalo);
     this.intervalos = [...this.intervalos];
     this.intervalo = new Intervalo("", "", false);
   }
+  /**
+   * Borrar intervalo de un horario
+   * @param intervalo intervalo
+   */
   removeIntervalo(intervalo) {
     console.log(intervalo);
     let pos = this.intervalos.indexOf(intervalo);
     this.intervalos.splice(pos, 1);
     this.intervalos = [...this.intervalos];
   }
-
+  /**
+   * Comprobar si un intervalo es correcto
+   * @param value valor
+   * @param campo  campo
+   */
   comprobar(value: string, campo: string) {
     if (campo === "inicio") {
       this.intervalo.inicio = value;
@@ -88,7 +98,9 @@ export class HorarioComponent implements OnInit {
     }
   }
 
-
+  /**
+   * Obtener horarios
+   */
   getHorarios() {
     this._horarioService.getHoras().subscribe(
       response => {
@@ -104,7 +116,10 @@ export class HorarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Seleccionar horario
+   * @param horario Horario
+   */
   seleccionarHorario(horario: Horario) {
     this.pos = this.horarios.indexOf(horario);
     for (let prop in horario) {
@@ -121,7 +136,9 @@ export class HorarioComponent implements OnInit {
     console.log(this.selectedDate);
     this.modificando = true;
   }
-
+  /**
+   * Cerrar dialog creacion/modificacion de un horario
+   */
   cancelar() {
     this.intervalos = [];
     this.modificando = false;
@@ -129,16 +146,23 @@ export class HorarioComponent implements OnInit {
     this.horarioSeleccionado = new Horario("", "", [], null);
     this.intervalo = new Intervalo("", "", false);
   }
-
+  /**
+   * Abrir dialog creacion/modificacion de un horario
+   */
   abrirDialog() {
     this.horarioSeleccionado = new Horario("", "", [], null);
     this.modificando = true;
   }
-
+  /**
+   * Seleccionar una fecha maxima para el horario
+   * @param value Date fecha
+   */
   seleccionarFecha(value: Date) {
     this.horarioSeleccionado.fecha_max = value.toDateString();
   }
-
+  /**
+   * Guardar horario
+   */
   saveHorario() {
     this.intervalos.sort();
     this.horarioSeleccionado.intervalos = [];
@@ -154,7 +178,7 @@ export class HorarioComponent implements OnInit {
           this.intervalos = [];
           this.selectedDate = null;
           this.mostrarMensajeCorrecto();
-          this.remplazarObjeto(response);
+          this.reemplazarObjeto(response);
           this.cancelar();
         } else if (response.status === 403) {
           localStorage.clear();
@@ -168,7 +192,10 @@ export class HorarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Borrar horario
+   * @param horario Horario
+   */
   removeHorario(horario: Horario) {
     this._horarioService.removeHorario(horario.id).subscribe(
       response => {
@@ -202,7 +229,10 @@ export class HorarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmar borrado de horario
+   * @param horario Horario
+   */
   confirmacionBorrado(horario: Horario) {
     this.confirmationService.confirm({
       message: '¿Desea elminiar el horario?',
@@ -215,8 +245,11 @@ export class HorarioComponent implements OnInit {
       }
     });
   }
-
-  remplazarObjeto(response) {
+  /**
+   * Reemplazar objeto cuando se modifica
+   * @param response Response
+   */
+  reemplazarObjeto(response) {
     let horario = this.horarios.filter((h: Horario) => h.id === response.json().id);
     if (horario.length > 0) {
       this.horarios[this.pos] = response.json();
@@ -226,22 +259,32 @@ export class HorarioComponent implements OnInit {
     this.pos = -1;
     this.horarios = [...this.horarios];
   }
-
+  /**
+   * Eliminar horario del array
+   * @param horario Horario
+   */
   eliminarElementoArray(horario: Horario) {
     this.horarios.splice(this.pos, 1);
   }
 
 
+  /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
-
+  /**
+    * Mostrar mensaje error en el borrado
+    */
   mostrarMensajeNoPuedeBorrar() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', detail: 'El horario no puede ser borrado porque esta asignado a un horario', summary: 'Eliminación cancelada' });

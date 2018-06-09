@@ -11,31 +11,43 @@ import { CONSTANTS } from './serviceConstants';
 export class RecursoService {
 
     public url: string;
-
+    /**
+     * Contructor parametrizado
+     * @param _http Http
+     */
     constructor(
         public _http: Http
     ) {
         this.url = CONSTANTS.url;
     }
-
+    /**
+     * Devuelve recursos
+     */
     getOtros() {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
 
         return this._http.get(this.url + 'recurso/otros', { headers: headers }).map(res => res.json());
     }
-
+    /**
+     * Devuelve aulas
+     */
     getAulas() {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
 
         return this._http.get(this.url + 'recurso/aulas', { headers: headers }).map(res => res.json());
     }
-
+    /**
+     * Devuelve aulas y recursos
+     */
     getRecursos() {
-        let headers = new Headers({ 'Authorization': localStorage.getItem("token")});
+        let headers = new Headers({ 'Authorization': localStorage.getItem("token") });
 
         return this._http.get(this.url + 'recurso/allRecursos', { headers: headers }).map(res => res);
     }
-
+    /**
+     * Guardar recurso
+     * @param recurso Recurso
+     */
     addRecurso(recurso: Recurso) {
         let json = JSON.stringify(recurso);
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -45,7 +57,10 @@ export class RecursoService {
             .map(res => res);
 
     }
-
+    /**
+     * Borrar recurso
+     * @param id String id recurso
+     */
     removeRecurso(id: String) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         headers.append('Authorization', localStorage.getItem("token"));
