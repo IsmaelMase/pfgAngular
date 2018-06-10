@@ -68,14 +68,23 @@ export class ReservaComponent implements OnInit {
     registerLocaleData(localeEs, 'es', localeEsExtra);
     moment.lang("es");
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
+    //se recoge el usuario de la cache
     this.usuario = JSON.parse(localStorage.getItem("usuario"))
+    /**
+     * Se comprueba si se ha seleccionado la ventana de realizar reservas o de visualizar reservas
+     */
     if (this.dialog === "diaria") {
+      /**
+       * Se obtienen los usuarios
+       */
       this.getUsuarios();
+      //se comprueba el rol del usuario pra configuracion de la reservas
       if (this.usuario.rol === "ROL_PROFESOR") {
         this.reservaSeleccionada.usuario = this.usuario;
         this.maxFechas = 30;
       }
       this.reservaSeleccionada.recurso = this.recurso;
+      //se establece la fecha maxima de reserva dependiendo del rol del usuario
       if (this.usuario.rol === 'ROL_ADMIN') {
         this.maxDate = new Date(this.recurso.intervalo.fecha_max);
       } else {
@@ -115,7 +124,10 @@ export class ReservaComponent implements OnInit {
       { field: 'nombre', header: 'Nombre' }
     ];
   }
-
+  /**
+   * Obtener reservas por fecha
+   * @param fecha String fecha
+   */
   getReservas(fecha) {
 
     this._reservaService.getReservasByRecursoAndFecha(this.recurso.id, fecha).subscribe(
@@ -133,7 +145,10 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Evento cuando se selecciona una reservas
+   * @param event Evento
+   */
   clickeado(event) {
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
       this.loading = true;
@@ -150,7 +165,9 @@ export class ReservaComponent implements OnInit {
       }
     }
   }
-
+  /**
+   * Obtener fechas no disponibles
+   */
   getFechasNoDisponibles() {
     this.haveFechas = false;
     console.log(this.reservaSeleccionada.intervalos_reservas.length === 0);
@@ -175,8 +192,9 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
-
+  /**
+   * Obtener usuarios
+   */
   getUsuarios() {
     this._usuarioService.getUsuarios().subscribe(
       response => {
@@ -193,19 +211,25 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Abrir dialog para realizar reserva
+   * @param recurso Recurso
+   */
   abrirDialogReservaDiaria(recurso: Recurso) {
     this.reservaSeleccionada.recurso = recurso;
     this.getUsuarios();
     console.log(this.horasDisponibles);
   }
-
+  /**
+   * Transformar reservas en evento del calendario
+   * @param reservas Reservas
+   */
   trasnformarReservasEventos(reservas: Reserva[]) {
     this.eventos = [];
     let evento = {};
 
     let observableReservas = Observable.from(reservas);
-
+    /* Se recorren las reservas con un Observable, se separan las horas y fechas y se crea el evento */
     observableReservas.map((reserva: Reserva) => {
       console.log(reserva)
       let horas = reserva.intervalos_reservas[0].split("-");
@@ -225,28 +249,38 @@ export class ReservaComponent implements OnInit {
       this.loading = false;
     }).subscribe();
   }
-
+  /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
-
+  /**
+   * Mostrar mensaje de error al realziar la reserva porque ya existe
+   */
   mostrarMensajeConflicto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Algunas de las reservas ya estan ocupadas por otro usuario' });
   }
-
+  /**
+   * Cerrar dialog reservas
+   */
   cancelar() {
     this.reservaDiaria = false;
     this.recurso = null;
     this.cerrar.emit("cerrar");
   }
-
+  /**
+   * Guardar reservas
+   */
   saveReserva() {
     this.doingReserva = true;
     console.log(this.reservaSeleccionada)
@@ -289,7 +323,10 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Seleccionar reserva
+   * @param reserva Reserva
+   */
   seleccionarReserva(reserva: Reserva) {
     console.log(reserva);
     this.pos = this.eventos.indexOf(reserva);
@@ -298,11 +335,15 @@ export class ReservaComponent implements OnInit {
     }
     console.log(this.pos);
   }
-
+  /**
+   * Cerrar dialog para la modificacion de una reserva
+   */
   cancelarBorrado() {
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
-
+  /**
+   * Modificar reserva
+   */
   updateReserva() {
     console.log(this.reservaSeleccionada);
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
@@ -324,7 +365,10 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Borrar reserva
+   * @param reserva Reserva
+   */
   removeReserva(reserva: Reserva) {
     this._reservaService.removeReserva(reserva.id).subscribe(
       response => {
@@ -345,7 +389,10 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Borrar listado de reservas
+   * @param ids String[] ids de las reservas
+   */
   removeReservasMass(ids: string[]) {
     this.loading = true;
     this._reservaService.removeReservaMass(ids).subscribe(
@@ -368,7 +415,9 @@ export class ReservaComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmacion de borrado
+   */
   confirmacionBorrado() {
     this.confirmationService.confirm({
       message: '¿Desea cancelar la reserva?',
@@ -381,7 +430,9 @@ export class ReservaComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * Confirmacion de borrado de listado de reservas
+   */
   confirmacionBorradoMass() {
     this.confirmationService.confirm({
       message: '¿Desea cancelar todas las reservas del mes?',
@@ -394,19 +445,27 @@ export class ReservaComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * Cancelar actualizado de reserva
+   */
   cancelarUpdate() {
     this.getReservas(this.yearMostrado + "/" + this.mesMostrado);
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
+  /**
+   * Eliminar reserva del array
+   */
   eliminarElementoArray() {
     this.eventos.splice(this.pos, 1);
     this.reservaSeleccionada = new Reserva("", [], [], null, null, null, "");
   }
-
+  /**
+   * Metodo previo a cancelar listado de reservas
+   */
   cancelarReservasMensules() {
     let observableReservas = Observable.from(this.eventos);
     let ids: string[] = [];
+    // se recorren todos los eventos y se recogen las reservas y sus ids
     observableReservas.map((evento: any) => {
       ids.push(evento.reserva.id);
     }).finally(() => {

@@ -62,7 +62,9 @@ export class UsuarioComponent implements OnInit {
     this.loading = true;
   }
 
-
+  /**
+   * Obtener usuarios
+   */
   getUsuarios() {
     this.loading = true;
     this._usuarioService.getUsuarios().subscribe(
@@ -83,7 +85,9 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Obtener cursos
+   */
   getCursos() {
     this._cursoService.getCursos().subscribe(
       response => {
@@ -99,7 +103,10 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Seleccionar un usuario
+   * @param usuario Usuario
+   */
   seleccionarUsuario(usuario: Usuario) {
     this.pos = this.usuarios.indexOf(usuario);
     for (let prop in usuario) {
@@ -108,18 +115,25 @@ export class UsuarioComponent implements OnInit {
     this.modificando = true;
     console.log(this.usuarioSeleccionado.cursos);
   }
-
+  /**
+   * Cerrar dialog de modificacion/creacion de un usuario
+   */
   cancelar() {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = false;
     this.password = "";
   }
-
+  /**
+   * Abrir dialog de modificacion/creacion de un usuario
+   */
   abrirDialog() {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = true;
   }
-
+  /**
+   * Guardar usuario
+   * @param formulario ngForm
+   */
   saveUsuario(formulario) {
     if (this.password !== "") {
       this.usuarioSeleccionado.password = btoa(this.password);
@@ -163,13 +177,18 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Inicializar imagen del usuario a una por defecto
+   */
   resetImage() {
     this.usuarioSeleccionado.imagen = "";
     this.currentFileUpload = null;
     this.selectedFiles = undefined;
   }
-
+  /**
+   * Seleccionar imagen
+   * @param event Evento
+   */
   selectFile(event) {
     console.log(event);
     let file = event.target.files.item(0);
@@ -178,7 +197,10 @@ export class UsuarioComponent implements OnInit {
       this.selectedFiles = event.target.files;
     }
   }
-
+  /**
+   * Subir imagen 
+   * @param formulario ngForm
+   */
   upload(formulario) {
     if (this.selectedFiles !== undefined) {
       this.currentFileUpload = this.selectedFiles.item(0);
@@ -211,7 +233,10 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
-
+  /**
+   * Dar de baja a un usuario
+   * @param usuario Usuario
+   */
   removeUsuario(usuario: Usuario) {
     this._usuarioService.removeUsuario(usuario.id).subscribe(
       response => {
@@ -231,7 +256,9 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
-
+  /**
+   * Confirmacion dar de baja a un usuario
+   */
   confirmacionBorrado() {
     this.confirmationService.confirm({
       message: '¿Desea eliminar el usuario?',
@@ -244,7 +271,10 @@ export class UsuarioComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * Reemplazar objecto en el array cuando se modifica
+   * @param response Response
+   */
   reemplazarObjeto(response) {
     let usuario = this.usuarios.filter((u: Usuario) => u.id === response.json().id);
     if (usuario.length > 0) {
@@ -256,28 +286,42 @@ export class UsuarioComponent implements OnInit {
     this.usuarios=[...this.usuarios];
     console.log(this.usuarios)
   }
-
+  /**
+   * Eliminar usuario del array
+   */
   eliminarElementoArray() {
     this.usuarios.splice(this.pos, 1);
     this.usuarios=[...this.usuarios];
   }
 
+  /**
+   * Mostrar mensaje operacion correcto
+   */
   mostrarMensajeCorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'success', summary: 'Operacion realizada' });
   }
-
+  /**
+   * Mostrar mensaje error en la operacion
+   */
   mostrarMensajeIncorrecto() {
     this.msgs = [];
     this.msgs.push({ severity: 'error', summary: 'Error en la operación' });
   }
 
+  /**
+   * Mostrar mensaje error al subir la imagen
+   */
   mostrarMensajeIncorrectoImagen() {
     this.msgs = [];
     console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
-
+  /**
+   * Filtar array por atributos
+   * @param campo String campo
+   * @param value String valor
+   */
   filter(campo, value) {
     if (campo === 'dni') {
       this.usuarios = this.usuariosTotales.filter(
@@ -294,7 +338,10 @@ export class UsuarioComponent implements OnInit {
     }
 
   }
-
+  /**
+   * Mostrar mensaje valor existente
+   * @param campo Campo duplicado
+   */
   mostrarMensajeDuplicado(campo: string) {
     this.msgs = [];
     console.log("sdasdasda")
