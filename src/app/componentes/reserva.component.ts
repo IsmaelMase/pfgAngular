@@ -268,7 +268,14 @@ export class ReservaComponent implements OnInit {
    */
   mostrarMensajeConflicto() {
     this.msgs = [];
-    this.msgs.push({ severity: 'error', summary: 'Algunas de las reservas ya estan ocupadas por otro usuario' });
+    this.msgs.push({ severity: 'error', summary: 'Alguna/s de las reservas ya estan ocupadas por otro usuario' });
+  }
+  /**
+   * Mostrar mensaje de error al realziar la reserva porque ya existe para otro aula
+   */
+  mostrarMensajeUsuarioOcupado() {
+    this.msgs = [];
+    this.msgs.push({ severity: 'error', summary: 'Reserva con fecha y hora existente para otro aula' });
   }
   /**
    * Cerrar dialog reservas
@@ -283,7 +290,6 @@ export class ReservaComponent implements OnInit {
    */
   saveReserva() {
     this.doingReserva = true;
-    console.log(this.reservaSeleccionada)
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
         console.log(response)
@@ -299,9 +305,6 @@ export class ReservaComponent implements OnInit {
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
-        } else if (response.status === 409) {
-          this.mostrarMensajeConflicto();
-          this.doingReserva = false;
         } else {
           if (this.dialog == "diaria") {
             this.cerrar.emit("fail");
@@ -309,17 +312,19 @@ export class ReservaComponent implements OnInit {
           } else {
             this.mostrarMensajeIncorrecto();
           }
-
+          this.doingReserva = false;
         }
         this.doingReserva = false;
       },
       error => {
         if (error.status === 409) {
           this.mostrarMensajeConflicto();
-          this.doingReserva = false;
+        } else if (error.status === 302) {
+          this.mostrarMensajeUsuarioOcupado();
         } else {
           this.mostrarMensajeIncorrecto();
         }
+        this.doingReserva = false;
       }
     );
   }

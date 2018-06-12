@@ -261,8 +261,8 @@ export class UsuarioComponent implements OnInit {
    */
   confirmacionBorrado() {
     this.confirmationService.confirm({
-      message: '¿Desea eliminar el usuario?',
-      header: 'Confirmacion eliminado',
+      message: '¿Desea dar de baja al usuario?',
+      header: 'Confirmacion baja',
       icon: 'fa fa-trash',
       accept: () => {
         this.removeUsuario(this.usuarioSeleccionado);

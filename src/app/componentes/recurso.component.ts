@@ -292,6 +292,7 @@ export class RecursoComponent implements OnInit {
     }
     this.pos = -1;
     this.recursos = [...this.recursos];
+    this.ordenar();
   }
   /**
    * Poner imagen recurso por defecto
