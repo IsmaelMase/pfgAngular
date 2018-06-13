@@ -8,7 +8,7 @@
   <div class="ui-grid-row">
     <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px"
       height="150px">
-    <img *ngIf="usuarioSeleccionado.imagen" src="{{url}}upload/files/{{usuarioSeleccionado.imagen}}"
+    <img *ngIf="usuarioSeleccionado.imagen" src="{{usuarioSeleccionado.imagen}}"
       alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px" height="150px">
   </div>
   <br>
@@ -90,9 +90,9 @@
           class="ui-button-info d-none d-sm-block "></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formUsuario.form.valid" pButton
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formUsuario.form.valid || doingRegistro" pButton
           icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-block d-sm-none btn-block"></button>
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formUsuario.form.valid" pButton
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="bottom" [disabled]="!formUsuario.form.valid || doingRegistro" pButton
           icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-none d-sm-block "></button>
       </div>
     </div>

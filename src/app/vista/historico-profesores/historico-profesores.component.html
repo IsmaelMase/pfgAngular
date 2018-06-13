@@ -59,10 +59,10 @@
   </p-header>
 
   <div class="ui-grid-row">
-    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="30%"
-      height="30%">
-    <img *ngIf="usuarioSeleccionado.imagen" src="{{url}}upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre" [ngStyle]="{'text-align':'center'}"
-      width="30%" height="30%">
+    <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px"
+      height="150px">
+    <img *ngIf="usuarioSeleccionado.imagen" src="{{usuarioSeleccionado.imagen}}" alt="Nombre" [ngStyle]="{'text-align':'center'}"
+      width="150px" height="150px">
   </div>
   <br>
   <form #formUsuario="ngForm">

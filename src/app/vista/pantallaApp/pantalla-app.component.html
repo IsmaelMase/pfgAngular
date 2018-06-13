@@ -110,7 +110,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div>
                 <img *ngIf="!usuario.imagen" style="vertical-align:middle" src="../assets/avatar.png" alt="Nombre" width="30px" height="30px">
-                <img *ngIf="usuario.imagen" style="vertical-align:middle" src="{{url}}upload/files/{{usuario.imagen}}"
+                <img *ngIf="usuario.imagen" style="vertical-align:middle" src="{{usuario.imagen}}"
                   alt="Nombre" width="30" height="30">
                 <span style="">{{usuario.nombre | nombre}} {{usuario.apellido | nombre}}</span>
               </div>

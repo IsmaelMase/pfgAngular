@@ -292,7 +292,6 @@ export class ReservaComponent implements OnInit {
     this.doingReserva = true;
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
-        console.log(response)
         if (response.status === 201) {
           if (this.dialog == "diaria") {
             this.cerrar.emit("ok");

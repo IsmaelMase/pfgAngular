@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-root',
@@ -14,14 +15,22 @@ export class AppComponent {
     private _route: ActivatedRoute,
     private _router: Router,
   ) {
+    var app = firebase.initializeApp({
+      apiKey: "AIzaSyC8Cxez8isntpZLmbhy7QxJ4FO9qk-TrLI",
+      authDomain: "salerevfotos.firebaseapp.com",
+      databaseURL: "https://salerevfotos.firebaseio.com",
+      projectId: "salerevfotos",
+      storageBucket: "salerevfotos.appspot.com",
+      messagingSenderId: "311606484205"
+    })
   }
 
-  ocultar(){
+  ocultar() {
     this.oculto = !this.oculto;
   }
 
-  changeOfRoutes(){
-    if(localStorage.getItem("token") === undefined){
+  changeOfRoutes() {
+    if (localStorage.getItem("token") === undefined) {
       this._router.navigate(["login"]);
     }
   }

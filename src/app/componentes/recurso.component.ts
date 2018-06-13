@@ -11,6 +11,7 @@ import { HorarioService } from "../servicios/horario.service";
 import { Horario } from '../modelo/horario';
 import { UploadService } from '../servicios/upload.service';
 import { CONSTANTS } from '../servicios/serviceConstants';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'recurso',
@@ -37,6 +38,7 @@ export class RecursoComponent implements OnInit {
   public order: number = 1;
   public opcionesOrdenar: any[];
   public opcionSeleccionada: string;
+  public doingRegistro: boolean;
   constructor(
     private _recursoService: RecursoService,
     private _route: ActivatedRoute,
@@ -58,6 +60,7 @@ export class RecursoComponent implements OnInit {
       ];
       this.opcionSeleccionada = 'nombre1';
       this.getHorasDisponibles();
+      this.doingRegistro = false;
     });
   }
   /**
@@ -203,6 +206,7 @@ export class RecursoComponent implements OnInit {
    */
   saveRecurso(formulario) {
     console.log(this.recursoSeleccionado)
+    this.selectedFiles = undefined;
     this._recursoService.addRecurso(this.recursoSeleccionado).subscribe(
       response => {
         console.log(response)
@@ -213,15 +217,17 @@ export class RecursoComponent implements OnInit {
           formulario.reset();
           this.currentFileUpload = null;
           this.selectedFiles = undefined;
+          this.doingRegistro = false;
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
         } else {
           this.mostrarMensajeIncorrecto();
-          this.cancelar();
+          this.doingRegistro = false;
         }
       },
       error => {
+        this.doingRegistro = false;
         this.mostrarMensajeIncorrecto();
       }
     );
@@ -320,35 +326,55 @@ export class RecursoComponent implements OnInit {
    */
   upload(formulario) {
     console.log(this.selectedFiles)
+    this.doingRegistro = true;
     if (this.selectedFiles !== undefined) {
       this.currentFileUpload = this.selectedFiles.item(0);
-      this.uploadService.saveImage(this.currentFileUpload).subscribe(
-        (response: any) => {
-          console.log(response);
-          if (response.status === 200) {
-            this.recursoSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveRecurso(formulario);
-          } else if (response.status === 403) {
-            console.log("2")
-            localStorage.clear();
-            this._router.navigate(["login"]);
-          } else if (response.status === 302) {
-            console.log("3")
-            this.recursoSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveRecurso(formulario);
-          } else if (response.status) {
-            console.log("4")
-            this.msgs = [];
+      // this.uploadService.saveImage(this.currentFileUpload).subscribe(
+      //   (response: any) => {
+      //     console.log(response);
+      //     if (response.status === 200) {
+      //       this.recursoSeleccionado.imagen = this.currentFileUpload.name;
+      //       this.saveRecurso(formulario);
+      //     } else if (response.status === 403) {
+      //       console.log("2")
+      //       localStorage.clear();
+      //       this._router.navigate(["login"]);
+      //     } else if (response.status === 302) {
+      //       console.log("3")
+      //       this.recursoSeleccionado.imagen = this.currentFileUpload.name;
+      //       this.saveRecurso(formulario);
+      //     } else if (response.status) {
+      //       console.log("4")
+      //       this.msgs = [];
 
-            this.mostrarMensajeIncorrectoImagen();
-            this.recursoSeleccionado.imagen = "";
-          }
+      //       this.mostrarMensajeIncorrectoImagen();
+      //       this.recursoSeleccionado.imagen = "";
+      //     }
 
-        },
-        error => {
-          console.log(error)
-        }
-      );
+      //   },
+      //   error => {
+      //     console.log(error)
+      //   }
+      // );
+      let nombre = this.recursoSeleccionado.nombre + Date.now()
+      const storageRef = firebase.storage().ref('/recursos/' + nombre)
+      const task = storageRef.put(this.currentFileUpload)
+      //Tarea realizandose
+      task.on('state_changed', snapshot => {
+        console.log('Running')
+      }, error => {
+        console.log(error);
+        this.doingRegistro = false;
+        this.mostrarMensajeIncorrectoImagen();
+      }, () => {
+        storageRef.getDownloadURL().then((url) => {
+          this.recursoSeleccionado.imagen = url;
+          this.saveRecurso(formulario);
+        }).catch((error) => {
+          this.doingRegistro = false;
+          this.mostrarMensajeIncorrectoImagen();
+        });
+      });
     } else {
       this.saveRecurso(formulario);
     }

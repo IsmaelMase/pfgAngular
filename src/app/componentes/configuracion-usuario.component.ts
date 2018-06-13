@@ -9,6 +9,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { UploadService } from '../servicios/upload.service';
 import { CONSTANTS } from '../servicios/serviceConstants';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'configuracion-usuario',
@@ -34,7 +35,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   public selectedFiles: FileList;
   public currentFileUpload: File;
   public password: string;
-
+  public doingRegistro: boolean;
   /**
    * Constructor
    * @param _usuarioService UsuarioService
@@ -62,7 +63,8 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     this.cambioPass = false;
     this.password = "";
     this.getCursos();
-    this.usuarioSeleccionado = JSON.parse(localStorage.getItem("usuario"))
+    this.usuarioSeleccionado = JSON.parse(localStorage.getItem("usuario"));
+    this.doingRegistro = false;
   }
   /**
    * Obtener cursos
@@ -118,6 +120,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
    * @param formulario ngForm
    */
   saveUsuario(formulario) {
+    this.selectedFiles = undefined;
     console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
@@ -128,23 +131,30 @@ export class ConfiguracionUsuarioComponent implements OnInit {
           this.currentFileUpload = null;
           this.selectedFiles = undefined;
           this.cerrar.emit("ok");
+          this.doingRegistro = false;
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
         } else if (response.status === 409) {
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("NIF");
         } else if (response.status === 406) {
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("Email");
         } else {
+          this.doingRegistro = false;
           this.mostrarMensajeIncorrecto();
         }
       },
       error => {
         if (error.status === 409) {
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("NIF");
         } else if (error.status === 406) {
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("Email");
         } else {
+          this.doingRegistro = false;
           this.mostrarMensajeIncorrecto();
         }
       }
@@ -175,33 +185,52 @@ export class ConfiguracionUsuarioComponent implements OnInit {
    * @param formulario ngForm
    */
   upload(formulario) {
-
+    this.doingRegistro = true;
     if (this.selectedFiles !== undefined) {
       this.currentFileUpload = this.selectedFiles.item(0);
-      this.uploadService.saveImage(this.currentFileUpload).subscribe(
-        (response: any) => {
-          console.log(response);
-          if (response.status === 200) {
-            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveUsuario(formulario);
-          } else if (response.status === 403) {
-            localStorage.clear();
-            this._router.navigate(["login"]);
-          } else if (response.status === 302) {
-            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveUsuario(formulario);
-          } else if (response.status || response.status === 0) {
-            this.usuarioSeleccionado.password = "";
-            this.msgs = [];
-            this.mostrarMensajeIncorrectoImagen();
-          }
+      // this.uploadService.saveImage(this.currentFileUpload).subscribe(
+      //   (response: any) => {
+      //     console.log(response);
+      //     if (response.status === 200) {
+      //       this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+      //       this.saveUsuario(formulario);
+      //     } else if (response.status === 403) {
+      //       localStorage.clear();
+      //       this._router.navigate(["login"]);
+      //     } else if (response.status === 302) {
+      //       this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+      //       this.saveUsuario(formulario);
+      //     } else if (response.status || response.status === 0) {
+      //       this.usuarioSeleccionado.password = "";
+      //       this.msgs = [];
+      //       this.mostrarMensajeIncorrectoImagen();
+      //     }
 
-        },
-        error => {
-          this.usuarioSeleccionado.password = "";
-          console.log(error)
-        }
-      );
+      //   },
+      //   error => {
+      //     this.usuarioSeleccionado.password = "";
+      //     console.log(error)
+      //   }
+      // );
+      let nombre = this.usuarioSeleccionado.nombre + Date.now()
+      const storageRef = firebase.storage().ref('/recursos/' + nombre)
+      const task = storageRef.put(this.currentFileUpload)
+      //Tarea realizandose
+      task.on('state_changed', snapshot => {
+        console.log('Running')
+      }, error => {
+        console.log(error);
+        this.doingRegistro = false;
+        this.mostrarMensajeIncorrectoImagen();
+      }, () => {
+        storageRef.getDownloadURL().then((url) => {
+          this.usuarioSeleccionado.imagen = url;
+          this.saveUsuario(formulario);
+        }).catch((error) => {
+          this.doingRegistro = false;
+          this.mostrarMensajeIncorrectoImagen();
+        });
+      });
     } else {
       this.saveUsuario(formulario);
     }

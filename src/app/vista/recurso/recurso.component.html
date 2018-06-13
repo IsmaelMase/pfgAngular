@@ -10,9 +10,10 @@
         <div class="ui-helper-clearfix">
           <div class="ui-g">
             <div class="ui-g-1 ui-md-1 ui-sm-12">
-              <button pButton type="button"  pTooltip="Refrescar" tooltipPosition="bottom" [ngStyle]="{'float':'left'}" class="ui-button-info d-none d-sm-block" icon="fa-retweet" (click)="getRecursos()"></button>
-              <button pButton type="button"  pTooltip="Refrescar" tooltipPosition="bottom" [ngStyle]="{'float':'left'}" class="ui-button-info d-block d-sm-none btn-block" icon="fa-retweet"
-                (click)="getRecursos()"></button>
+              <button pButton type="button" pTooltip="Refrescar" tooltipPosition="bottom" [ngStyle]="{'float':'left'}" class="ui-button-info d-none d-sm-block"
+                icon="fa-retweet" (click)="getRecursos()"></button>
+              <button pButton type="button" pTooltip="Refrescar" tooltipPosition="bottom" [ngStyle]="{'float':'left'}" class="ui-button-info d-block d-sm-none btn-block"
+                icon="fa-retweet" (click)="getRecursos()"></button>
             </div>
             <div class="ui-g-5 ui-md-5 ui-sm-12 filter-container">
               <div style="float:rigth">
@@ -27,8 +28,9 @@
               <p-selectButton [options]="opcionesOrdenar" [(ngModel)]="opcionSeleccionada" (onChange)="ordenar()"></p-selectButton>
             </div>
             <div class="ui-g-1 ui-md-1 ui-sm-12">
-              <button pButton type="button"  pTooltip="Añadir" tooltipPosition="bottom" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-none d-sm-block" (click)="abrirDialog()"></button>
-              <button pButton type="button"  pTooltip="Añadir" tooltipPosition="bottom" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-block d-sm-none btn-block"
+              <button pButton type="button" pTooltip="Añadir" tooltipPosition="bottom" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-none d-sm-block"
+                (click)="abrirDialog()"></button>
+              <button pButton type="button" pTooltip="Añadir" tooltipPosition="bottom" [ngStyle]="{'float':'right'}" icon="fa-plus" class="ui-button-success d-block d-sm-none btn-block"
                 (click)="abrirDialog()"></button>
             </div>
           </div>
@@ -40,7 +42,7 @@
             <div class="ui-g-12 ui-md-2" [ngStyle]="{'text-align':'center'}">
               <img *ngIf="!recurso.imagen && tipo==='aulas'" src="../../../assets/aula.png" width="125px" height="100px">
               <img *ngIf="!recurso.imagen && tipo==='otros'" src="../../../assets/recurso.png" width="125px" height="100px">
-              <img *ngIf="recurso.imagen" src="{{url}}upload/files/{{recurso.imagen}}" width="100px" height="100px">
+              <img *ngIf="recurso.imagen" src="{{recurso.imagen}}" width="100px" height="100px">
             </div>
             <div class="ui-g-12 ui-md-8 recurso-details">
               <div class="ui-g">
@@ -84,7 +86,7 @@
               </p-header>
               <img *ngIf="!recurso.imagen && tipo==='aulas'" src="../../../assets/aula.png" width="25%" height="25%">
               <img *ngIf="!recurso.imagen && tipo==='otros'" src="../../../assets/recurso.png" width="25%" height="25%">
-              <img *ngIf="recurso.imagen" src="{{url}}upload/files/{{recurso.imagen}}" width="25%" height="25%">
+              <img *ngIf="recurso.imagen" src="{{recurso.imagen}}" width="25%" height="25%">
               <div class="recurso-detail" [ngStyle]="{'text-align':'center'}">
                 <div *ngIf="tipo == 'aulas'">
                   <b>Capacidad: </b>{{recurso.capacidad}}
@@ -125,8 +127,8 @@
           width="30%" height="30%">
         <img *ngIf="!recursoSeleccionado.imagen && tipo==='otros'" class="imgFormulario" src="../../../assets/recurso.png" [ngStyle]="{'text-align':'center'}"
           width="30%" height="30%">
-        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="{{url}}upload/files/{{recursoSeleccionado.imagen}}" alt="Nombre"
-          [ngStyle]="{'text-align':'center'}" width="30%" height="30%">
+        <img *ngIf="recursoSeleccionado.imagen" class="imgFormulario" src="{{recursoSeleccionado.imagen}}" alt="Nombre" [ngStyle]="{'text-align':'center'}"
+          width="30%" height="30%">
       </div>
     </div>
   </div>
@@ -201,15 +203,15 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <button *ngIf="recursoSeleccionado.id && usuario.rol==='ROL_ADMIN'" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()"
-          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-none d-sm-block"></button>
+          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-none d-sm-block" [disabled]="doingRegistro"></button>
         <button *ngIf="recursoSeleccionado.id && usuario.rol==='ROL_ADMIN'" [ngStyle]="{'float':'left'}" pTooltip="Borrar" (click)="confirmacionBorrado()"
-          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-block d-sm-none btn-block"></button>
+          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-block d-sm-none btn-block" [disabled]="doingRegistro"></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
-          icon="fa-check" (click)="upload(formRecurso)" class="ui-button-success d-none d-sm-block"></button>
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid" pButton
-          icon="fa-check" (click)="upload(formRecurso)" class="ui-button-success d-block d-sm-none btn-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid || doingRegistro "
+          pButton icon="fa-check" (click)="upload(formRecurso)" class="ui-button-success d-none d-sm-block"></button>
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formRecurso.form.valid || doingRegistro"
+          pButton icon="fa-check" (click)="upload(formRecurso)" class="ui-button-success d-block d-sm-none btn-block"></button>
       </div>
     </div>
   </p-footer>

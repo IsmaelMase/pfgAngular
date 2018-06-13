@@ -9,6 +9,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { UploadService } from '../servicios/upload.service';
 import { CONSTANTS } from '../servicios/serviceConstants';
+import * as firebase from 'firebase';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { CONSTANTS } from '../servicios/serviceConstants';
 })
 export class UsuarioComponent implements OnInit {
 
-  public url=CONSTANTS.url;
+  public url = CONSTANTS.url;
   public usuarios: Usuario[];
   public usuariosTotales: Usuario[];
   public cursos: Curso[];
@@ -32,7 +33,7 @@ export class UsuarioComponent implements OnInit {
   public currentFileUpload: File = undefined;
   public password: string;
   public loading: boolean;
-
+  public doingRegistro: boolean;
   constructor(
     private _usuarioService: UsuarioService,
     private _cursoService: CursoService,
@@ -54,12 +55,13 @@ export class UsuarioComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem("usuario")).rol==="ROL_PROFESOR"){
+    if (JSON.parse(localStorage.getItem("usuario")).rol === "ROL_PROFESOR") {
       this._router.navigate(["pantallaApp/inicio"]);
     }
     this.password = "";
     this.getUsuarios();
     this.loading = true;
+    this.doingRegistro = false;
   }
 
   /**
@@ -122,6 +124,7 @@ export class UsuarioComponent implements OnInit {
     this.usuarioSeleccionado = new Usuario("", "", "", "", "", "", "", [], "ROL_PROFESOR", "", true);
     this.modificando = false;
     this.password = "";
+    this.doingRegistro = false;
   }
   /**
    * Abrir dialog de modificacion/creacion de un usuario
@@ -138,6 +141,7 @@ export class UsuarioComponent implements OnInit {
     if (this.password !== "") {
       this.usuarioSeleccionado.password = btoa(this.password);
     }
+    this.selectedFiles = undefined;
     console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
@@ -149,29 +153,30 @@ export class UsuarioComponent implements OnInit {
           formulario.reset();
           this.currentFileUpload = null;
           this.selectedFiles = undefined;
+          this.doingRegistro = false;
         } else if (response.status === 403) {
           localStorage.clear();
           this._router.navigate(["login"]);
         } else if (response.status === 409) {
-          this.usuarioSeleccionado.password = "";
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("NIF");
         } else if (response.status === 406) {
-          this.usuarioSeleccionado.password = "";
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("Email");
         } else {
-          this.usuarioSeleccionado.password = "";
+          this.doingRegistro = false;
           this.mostrarMensajeIncorrecto();
         }
       },
       error => {
         if (error.status === 409) {
-          this.usuarioSeleccionado.password = "";
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("NIF");
         } else if (error.status === 406) {
-          this.usuarioSeleccionado.password = "";
+          this.doingRegistro = false;
           this.mostrarMensajeDuplicado("Email");
         } else {
-          this.usuarioSeleccionado.password = "";
+          this.doingRegistro = false;
           this.mostrarMensajeIncorrecto();
         }
       }
@@ -202,32 +207,52 @@ export class UsuarioComponent implements OnInit {
    * @param formulario ngForm
    */
   upload(formulario) {
+    this.doingRegistro = true;
     if (this.selectedFiles !== undefined) {
       this.currentFileUpload = this.selectedFiles.item(0);
-      this.uploadService.saveImage(this.currentFileUpload).subscribe(
-        (response: any) => {
-          console.log(response);
-          if (response.status === 200) {
-            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveUsuario(formulario);
-          } else if (response.status === 403) {
-            localStorage.clear();
-            this._router.navigate(["login"]);
-          } else if (response.status === 302) {
-            this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
-            this.saveUsuario(formulario);
-          } else if (response.status || response.status === 0) {
-            this.usuarioSeleccionado.password = "";
-            this.msgs = [];
-            this.mostrarMensajeIncorrectoImagen();
-          }
+      // this.uploadService.saveImage(this.currentFileUpload).subscribe(
+      //   (response: any) => {
+      //     console.log(response);
+      //     if (response.status === 200) {
+      //       this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+      //       this.saveUsuario(formulario);
+      //     } else if (response.status === 403) {
+      //       localStorage.clear();
+      //       this._router.navigate(["login"]);
+      //     } else if (response.status === 302) {
+      //       this.usuarioSeleccionado.imagen = this.currentFileUpload.name;
+      //       this.saveUsuario(formulario);
+      //     } else if (response.status || response.status === 0) {
+      //       this.usuarioSeleccionado.password = "";
+      //       this.msgs = [];
+      //       this.mostrarMensajeIncorrectoImagen();
+      //     }
 
-        },
-        error => {
-          this.usuarioSeleccionado.password = "";
-          console.log(error)
-        }
-      );
+      //   },
+      //   error => {
+      //     this.usuarioSeleccionado.password = "";
+      //     console.log(error)
+      //   }
+      // );
+      let nombre = this.usuarioSeleccionado.nombre + Date.now()
+      const storageRef = firebase.storage().ref('/usuarios/' + nombre)
+      const task = storageRef.put(this.currentFileUpload)
+      //Tarea realizandose
+      task.on('state_changed', snapshot => {
+        console.log('Running')
+      }, error => {
+        console.log(error);
+        this.mostrarMensajeIncorrectoImagen();
+        this.doingRegistro = false;
+      }, () => {
+        storageRef.getDownloadURL().then((url) => {
+          this.usuarioSeleccionado.imagen = url;
+          this.saveUsuario(formulario);
+        }).catch((error) => {
+          this.mostrarMensajeIncorrectoImagen();
+          this.doingRegistro = false;
+        });
+      });
     } else {
       this.saveUsuario(formulario);
     }
@@ -283,7 +308,7 @@ export class UsuarioComponent implements OnInit {
       this.usuarios.push(response.json());
     }
     this.pos = -1;
-    this.usuarios=[...this.usuarios];
+    this.usuarios = [...this.usuarios];
     console.log(this.usuarios)
   }
   /**
@@ -291,7 +316,7 @@ export class UsuarioComponent implements OnInit {
    */
   eliminarElementoArray() {
     this.usuarios.splice(this.pos, 1);
-    this.usuarios=[...this.usuarios];
+    this.usuarios = [...this.usuarios];
   }
 
   /**

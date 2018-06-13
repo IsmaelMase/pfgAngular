@@ -69,8 +69,8 @@
   <div class="ui-grid-row">
     <img *ngIf="!usuarioSeleccionado.imagen" src="../assets/avatar.png" alt="Nombre" [ngStyle]="{'text-align':'center'}" width="150px"
       height="150px">
-    <img *ngIf="usuarioSeleccionado.imagen" src="{{url}}upload/files/{{usuarioSeleccionado.imagen}}" alt="Nombre"
-      [ngStyle]="{'text-align':'center'}" width="150px" height="150px">
+    <img *ngIf="usuarioSeleccionado.imagen" src="{{usuarioSeleccionado.imagen}}" alt="Nombre" [ngStyle]="{'text-align':'center'}"
+      width="150px" height="150px">
   </div>
   <br>
   <form #formUsuario="ngForm">
@@ -151,8 +151,7 @@
     </div>
     <br>
     <label>Cursos</label>
-    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="cursos"
-      [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos">
+    <p-table #dt2 [columns]="colsCursos" [paginator]="true" [rows]="10" [value]="cursos" [filterDelay]="50" [(selection)]="usuarioSeleccionado.cursos">
       <ng-template pTemplate="emptymessage">
         <tr>
           <th>No hay registros</th>
@@ -191,14 +190,14 @@
     <div class="ui-g">
       <div class="ui-sm-12 ui-md-6">
         <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Dar de baja" (click)="confirmacionBorrado()"
-          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-none d-sm-block"></button>
+          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-none d-sm-block" [disabled]="doingRegistro"></button>
         <button *ngIf="usuarioSeleccionado.id" [ngStyle]="{'float':'left'}" pTooltip="Dar de baja" (click)="confirmacionBorrado()"
-          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-block d-sm-none btn-block "></button>
+          tooltipPosition="left" pButton icon="fa-trash" class="ui-button-danger d-block d-sm-none btn-block " [disabled]="doingRegistro"></button>
       </div>
       <div class="ui-sm-12 ui-md-6">
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid || !usuarioSeleccionado.cursos[0]"
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid || !usuarioSeleccionado.cursos[0] || doingRegistro"
           pButton icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-none d-sm-block"></button>
-        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid || !usuarioSeleccionado.cursos[0]"
+        <button [ngStyle]="{'float':'right'}" pTooltip="Guardar" tooltipPosition="left" [disabled]="!formUsuario.form.valid || !usuarioSeleccionado.cursos[0] || doingRegistro"
           pButton icon="fa-check" (click)="upload(formUsuario)" class="ui-button-success d-block d-sm-none btn-block "></button>
       </div>
     </div>
