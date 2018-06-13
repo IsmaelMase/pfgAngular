@@ -58,7 +58,6 @@ export class GeneradorCalendarioComponent implements OnInit {
     this._recursoService.getRecursos().subscribe(
       response => {
         if (response.status !== 403) {
-          console.log(response.json());
           this.recursos = response.json();
         } else {
           localStorage.clear();
@@ -105,13 +104,11 @@ export class GeneradorCalendarioComponent implements OnInit {
    * @param map Map
    */
   getKeys(map) {
-    console.log(map);
     this.filas = [];
     for (let filas in map) {
       this.filas.push(map[filas]);
     }
     this.visible = true;
-    console.log(this.filas);
     return this.filas;
   }
   /**

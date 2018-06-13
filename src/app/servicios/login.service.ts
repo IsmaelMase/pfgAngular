@@ -25,7 +25,6 @@ export class LoginService {
      */
     login(usuarioLogin: any) {
         let json = JSON.stringify(usuarioLogin);
-        console.log(json);
         let headers = new Headers({ 'Content-Type': 'application/json' });
 
         return this._http.post(this.url + 'login', json, { headers: headers })
@@ -38,7 +37,6 @@ export class LoginService {
      */
     changePassword(changePassUser: any) {
         let json = JSON.stringify(changePassUser);
-        console.log(json);
         let headers = new Headers({ 'Content-Type': 'application/json' });
 
         return this._http.post(this.url + 'mail/sendMail', json, { headers: headers })

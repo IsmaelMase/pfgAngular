@@ -66,7 +66,6 @@ export class HorarioComponent implements OnInit {
    * @param intervalo intervalo
    */
   removeIntervalo(intervalo) {
-    console.log(intervalo);
     let pos = this.intervalos.indexOf(intervalo);
     this.intervalos.splice(pos, 1);
     this.intervalos = [...this.intervalos];
@@ -131,9 +130,7 @@ export class HorarioComponent implements OnInit {
         this.intervalos.push(new Intervalo(intervaloSeparado[0], intervaloSeparado[1], true));
       }
     }
-    console.log(this.horarioSeleccionado.fecha_max)
     this.selectedDate = new Date(this.horarioSeleccionado.fecha_max);
-    console.log(this.selectedDate);
     this.modificando = true;
   }
   /**
@@ -167,13 +164,10 @@ export class HorarioComponent implements OnInit {
     this.intervalos.sort();
     this.horarioSeleccionado.intervalos = [];
     for (let intervalo of this.intervalos) {
-      console.log(intervalo);
       this.horarioSeleccionado.intervalos.push(intervalo.inicio + "-" + intervalo.fin);
     }
-    console.log(this.horarioSeleccionado)
     this._horarioService.addHorario(this.horarioSeleccionado).subscribe(
       response => {
-        console.log(response);
         if (response.status === 201) {
           this.intervalos = [];
           this.selectedDate = null;
@@ -199,7 +193,6 @@ export class HorarioComponent implements OnInit {
   removeHorario(horario: Horario) {
     this._horarioService.removeHorario(horario.id).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
           this.eliminarElementoArray(horario);

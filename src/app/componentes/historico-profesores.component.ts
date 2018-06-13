@@ -89,7 +89,6 @@ export class HistoricoProfesoresComponent implements OnInit {
           this.usuarios = response.json();
           this.usuariosTotales = response.json();
           this.loading = false;
-          console.log(this.usuarios);
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -105,10 +104,8 @@ export class HistoricoProfesoresComponent implements OnInit {
    * @param fecha String fecha
    */
   getReservas(fecha) {
-    console.log(fecha);
     this._reservaService.getReservasByUsuarioAndFecha(this.usuarioSeleccionado.id, fecha).subscribe(
       response => {
-        console.log(response);
         if (response.status !== 403) {
           this.trasnformarReservasEventos(response.json());
         } else {
@@ -247,7 +244,6 @@ export class HistoricoProfesoresComponent implements OnInit {
     for (let prop in reserva) {
       this.reservaSeleccionada[prop] = reserva[prop];
     }
-    console.log(this.pos);
   }
   /**
    * Cerrar dialog reservas
@@ -262,7 +258,6 @@ export class HistoricoProfesoresComponent implements OnInit {
   darAlta(usuario: Usuario) {
     this._usuarioService.removeUsuario(usuario.id).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
           this.cambiarEstado();
@@ -305,7 +300,6 @@ export class HistoricoProfesoresComponent implements OnInit {
       this.usuarios.push(response.json());
     }
     this.pos = -1;
-    console.log(this.usuarios)
   }
   /**
    * Cambiar estado usuario
@@ -357,7 +351,6 @@ export class HistoricoProfesoresComponent implements OnInit {
   saveReserva() {
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
-        console.log(response.json())
         if (response.status === 201) {
           this.cancelarReserva();
           this.loadingReservas = true;
@@ -401,7 +394,6 @@ export class HistoricoProfesoresComponent implements OnInit {
    * Eliminar reserva del array
    */
   eliminarElementoArray() {
-    console.log(this.pos);
     this.eventos.splice(this.pos, 1);
     this.pos = -1
     this.cancelar()
@@ -414,7 +406,6 @@ export class HistoricoProfesoresComponent implements OnInit {
     this.loadingReservas = true;
     this._reservaService.removeReservaMass(ids).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
           this.eventos = [];

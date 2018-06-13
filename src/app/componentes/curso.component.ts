@@ -85,10 +85,8 @@ export class CursoComponent implements OnInit {
    * Guardar curso
    */
   saveCurso() {
-    console.log(this.cursoSeleccionado)
     this._cursoService.addCurso(this.cursoSeleccionado).subscribe(
       response => {
-        console.log(response);
         if (response.status === 201) {
           this.mostrarMensajeCorrecto();
           this.reemplazarObjeto(response);
@@ -113,7 +111,6 @@ export class CursoComponent implements OnInit {
   removeCurso(curso: Curso) {
     this._cursoService.removeCurso(curso.id).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
           this.eliminarElementoArray(curso);

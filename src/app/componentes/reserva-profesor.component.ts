@@ -138,7 +138,6 @@ export class ReservaProfesorComponent implements OnInit {
     for (let prop in reserva) {
       this.reservaSeleccionada[prop] = reserva[prop];
     }
-    console.log(this.pos);
   }
   /**
    * Guardar reserva
@@ -146,7 +145,6 @@ export class ReservaProfesorComponent implements OnInit {
   saveReserva() {
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
-        console.log(response.json())
         if (response.status === 201) {
           this.cancelar();
           this.loading = true;
@@ -214,7 +212,6 @@ export class ReservaProfesorComponent implements OnInit {
    * Eliminar reserva del array
    */
   eliminarElementoArray() {
-    console.log(this.pos);
     this.eventos.splice(this.pos, 1);
     this.pos = -1
     this.cancelar()

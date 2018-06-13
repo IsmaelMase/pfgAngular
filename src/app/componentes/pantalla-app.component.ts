@@ -52,7 +52,6 @@ export class PantallaAppComponent implements OnInit {
    * @param e Event 
    */
   cerrarDialogReservas(e) {
-    console.log(e);
     if (e === "ok") {
       this.cambiarConfig = false;
       this.usuario = JSON.parse(localStorage.getItem("usuario"))

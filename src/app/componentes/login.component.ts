@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
       this.usuario.password = btoa(this.password);
       this._loginService.login(this.usuario).subscribe(
         response => {
-          console.log(response);
           if (response.status === 403) {
             this.mostrarMensajeIncorrecto();
             this.password = "";
@@ -57,7 +56,6 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("token", response.json().authorization);
             localStorage.setItem("usuario", JSON.stringify(response.json().usuario))
             setTimeout(() => {
-              console.log(JSON.stringify(response.json().usuario));
               if (response.json().usuario.rol === "ROL_PROFESOR") {
                 this._router.navigate(["pantallaApp"]);
               } else {
@@ -81,7 +79,6 @@ export class LoginComponent implements OnInit {
     this.userChangePass.pass = password;
     this._loginService.changePassword(this.userChangePass).subscribe(
       response => {
-        console.log(response);
         if (response.status === 404) {
           this.usuarioNotFound();
         } else if (response.status === 400) {

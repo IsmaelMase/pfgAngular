@@ -76,7 +76,6 @@ export class UsuarioComponent implements OnInit {
           this.usuariosTotales = response.json();
           this.loading = false;
           this.getCursos();
-          console.log(this.usuarios);
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -115,7 +114,6 @@ export class UsuarioComponent implements OnInit {
       this.usuarioSeleccionado[prop] = usuario[prop];
     }
     this.modificando = true;
-    console.log(this.usuarioSeleccionado.cursos);
   }
   /**
    * Cerrar dialog de modificacion/creacion de un usuario
@@ -142,10 +140,8 @@ export class UsuarioComponent implements OnInit {
       this.usuarioSeleccionado.password = btoa(this.password);
     }
     this.selectedFiles = undefined;
-    console.log(this.usuarioSeleccionado.password);
     this._usuarioService.addUsuario(this.usuarioSeleccionado).subscribe(
       response => {
-        console.log(response);
         if (response.status === 201) {
           this.mostrarMensajeCorrecto();
           this.reemplazarObjeto(response);
@@ -195,7 +191,6 @@ export class UsuarioComponent implements OnInit {
    * @param event Evento
    */
   selectFile(event) {
-    console.log(event);
     let file = event.target.files.item(0);
 
     if (file.type.match('image.*')) {
@@ -239,7 +234,6 @@ export class UsuarioComponent implements OnInit {
       const task = storageRef.put(this.currentFileUpload)
       //Tarea realizandose
       task.on('state_changed', snapshot => {
-        console.log('Running')
       }, error => {
         console.log(error);
         this.mostrarMensajeIncorrectoImagen();
@@ -265,7 +259,6 @@ export class UsuarioComponent implements OnInit {
   removeUsuario(usuario: Usuario) {
     this._usuarioService.removeUsuario(usuario.id).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
           this.eliminarElementoArray();
@@ -309,7 +302,6 @@ export class UsuarioComponent implements OnInit {
     }
     this.pos = -1;
     this.usuarios = [...this.usuarios];
-    console.log(this.usuarios)
   }
   /**
    * Eliminar usuario del array
@@ -339,7 +331,6 @@ export class UsuarioComponent implements OnInit {
    */
   mostrarMensajeIncorrectoImagen() {
     this.msgs = [];
-    console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'Error al subir la imagen' });
   }
   /**
@@ -369,7 +360,6 @@ export class UsuarioComponent implements OnInit {
    */
   mostrarMensajeDuplicado(campo: string) {
     this.msgs = [];
-    console.log("sdasdasda")
     this.msgs.push({ severity: 'error', summary: 'El campo ' + campo + ' ya esta registrado' });
   }
 

@@ -22,7 +22,7 @@ export class AppComponent {
       projectId: "salerevfotos",
       storageBucket: "salerevfotos.appspot.com",
       messagingSenderId: "311606484205"
-    })
+    });
   }
 
   ocultar() {

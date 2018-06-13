@@ -68,7 +68,6 @@ export class ReservaService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         headers.append('Authorization', localStorage.getItem("token"));
 
-        console.log(json);
         return this._http.post(this.url + 'reserva/getFechasDisponibles/' + idRecurso, json, { headers: headers })
             .map(res => res);
     }

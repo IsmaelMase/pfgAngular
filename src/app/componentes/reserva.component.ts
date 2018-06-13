@@ -132,7 +132,6 @@ export class ReservaComponent implements OnInit {
 
     this._reservaService.getReservasByRecursoAndFecha(this.recurso.id, fecha).subscribe(
       response => {
-        console.log(response);
         if (response.status !== 403) {
           this.trasnformarReservasEventos(response.json());
         } else {
@@ -152,7 +151,6 @@ export class ReservaComponent implements OnInit {
   clickeado(event) {
     if (this.mesMostrado !== Number(event.getDate()._d.getUTCMonth() + 1)) {
       this.loading = true;
-      console.log(event.getDate()._d.getMonth())
       this.mesMostrado = Number(event.getDate()._d.getUTCMonth() + 1)
       this.yearMostrado = Number(event.getDate()._d.getFullYear())
 
@@ -170,7 +168,6 @@ export class ReservaComponent implements OnInit {
    */
   getFechasNoDisponibles() {
     this.haveFechas = false;
-    console.log(this.reservaSeleccionada.intervalos_reservas.length === 0);
     this.fechasNoDisponibles = [];
     this._reservaService.getFechasNoDisponibles(this.reservaSeleccionada.intervalos_reservas, this.recurso.id).subscribe(
       response => {
@@ -179,7 +176,6 @@ export class ReservaComponent implements OnInit {
             let fechaSeparada = response.json()[fecha].split("/")
             this.fechasNoDisponibles.push(new Date(fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + "00:00"));
           }
-          console.log(this.fechasNoDisponibles);
           this.fechasNoDisponibles = [...this.fechasNoDisponibles];
           this.haveFechas = true;
         } else {
@@ -200,7 +196,6 @@ export class ReservaComponent implements OnInit {
       response => {
         if (response.status !== 403) {
           this.usuarios = response.json();
-          console.log(this.usuarios);
         } else {
           localStorage.clear();
           this._router.navigate(["login"]);
@@ -218,7 +213,6 @@ export class ReservaComponent implements OnInit {
   abrirDialogReservaDiaria(recurso: Recurso) {
     this.reservaSeleccionada.recurso = recurso;
     this.getUsuarios();
-    console.log(this.horasDisponibles);
   }
   /**
    * Transformar reservas en evento del calendario
@@ -231,10 +225,8 @@ export class ReservaComponent implements OnInit {
     let observableReservas = Observable.from(reservas);
     /* Se recorren las reservas con un Observable, se separan las horas y fechas y se crea el evento */
     observableReservas.map((reserva: Reserva) => {
-      console.log(reserva)
       let horas = reserva.intervalos_reservas[0].split("-");
       let fechaSeparada = reserva.fechas_reservas[0].split("/")
-      console.log(reserva);
       evento = {
         "title": reserva.usuario.nombre + " " + reserva.curso.nombre,
         "start": fechaSeparada[0] + "-" + fechaSeparada[1] + "-" + fechaSeparada[2] + "T" + horas[0],
@@ -332,12 +324,10 @@ export class ReservaComponent implements OnInit {
    * @param reserva Reserva
    */
   seleccionarReserva(reserva: Reserva) {
-    console.log(reserva);
     this.pos = this.eventos.indexOf(reserva);
     for (let prop in reserva) {
       this.reservaSeleccionada[prop] = reserva[prop];
     }
-    console.log(this.pos);
   }
   /**
    * Cerrar dialog para la modificacion de una reserva
@@ -349,10 +339,8 @@ export class ReservaComponent implements OnInit {
    * Modificar reserva
    */
   updateReserva() {
-    console.log(this.reservaSeleccionada);
     this._reservaService.addReserva(this.reservaSeleccionada).subscribe(
       response => {
-        console.log(response)
         if (response.status === 201) {
           this.cancelarUpdate();
           this.mostrarMensajeCorrecto();
@@ -376,7 +364,6 @@ export class ReservaComponent implements OnInit {
   removeReserva(reserva: Reserva) {
     this._reservaService.removeReserva(reserva.id).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.cancelarUpdate();
           this.mostrarMensajeCorrecto();
@@ -401,7 +388,6 @@ export class ReservaComponent implements OnInit {
     this.loading = true;
     this._reservaService.removeReservaMass(ids).subscribe(
       response => {
-        console.log(response);
         if (response.status === 200) {
           this.mostrarMensajeCorrecto();
           this.eventos = [];
