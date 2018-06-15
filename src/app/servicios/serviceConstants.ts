@@ -1,5 +1,3 @@
 export var CONSTANTS = {
-	// url: 'https://salerev.herokuapp.com/api/'
-	// url: 'http://localhost:8080/api/'
-	url: 'http://167.99.141.41:8080/api/'
+	url: 'http://159.65.18.9:8080/api/'
 };
